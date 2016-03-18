@@ -1,0 +1,9 @@
+C:\Users\Honky\documents\visual studio 2010\Projects\HungerGames\HungerGames\bin\Debug\HungerGames.exe
+C:\Users\Honky\documents\visual studio 2010\Projects\HungerGames\HungerGames\bin\Debug\HungerGames.pdb
+C:\Users\Honky\documents\visual studio 2010\Projects\HungerGames\HungerGames\bin\Debug\Muphcode.Xna2D.dll
+C:\Users\Honky\documents\visual studio 2010\Projects\HungerGames\HungerGames\bin\Debug\Muphcode.Xna2D.pdb
+C:\Users\Honky\documents\visual studio 2010\Projects\HungerGames\HungerGames\obj\x86\Debug\HungerGames.csprojResolveAssemblyReference.cache
+C:\Users\Honky\documents\visual studio 2010\Projects\HungerGames\HungerGames\obj\x86\Debug\HungerGames.exe
+C:\Users\Honky\documents\visual studio 2010\Projects\HungerGames\HungerGames\obj\x86\Debug\HungerGames.pdb
+C:\Users\Honky\documents\visual studio 2010\Projects\HungerGames\HungerGames\bin\Debug\KeraLua.dll
+C:\Users\Honky\documents\visual studio 2010\Projects\HungerGames\HungerGames\bin\Debug\NLua.dll
