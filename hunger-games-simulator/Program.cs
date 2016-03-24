@@ -15,7 +15,7 @@ namespace hunger_games_simulator
             Console.BufferWidth = 80;
             Console.Clear();
 
-            MainMenu.Show();
+            new MainMenu().Show();
         }
     }
 }

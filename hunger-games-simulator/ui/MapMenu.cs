@@ -19,8 +19,8 @@ namespace hunger_games_simulator.ui
                 buf.InsertBuffer(server.Arena.MapBuffer(), 0, 0);
                 buf.SetCursorPosition(50, 0);
                 buf.WriteVertical("".PadRight(25, '▌'));
-                buf.SetCursorPosition(50, 0);
-                buf.Write("▌".PadRight(30, '-'));
+                buf.SetCursorPosition(51, 13);
+                buf.Write("".PadRight(29, '-'));
                 
                 buf.DrawSelf();
                 Console.ReadKey(true);

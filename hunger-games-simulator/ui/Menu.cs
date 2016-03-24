@@ -51,7 +51,7 @@ namespace hunger_games_simulator.ui
             SelectedColor = ConsoleColor.DarkRed;
         }
 
-        public int ReadLine()
+        public virtual int ReadLine()
         {
             this.x = Console.CursorLeft;
             this.y = Console.CursorTop;
@@ -67,7 +67,7 @@ namespace hunger_games_simulator.ui
             }
         }
 
-        public ConsoleKeyInfo Read()
+        public virtual ConsoleKeyInfo Read()
         {
             while (Console.KeyAvailable)
                 Console.ReadKey(true);

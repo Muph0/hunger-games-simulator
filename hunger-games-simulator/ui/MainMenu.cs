@@ -7,9 +7,15 @@ using hunger_games_simulator.core;
 
 namespace hunger_games_simulator.ui
 {
-    abstract class MainMenu
+    class MainMenu : Menu
     {
-        public static void Show()
+        public MainMenu()
+            :base(new string[] { "Host game", "Join game", "!", "Settings", "Exit" })
+        {
+
+        }
+
+        public void Show()
         {
             ConsoleBuffer buffer = new ConsoleBuffer();
 
@@ -40,14 +46,22 @@ namespace hunger_games_simulator.ui
             buffer.DrawSelf();
 
             Console.SetCursorPosition(35, buffer.CursorTop + 1);
-            Menu menu = new Menu(new string[] { "Host game", "Join game", "!", "Settings", "Exit" });
-            int selected = menu.ReadLine();
-
+            int selected = this.ReadLine();
+            
             if (selected == 0)
             {
                 GameServer server = new GameServer();
                 server.LoadAssets();
                 MapPreviewMenu.Show(server);
+            }
+            if (selected == 3)
+            {
+                new SettingsMenu().Show();
+                Show();
+            }
+            if (selected == Items.Length - 1)
+            {
+                Environment.Exit(0);
             }
         }
     }
