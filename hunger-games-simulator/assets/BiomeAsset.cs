@@ -31,14 +31,6 @@ namespace hunger_games_simulator.assets
                 Chars[i] = str.Substring(2);
             }
 
-            string exc = ini.GetEntryValue("biome:" + name, "except").ToString();
-            split = exc.Split(',');
-            if (exc.Length == 0) split = new string[0];
-            this.Excepts = new int[2 * split.Length];
-            for (int i = 0; i < split.Length; i++)
-                for (int j = 0; j < 2; j++)
-                    Excepts[2 * i + j] = int.Parse(split[i].Split(' ')[j]);
-
             string amt = ini.GetEntryValue("biome:" + name, "amount").ToString();
             this.Amount = int.Parse(amt);
         }

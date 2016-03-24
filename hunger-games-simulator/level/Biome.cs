@@ -11,7 +11,7 @@ namespace hunger_games_simulator.level
     {
         public Biome(int pivX, int pivY)
         {
-
+            Pivot = new Point(pivX, pivY);
         }
 
         public string AssetName;

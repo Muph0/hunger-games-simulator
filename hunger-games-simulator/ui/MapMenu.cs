@@ -12,10 +12,13 @@ namespace hunger_games_simulator.ui
     {
         public static void Show(GameServer server)
         {
-            server.Arena = ArenaGenerator.Generate(server.GameAssets, 0, 30);
-            ConsoleBuffer buf = server.Arena.MapBuffer();
-            buf.DrawSelf();
-            Console.ReadLine();
+            for (int i = 0; true; i++)
+            {
+                server.Arena = ArenaGenerator.Generate(server.GameAssets, i, 20);
+                ConsoleBuffer buf = server.Arena.MapBuffer();
+                buf.DrawSelf();
+                Console.ReadKey(true);
+            }
         }
     }
 }

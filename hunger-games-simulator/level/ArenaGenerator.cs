@@ -23,7 +23,10 @@ namespace hunger_games_simulator.level
             // set locations of biome pivots
             for (int i = 0; i < biome_count; i++)
             {
-                arena.Biomes[i] = new Biome((int)(hlt.Seq2(i + 1) * arena.Width), (int)(hlt.Seq3(i + 1) * arena.Height));
+                double halton2 = hlt.Seq2(i + 1);
+                double halton3 = hlt.Seq3(i + 1);
+
+                arena.Biomes[i] = new Biome((int)(halton2 * arena.Width), (int)(halton3 * arena.Height));
                 biome_tiles_list[i] = new List<int>();
             }
 
@@ -38,10 +41,10 @@ namespace hunger_games_simulator.level
                 // go thru all the pivots and pick the closest to current tile
                 for (int p = 0; p < biome_count; p++)
                 {
-                    Point pivot = arena.Biomes[p].Pivot;
+                    Point noise = new Point((int)((rnd.NextDouble() - 0.5) * 2.5), (int)((rnd.NextDouble() - 0.5) * 2));
+                    Point pivot = new Point(arena.Biomes[p].Pivot.X, arena.Biomes[p].Pivot.Y) + noise;
                     // add a bit of noise
-                    pivot.X += (int)((rnd.NextDouble() - 0.5) * 2.5);
-                    pivot.Y += (int)((rnd.NextDouble() - 0.5) * 2);
+
 
                     int dist2 = tile_pos.distanceSquared(pivot);
                     if (dist2 < minDist2)
