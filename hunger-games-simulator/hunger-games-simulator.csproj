@@ -43,8 +43,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="assets\BiomeAsset.cs" />
+    <Compile Include="assets\ItemAsset.cs" />
+    <Compile Include="core\GameAssets.cs" />
+    <Compile Include="core\GameClient.cs" />
+    <Compile Include="core\GameServer.cs" />
+    <Compile Include="Halton.cs" />
+    <Compile Include="IniFile.cs" />
+    <Compile Include="level\ArenaGenerator.cs" />
+    <Compile Include="level\Biome.cs" />
+    <Compile Include="level\Entity.cs" />
+    <Compile Include="level\Arena.cs" />
+    <Compile Include="level\Tile.cs" />
+    <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ui\MainMenu.cs" />
+    <Compile Include="ui\MapMenu.cs" />
+    <Compile Include="ui\Menu.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\MazeGenerator\ConsoleBufferApi\ConsoleBufferApi.csproj">
+      <Project>{49ED6BDC-48CE-42D1-840A-F1161AD26D00}</Project>
+      <Name>ConsoleBufferApi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="assets\items.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
