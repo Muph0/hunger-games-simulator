@@ -8,7 +8,7 @@ namespace hunger_games_simulator.assets
     [Serializable]
     class BiomeAsset
     {
-        public string Chars;
+        public string[] Chars;
         public ConsoleColor[] Foregrounds, Backgrounds;
 
         public int[] Excepts;
@@ -17,34 +17,43 @@ namespace hunger_games_simulator.assets
         public BiomeAsset(IniFile ini, string name)
         {
             Exception e = new Exception("Error parsing biome " + name + " in file " + ini.path);
-            string[] split = ini.GetEntryValue("biome:" + name, "chars").ToString().Split(',');
-            foreach (string str in split)
-            {
-                if (str.Length == 1)
-                    Chars += str;
-                else if (str.Length > 1)
-                    Chars += ConsoleBufferApi.ConsoleBuffer.ASCII[int.Parse(str)];
-                else throw e;
-            }
 
-            split = ini.GetEntryValue("biome:" + name, "colors").ToString().Split(',');
+            string[] split = ini.GetEntryValue("biome:" + name, "colors").ToString().Split(',');
             this.Foregrounds = new ConsoleColor[split.Length];
             this.Backgrounds = new ConsoleColor[split.Length];
+            this.Chars = new string[split.Length];
             for (int i = 0; i < split.Length; i++)
             {
                 string str = split[i];
-                if (str.Length != 2) throw e;
+                if (str.Length < 3) throw e;
                 Foregrounds[i] = (ConsoleColor)Convert.ToInt32(str[0].ToString(), 16);
                 Backgrounds[i] = (ConsoleColor)Convert.ToInt32(str[1].ToString(), 16);
+                Chars[i] = str.Substring(2);
             }
 
-            split = ini.GetEntryValue("biome:" + name, "except").ToString().Split(',');
+            string exc = ini.GetEntryValue("biome:" + name, "except").ToString();
+            split = exc.Split(',');
+            if (exc.Length == 0) split = new string[0];
             this.Excepts = new int[2 * split.Length];
             for (int i = 0; i < split.Length; i++)
                 for (int j = 0; j < 2; j++)
                     Excepts[2 * i + j] = int.Parse(split[i].Split(' ')[j]);
 
-            this.Amount = int.Parse(ini.GetEntryValue("biome:" + name, "except").ToString());
+            string amt = ini.GetEntryValue("biome:" + name, "amount").ToString();
+            this.Amount = int.Parse(amt);
+        }
+
+        public level.Tile GenerateTile(Random rnd)
+        {
+            level.Tile tile = new level.Tile();
+
+            int picked = rnd.Next(Foregrounds.Length);
+            tile.Foreground = Foregrounds[picked];
+            tile.Background = Backgrounds[picked];
+
+            tile.Char = Chars[picked][rnd.Next(Chars[picked].Length)];
+
+            return tile;
         }
     }
 }

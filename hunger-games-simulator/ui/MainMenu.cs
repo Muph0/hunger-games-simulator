@@ -47,6 +47,7 @@ namespace hunger_games_simulator.ui
             {
                 GameServer server = new GameServer();
                 server.LoadAssets();
+                MapMenu.Show(server);
             }
         }
     }

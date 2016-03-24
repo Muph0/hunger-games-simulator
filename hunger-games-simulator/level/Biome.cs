@@ -14,9 +14,9 @@ namespace hunger_games_simulator.level
 
         }
 
-        public string Asset;
+        public string AssetName;
         public Point Pivot;
-        public int[] Tiles;
+        public int[] TilesOwned;
 
         [NonSerialized] public Arena Arena;
     }

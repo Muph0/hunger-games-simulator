@@ -9,12 +9,13 @@ namespace hunger_games_simulator.core
 {
     class GameAssets
     {
-        public Dictionary<string, BiomeAsset> Biomes;
-        public Dictionary<string, ItemAsset> Items;
+        public Dictionary<string, BiomeAsset> BiomeAssets;
+        public Dictionary<string, ItemAsset> ItemAssets;
 
         public GameAssets()
         {
-
+            BiomeAssets = new Dictionary<string, BiomeAsset>();
+            ItemAssets = new Dictionary<string, ItemAsset>();
         }
 
         public void LoadLocal()
@@ -26,14 +27,15 @@ namespace hunger_games_simulator.core
             DirectoryInfo dir = new DirectoryInfo(dirpath);
             foreach (FileInfo file in dir.GetFiles("*.ini"))
             {
+                if (file.Name.First() != '_')
                 ParseLocal(file.FullName);
             }
             foreach (DirectoryInfo d in dir.GetDirectories())
             {
-                LoadLocal(d.FullName);
+                if (d.Name.First() != '_')
+                    LoadLocal(d.FullName);
             }
         }
-
         public void ParseLocal(string filename)
         {
             IniFile ini = new IniFile(filename);
@@ -60,8 +62,34 @@ namespace hunger_games_simulator.core
             foreach (string biome in biomes_list)
             {
                 BiomeAsset b = new BiomeAsset(ini, biome);
-                this.Biomes.Add(biome, b);
+                this.BiomeAssets.Add(biome, b);
             }
+        }
+
+        public string PickBiomeAmountBased(Random rnd)
+        {
+            int[] amts = new int[BiomeAssets.Count];
+            string[] names = new string[BiomeAssets.Count];
+            int amt_total = 0;
+            for (int i = 0; i < BiomeAssets.Count; i++)
+            {
+                amt_total += BiomeAssets.ElementAt(i).Value.Amount;
+                amts[i] = amt_total;
+                names[i] = BiomeAssets.ElementAt(i).Key;
+            }
+
+            int pick = rnd.Next(amt_total);
+
+            for (int i = 0; i < BiomeAssets.Count; i++)
+            {
+                if (pick < amts[i])
+                {
+                    pick = i;
+                    break;
+                }
+            }
+
+            return names[pick];
         }
     }
 }

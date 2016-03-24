@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using hunger_games_simulator.core;
+using hunger_games_simulator.assets;
 
 namespace hunger_games_simulator.level
 {
     class ArenaGenerator
     {
-        public static Arena Generate(GameAssets assets, int seed, int biome_count)
+        public static Arena Generate(GameAssets gameAssets, int seed, int biome_count)
         {
             // Prepare stuff
-            Arena arena = new Arena(40, 25);
+            Arena arena = new Arena(50, 25);
             arena.Biomes = new Biome[biome_count];
             List<int>[] biome_tiles_list = new List<int>[biome_count];
 
             // halton sequence is used for generating evenly distributed points
-            HaltonSet hlt = new HaltonSet(seed);
             Random rnd = new Random(seed);
+            HaltonSet hlt = new HaltonSet(seed);
 
             // set locations of biome pivots
             for (int i = 0; i < biome_count; i++)
@@ -56,11 +57,23 @@ namespace hunger_games_simulator.level
             // assign the calculated tiles to actual biomes
             for (int i = 0; i < biome_count; i++)
             {
-                arena.Biomes[i].Tiles = biome_tiles_list[i].ToArray();
+                arena.Biomes[i].TilesOwned = biome_tiles_list[i].ToArray();
+                arena.Biomes[i].AssetName = gameAssets.PickBiomeAmountBased(rnd);
             }
 
-            // time to POPULATE tiles
+            // time to POPULATE 
+            //                 *biomes*
+            for (int b = 0; b < biome_count; b++)
+            {
+                Biome biome = arena.Biomes[b];
+                BiomeAsset biome_asset = gameAssets.BiomeAssets[biome.AssetName];
 
+                for (int t = 0; t < biome.TilesOwned.Length; t++)
+                {
+                    Tile tile = biome_asset.GenerateTile(rnd);
+                    arena.Tiles[biome.TilesOwned[t]] = tile;
+                }
+            }
 
 
             return arena;

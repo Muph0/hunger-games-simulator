@@ -23,7 +23,7 @@ namespace hunger_games_simulator
         // First Method
         [DllImport("kernel32")]
         static extern int GetPrivateProfileString(string Section, string Key,
-               string Value, StringBuilder Result, int Size, string FileName);
+               string Value, byte[] Result, int Size, string FileName);
 
         // Second Method
         [DllImport("kernel32")]
@@ -43,6 +43,8 @@ namespace hunger_games_simulator
         {
             path = INIPath;
         }
+
+        Encoding ENCODING = Encoding.UTF8;
 
         // The Function called to obtain the SectionHeaders,
         // and returns them in an Dynamic Array.
@@ -64,8 +66,7 @@ namespace hunger_games_simulator
                 if (size < maxsize - 2)
                 {
                     // Converts the bytes value into an ASCII char. This is one long string.
-                    string Selected = Encoding.ASCII.GetString(bytes, 0,
-                                               size - (size > 0 ? 1 : 0));
+                    string Selected = ENCODING.GetString(bytes, 0, size - (size > 0 ? 1 : 0));
                     // Splits the Long string into an array based on the "\0"
                     // or null (Newline) value and returns the value(s) in an array
                     return Selected.Split(new char[] { '\0' });
@@ -94,8 +95,7 @@ namespace hunger_games_simulator
                 {
                     // Converts the bytes value into an ASCII char.
                     // This is one long string.
-                    string entries = Encoding.ASCII.GetString(bytes, 0,
-                                              size - (size > 0 ? 1 : 0));
+                    string entries = ENCODING.GetString(bytes, 0, size - (size > 0 ? 1 : 0));
                     // Splits the Long string into an array based on the "\0"
                     // or null (Newline) value and returns the value(s) in an array
                     return entries.Split(new char[] { '\0' });
@@ -114,13 +114,13 @@ namespace hunger_games_simulator
                 //    Obtains the EntryValue information and uses the StringBuilder
                 //    Function to and stores them in the maxsize buffers (result).
                 //    Note that the SectionHeader and EntryKey values has been passed.
-                StringBuilder result = new StringBuilder(maxsize);
-                int size = GetPrivateProfileString(section, entry, "",
-                                                   result, maxsize, path);
+                byte[] bytes = new byte[maxsize];
+                int size = GetPrivateProfileString(section, entry, "", bytes, maxsize, path);
                 if (size < maxsize - 1)
                 {
                     // Returns the value gathered from the EntryKey
-                    return result.ToString();
+                    string str = ENCODING.GetString(bytes,0,size);
+                    return str;
                 }
             }
         }
