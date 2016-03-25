@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using hunger_games_simulator.ui;
+using ConsoleBufferApi;
 
 namespace hunger_games_simulator
 {
@@ -15,6 +16,7 @@ namespace hunger_games_simulator
             Console.BufferWidth = 80;
             Console.Clear();
 
+            ConsoleBuffer.Fullscreen = true;
             new MainMenu().Show();
         }
     }

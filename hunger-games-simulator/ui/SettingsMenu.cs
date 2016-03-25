@@ -21,8 +21,8 @@ namespace hunger_games_simulator.ui
 
         void UpdateItems()
         {
-            string fullscreen_stat = ConsoleBuffer.IsFullscreen?Enabled:Disabled;
-            Items[0] = proitems[0].PadRight(width - fullscreen_stat.Length-2) + fullscreen_stat;
+            string fullscreen_stat = ConsoleBuffer.Fullscreen ? Enabled : Disabled;
+            Items[0] = proitems[0].PadRight(width - fullscreen_stat.Length - 2) + fullscreen_stat;
         }
 
         public override ConsoleKeyInfo Read()
@@ -33,7 +33,7 @@ namespace hunger_games_simulator.ui
             {
                 if (k.Key == ConsoleKey.LeftArrow || k.Key == ConsoleKey.RightArrow || k.Key == ConsoleKey.Enter)
                 {
-                    ConsoleBuffer.Fullscreen();
+                    ConsoleBuffer.ToggleFullscreen();
                 }
             }
 
@@ -51,7 +51,7 @@ namespace hunger_games_simulator.ui
             buffer.Write("Settings");
             buffer.SetCursorPosition(10, 4);
             buffer.ForegroundColor = ConsoleColor.DarkCyan;
-            buffer.Write("".PadRight(width,'═'));
+            buffer.Write("".PadRight(width, '═'));
             buffer.ResetColor();
             buffer.DrawSelf();
 

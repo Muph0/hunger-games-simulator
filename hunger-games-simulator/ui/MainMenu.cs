@@ -61,7 +61,7 @@ namespace hunger_games_simulator.ui
             }
             if (selected == Items.Length - 1)
             {
-                Environment.Exit(0);
+                ConsoleBuffer.Fullscreen = false;
             }
         }
     }
