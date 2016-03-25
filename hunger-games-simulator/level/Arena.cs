@@ -10,6 +10,17 @@ namespace hunger_games_simulator.level
     {
         public Tile[] Tiles;
         public Biome[] Biomes;
+        int seed = -1;
+        public int Seed
+        {
+            get { return seed; }
+            set {
+                if (seed == -1)
+                    seed = value;
+                else
+                    throw new Exception();
+            }
+        }
 
         public int Width { get; private set; }
         public int Height { get; private set; }

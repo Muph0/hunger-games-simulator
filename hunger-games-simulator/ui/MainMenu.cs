@@ -17,7 +17,7 @@ namespace hunger_games_simulator.ui
 
         public void Show()
         {
-            ConsoleBuffer buffer = new ConsoleBuffer();
+            buffer = new ConsoleBuffer();
 
             buffer.Clear();
             buffer.ForegroundColor = ConsoleColor.Red;
@@ -43,16 +43,15 @@ namespace hunger_games_simulator.ui
             );
 
 
-            buffer.DrawSelf();
-
-            Console.SetCursorPosition(35, buffer.CursorTop + 1);
-            int selected = this.ReadLine();
+            buffer.SetCursorPosition(35, buffer.CursorTop + 1);
+            int selected = this.ReadMenu();
             
             if (selected == 0)
             {
                 GameServer server = new GameServer();
                 server.LoadAssets();
-                MapPreviewMenu.Show(server);
+                new MapPreviewMenu().Show(server);
+                Show();
             }
             if (selected == 3)
             {

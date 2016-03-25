@@ -48,6 +48,11 @@
     <Compile Include="core\GameAssets.cs" />
     <Compile Include="core\GameClient.cs" />
     <Compile Include="core\GameServer.cs" />
+    <Compile Include="core\GameState.cs" />
+    <Compile Include="core\networking\ClientRequest.cs" />
+    <Compile Include="core\networking\ServerResponse.cs" />
+    <Compile Include="core\networking\ServersideClientInfo.cs" />
+    <Compile Include="core\TurnState.cs" />
     <Compile Include="Halton.cs" />
     <Compile Include="IniFile.cs" />
     <Compile Include="level\ArenaGenerator.cs" />
@@ -59,7 +64,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ui\MainMenu.cs" />
-    <Compile Include="ui\MapMenu.cs" />
+    <Compile Include="ui\MapPreviewMenu.cs" />
     <Compile Include="ui\Menu.cs" />
     <Compile Include="ui\SettingsMenu.cs" />
   </ItemGroup>
@@ -67,6 +72,10 @@
     <ProjectReference Include="..\..\MazeGenerator\ConsoleBufferApi\ConsoleBufferApi.csproj">
       <Project>{49ED6BDC-48CE-42D1-840A-F1161AD26D00}</Project>
       <Name>ConsoleBufferApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TcpServer\tcpServer\tcpServer.csproj">
+      <Project>{537D46B1-F453-4EE7-B0F9-0336D7AF745A}</Project>
+      <Name>tcpServer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

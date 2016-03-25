@@ -14,6 +14,7 @@ namespace hunger_games_simulator.level
             // Prepare stuff
             Arena arena = new Arena(50, 25);
             arena.Biomes = new Biome[biome_count];
+            arena.Seed = seed;
             List<int>[] biome_tiles_list = new List<int>[biome_count];
 
             // halton sequence is used for generating evenly distributed points

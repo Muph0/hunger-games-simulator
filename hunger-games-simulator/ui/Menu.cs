@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ConsoleBufferApi;
 
 namespace hunger_games_simulator.ui
 {
@@ -10,10 +11,12 @@ namespace hunger_games_simulator.ui
         public string pretoken;
         public int Selected = 0;
         public bool Backround = true, Escapable = false;
-        public ConsoleColor BackgroundColor, ForegroundColor, SelectedColor;
+        public ConsoleColor BackgroundColor, ForegroundColor, SelectedColor, HeadingColor;
+
+        public ConsoleBuffer buffer;
 
         public string[] Items;
-        int x, y;
+        protected int X, Y;
 
         public int SelectableItemCount
         {
@@ -39,9 +42,19 @@ namespace hunger_games_simulator.ui
 
         public Menu(string[] items)
         {
+            buffer = new ConsoleBuffer();
             pretoken = "► ";
             this.Items = (string[])items.Clone();
             this.ResetColors();
+
+            for (int i = 0; i < Items.Length; i++)
+            {
+                if (Items[i].First() != '!')
+                {
+                    Selected = i;
+                    break;
+                }
+            }
         }
 
         public void ResetColors()
@@ -49,12 +62,13 @@ namespace hunger_games_simulator.ui
             BackgroundColor = ConsoleColor.Black;
             ForegroundColor = ConsoleColor.Gray;
             SelectedColor = ConsoleColor.DarkRed;
+            HeadingColor = ConsoleColor.White;
         }
 
-        public virtual int ReadLine()
+        public virtual int ReadMenu()
         {
-            this.x = Console.CursorLeft;
-            this.y = Console.CursorTop;
+            this.X = buffer.CursorLeft;
+            this.Y = buffer.CursorTop;
 
             while (true)
             {
@@ -97,34 +111,45 @@ namespace hunger_games_simulator.ui
 
         public void Draw()
         {
-            Console.ForegroundColor = ForegroundColor;
+            buffer.ForegroundColor = ForegroundColor;
             for (int i = 0; i < Items.Length; i++)
             {
-                Console.SetCursorPosition(x, y + i);
+                buffer.SetCursorPosition(X, Y + i);
                 string item = Items[i];
 
-                Console.ForegroundColor = ForegroundColor;
-                Console.BackgroundColor = BackgroundColor;
+                buffer.ForegroundColor = ForegroundColor;
+                buffer.BackgroundColor = BackgroundColor;
 
                 if (i == Selected)
                 {
-                    Console.ForegroundColor = SelectedColor;
-                    Console.Write(pretoken);
+                    buffer.ForegroundColor = SelectedColor;
+                    buffer.Write(pretoken);
 
-                    Console.ForegroundColor = ForegroundColor;
-                    Console.BackgroundColor = SelectedColor;
+                    buffer.ForegroundColor = ForegroundColor;
+                    buffer.BackgroundColor = SelectedColor;
                 }
                 else
                 {
-                    Console.Write("".PadLeft(pretoken.Length));
+                    if (IsValidMenuItem(item))
+                        buffer.Write("".PadLeft(pretoken.Length));
+                    else
+                        buffer.SetCursorPosition(X + pretoken.Length, Y + i);
                 }
 
                 if (!IsValidMenuItem(item))
                     item = (item.Substring(1));
 
-                Console.Write(item);
-                Console.BackgroundColor = BackgroundColor;
+                if (!IsValidMenuItem(item))
+                {
+                    item = (item.Substring(1));
+                    buffer.ForegroundColor = HeadingColor;
+                }
+
+                buffer.Write(item);
+                buffer.BackgroundColor = BackgroundColor;
             }
+
+            buffer.DrawSelf();
         }
 
         public static bool IsValidMenuItem(string item)

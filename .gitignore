@@ -1,4 +1,11 @@
 *.pdb
+*.suo
 *.cache
 *manifest*
 obj/*
+hunger-games-simulator.suo
+hunger-games-simulator/bin/Debug/ConsoleBufferApi.pdb
+hunger-games-simulator/bin/Debug/hunger-games-simulator.pdb
+hunger-games-simulator/obj/x86/Debug/hunger-games-simulator.pdb
+hunger-games-simulator/obj/x86/Debug/hunger-games-simulator.csprojResolveAssemblyReference.cache
+hunger-games-simulator/obj/x86/Debug/DesignTimeResolveAssemblyReferencesInput.cache

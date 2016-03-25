@@ -46,17 +46,16 @@ namespace hunger_games_simulator.ui
 
         public void Show()
         {
-            ConsoleBuffer buffer = new ConsoleBuffer();
+            buffer = new ConsoleBuffer();
             buffer.SetCursorPosition(10, 3);
             buffer.Write("Settings");
             buffer.SetCursorPosition(10, 4);
             buffer.ForegroundColor = ConsoleColor.DarkCyan;
             buffer.Write("".PadRight(width, '═'));
             buffer.ResetColor();
-            buffer.DrawSelf();
 
-            Console.SetCursorPosition(10, 6);
-            this.ReadLine();
+            buffer.SetCursorPosition(10, 6);
+            this.ReadMenu();
         }
     }
 }
