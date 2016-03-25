@@ -10,7 +10,7 @@ namespace hunger_games_simulator.ui
     {
         const string Enabled = "TRUE", Disabled = "FALSE";
         int width = 40;
-        static readonly string[] proitems = new string[] { "Fullscreen", "!", "Back" };
+        static readonly string[] proitems = new string[] { "Fullscreen", "!", "Character", "!", "Back" };
 
         public SettingsMenu()
             : base(proitems.ToArray())
@@ -39,23 +39,27 @@ namespace hunger_games_simulator.ui
 
             UpdateItems();
 
-            if (k.Key == ConsoleKey.Enter && Selected != Items.Length - 1)
-                k = new ConsoleKeyInfo();
             return k;
         }
 
         public void Show()
         {
-            buffer = new ConsoleBuffer();
-            buffer.SetCursorPosition(10, 3);
-            buffer.Write("Settings");
-            buffer.SetCursorPosition(10, 4);
-            buffer.ForegroundColor = ConsoleColor.DarkCyan;
-            buffer.Write("".PadRight(width, '═'));
-            buffer.ResetColor();
+            while (true)
+            {
+                buffer = new ConsoleBuffer();
+                buffer.SetCursorPosition(10, 3);
+                buffer.Write("Settings");
+                buffer.SetCursorPosition(10, 4);
+                buffer.ForegroundColor = ConsoleColor.DarkCyan;
+                buffer.Write("".PadRight(width, '═'));
+                buffer.ResetColor();
 
-            buffer.SetCursorPosition(10, 6);
-            this.ReadMenu();
+                buffer.SetCursorPosition(10, 6);
+                this.ReadMenu();
+
+                if (Selected == Items.Length - 1)
+                    return;
+            }
         }
     }
 }

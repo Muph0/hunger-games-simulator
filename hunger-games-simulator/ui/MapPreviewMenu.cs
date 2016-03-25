@@ -5,6 +5,7 @@ using System.Text;
 using hunger_games_simulator.core;
 using hunger_games_simulator.level;
 using ConsoleBufferApi;
+using System.Net;
 
 namespace hunger_games_simulator.ui
 {
@@ -41,33 +42,39 @@ namespace hunger_games_simulator.ui
 
         public void Show(GameServer server)
         {
-            arena = ArenaGenerator.Generate(server.GameAssets, seed, biome_count);
-            UpdateItems();
-
-            ConsoleBuffer mapbuf = arena.MapBuffer();
-            buffer = new ConsoleBuffer();
-            buffer.InsertBuffer(mapbuf, 0, 0);
-            buffer.SetCursorPosition(mapbuf.Width, 0);
-            buffer.WriteVertical("".PadRight(25, '▌'));
-
-            buffer.SetCursorPosition(mapbuf.Width, 7);
-            buffer.Write("█".PadRight(30, '─'));
-
-            buffer.SetCursorPosition(mapbuf.Width + 1, 1);
-
-            this.ReadMenu();
-
-            if (Selected == proitems.Length - 1)
-                return;
-            if (Selected == proitems.Length - 2)
+            while (true)
             {
-                GameState gs = new GameState(arena, max_players, port);
-                server.Open(gs);
-                
-                return;
-            }
+                arena = ArenaGenerator.Generate(server.GameAssets, seed, biome_count);
+                UpdateItems();
 
-            Show(server);
+                ConsoleBuffer mapbuf = arena.MapBuffer();
+                buffer = new ConsoleBuffer();
+                buffer.InsertBuffer(mapbuf, 0, 0);
+                buffer.SetCursorPosition(mapbuf.Width, 0);
+                buffer.WriteVertical("".PadRight(25, '▌'));
+
+                buffer.SetCursorPosition(mapbuf.Width, 7);
+                buffer.Write("█".PadRight(30, '─'));
+
+                buffer.SetCursorPosition(mapbuf.Width + 1, 1);
+
+                this.ReadMenu();
+
+                if (Selected == proitems.Length - 1)
+                    return;
+                if (Selected == proitems.Length - 2)
+                {
+                    GameState gs = new GameState(arena, max_players, port);
+                    server.Open(gs);
+
+                    IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+                    GameClient client = new GameClient(ep);
+                    new ConnectingMenu().Show(client);
+
+                    server.Close();
+                    return;
+                }
+            }
         }
 
         public bool NumberSetting(int index, ConsoleKeyInfo key, int min, int max, int length, ref int val)
@@ -135,7 +142,7 @@ namespace hunger_games_simulator.ui
                 buffer.DrawSelf();
             }
 
-            return new ConsoleKeyInfo();
+            return key;
         }
     }
 }

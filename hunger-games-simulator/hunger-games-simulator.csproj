@@ -52,6 +52,7 @@
     <Compile Include="core\networking\ClientRequest.cs" />
     <Compile Include="core\networking\ServerResponse.cs" />
     <Compile Include="core\networking\ServersideClientInfo.cs" />
+    <Compile Include="core\PlayerCharacter.cs" />
     <Compile Include="core\TurnState.cs" />
     <Compile Include="Halton.cs" />
     <Compile Include="IniFile.cs" />
@@ -63,6 +64,8 @@
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ui\ConnectingMenu.cs" />
+    <Compile Include="ui\InputBox.cs" />
     <Compile Include="ui\MainMenu.cs" />
     <Compile Include="ui\MapPreviewMenu.cs" />
     <Compile Include="ui\Menu.cs" />

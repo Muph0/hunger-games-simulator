@@ -59,7 +59,6 @@ namespace hunger_games_simulator.core
             if (req.Purpose == ClientRequest.RequestType.Connect)
             {
                 ServersideClientInfo client = new ServersideClientInfo();
-                client.PlayerName = (string)req.Data[0];
                 client.ID = clients.Count;
                 clients.Add(client);
 
@@ -76,6 +75,11 @@ namespace hunger_games_simulator.core
             ClientRequest req = ClientRequest.ReceiveFrom(stream);
 
 
+        }
+
+        public void Close()
+        {
+            server.Close();
         }
     }
 }

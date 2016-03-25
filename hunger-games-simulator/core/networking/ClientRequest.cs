@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace hunger_games_simulator.core.networking
 {
+    [Serializable]
     class ClientRequest
     {
         public RequestType Purpose;
