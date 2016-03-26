@@ -73,11 +73,11 @@ namespace hunger_games_simulator.ui
             {
                 if (key.Key == ConsoleKey.Enter)
                 {
-                    Console.BackgroundColor = this.SelectedColor;
-                    Console.SetCursorPosition(this.X + width + 2, this.Y + Selected);
-                    ConsoleBuffer.SendKeys(val.ToString());
-                    val = buffer.ReadNumberAlignRight(length, min);
-                    Console.ResetColor();
+                    if (this.fillBackround)
+                        buffer.BackgroundColor = this.SelectedColor;
+                    buffer.SetCursorPosition(this.X + width + 2, this.Y + Selected);
+                    val = buffer.ReadNumberAlignRight(length, min, val.ToString());
+                    buffer.ResetColor();
                 }
 
                 if (key.Key == ConsoleKey.RightArrow)
@@ -122,11 +122,12 @@ namespace hunger_games_simulator.ui
             {
                 if (key.Key == ConsoleKey.Enter)
                 {
-                    Console.BackgroundColor = this.SelectedColor;
-                    Console.SetCursorPosition(this.X + width + 2, this.Y + Selected);
-                    ConsoleBuffer.SendKeys(val.ToString());
-                    val = buffer.ReadLineAlingRight(length);
-                    Console.ResetColor();
+                    if (this.fillBackround)
+                        buffer.BackgroundColor = this.SelectedColor;
+                    buffer.SetCursorPosition(this.X + width + 2, this.Y + Selected);
+                    //ConsoleBuffer.SendKeys(oldval.ToString());
+                    val = buffer.ReadLineAlingRight(length, oldval);
+                    buffer.ResetColor();
                 }
             }
 

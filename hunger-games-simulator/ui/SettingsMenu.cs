@@ -60,7 +60,7 @@ namespace hunger_games_simulator.ui
 
                 if (Selected == Items.Length - 3)
                 {
-                    new CharacterEditMenu(client.Charcter).Show();
+                    new CharacterEditMenu(client).Show();
                 }
                 if (Selected == Items.Length - 1)
                     return;

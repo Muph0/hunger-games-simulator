@@ -13,7 +13,7 @@ namespace hunger_games_simulator.core
     class GameClient
     {
         public Arena ClientArena;
-        public PlayerCharacter Charcter;
+        public PlayerCharacter Character;
 
         TcpClient tcpClient;
         public IPEndPoint ServerEp;
@@ -23,7 +23,8 @@ namespace hunger_games_simulator.core
         public GameClient()
         {
             tcpClient = new TcpClient();
-            Charcter = PlayerCharacter.Random(new Random());
+            Character = new PlayerCharacter();
+            Character.Randomize();
         }
 
         public void Connect(IPEndPoint ip)

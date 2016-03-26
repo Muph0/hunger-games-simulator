@@ -132,24 +132,26 @@ namespace hunger_games_simulator.core
             }
         }
 
-        public static PlayerCharacter Random(Random rnd)
+        public void Randomize()
         {
-            PlayerCharacter c = new PlayerCharacter();
+            Random rnd = new System.Random((int)Program.Time);
 
-            while (c.FreeStatPoints > 0)    
+            for (int i = 0; i < 4; i++)
+                Stats[i] = 0;
+            for (int i = 0; i < 8; i++)
+                Skills[i] = 0;
+
+            while (FreeStatPoints > 0)
             {
                 int i = rnd.Next(4);
-                c.Stats[i] += 1;
+                Stats[i] += 1;
             }
 
-            while (c.FreeSkillPoints > 0)
-                c.Skills[rnd.Next(8)] += 1;
+            while (FreeSkillPoints > 0)
+                Skills[rnd.Next(8)] += 1;
 
-            byte[] buf = new byte[8];
-            rnd.NextBytes(buf);
-            c.Name = "Nameless " + Convert.ToBase64String(buf);
-
-            return c;
+            int cap = (int)Math.Pow(10, 7);
+            Name = "Nameless " + (rnd.Next(cap / 10 * 9) + cap / 10);
         }
     }
 }

@@ -18,12 +18,12 @@ namespace hunger_games_simulator.ui
             "!", "Random", "Done"
         };
 
-        PlayerCharacter character;
-        public CharacterEditMenu(PlayerCharacter character)
+        GameClient client;
+        public CharacterEditMenu(GameClient client)
             : base(proitems)
         {
             width = 35;
-            this.character = character;
+            this.client = client;
             this.SelectedColor = ConsoleColor.White;
             this.fillBackround = false;
         }
@@ -32,13 +32,14 @@ namespace hunger_games_simulator.ui
         int o2 = 9;
         public void UpdateItems()
         {
-            Items[2] = "!◘◘2" + (proitems[2] + " ◘a◘" + character.FreeStatPoints).PadRight(width + 3);
-            Items[8] = "!◘◘6" + (proitems[8] + " ◘a◘" + character.FreeSkillPoints).PadRight(width + 3);
+            Items[0] = proitems[0] + client.Character.Name.PadLeft(width - proitems[0].Length);
+            Items[2] = "!◘◘2" + (proitems[2] + " ◘a◘" + client.Character.FreeStatPoints).PadRight(width + 3);
+            Items[8] = "!◘◘6" + (proitems[8] + " ◘a◘" + client.Character.FreeSkillPoints).PadRight(width + 3);
 
             for (int i = 0; i < 4; i++)
-                Items[i + o1] = proitems[i + o1] + character.Stats[i].ToString().PadLeft(width - proitems[i + o1].Length);
+                Items[i + o1] = proitems[i + o1] + client.Character.Stats[i].ToString().PadLeft(width - proitems[i + o1].Length);
             for (int i = 0; i < 8; i++)
-                Items[i + o2] = proitems[i + o2] + character.Skills[i].ToString().PadLeft(width - proitems[i + o2].Length);
+                Items[i + o2] = proitems[i + o2] + client.Character.Skills[i].ToString().PadLeft(width - proitems[i + o2].Length);
         }
 
         public void Show()
@@ -48,6 +49,11 @@ namespace hunger_games_simulator.ui
                 buffer.SetCursorPosition(30, 2);
                 UpdateItems();
                 this.ReadMenu();
+
+                if (Selected == Items.Length - 2)
+                    client.Character.Randomize();
+                if (Selected == Items.Length - 1)
+                    return;
             }
         }
 
@@ -56,28 +62,28 @@ namespace hunger_games_simulator.ui
             ConsoleKeyInfo key = base.Read();
             bool redraw = false;
 
-            if (this.StringSetting(0, key, width - 7, ref character.Name))
+            if (this.StringSetting(0, key, width - 7, ref client.Character.Name))
                 redraw = true;
 
             // STATS
             for (int i = 0; i < 4; i++)
             {
-                int stat = character.Stats[i];
-                if (NumberLRSetting(o1 + i, key, 0, character.FreeStatPoints + stat+1, ref stat))
+                int stat = client.Character.Stats[i];
+                if (NumberLRSetting(o1 + i, key, 0, client.Character.FreeStatPoints + stat + 1, ref stat))
                 {
                     redraw = true;
-                    character.Stats[i] = stat;
+                    client.Character.Stats[i] = stat;
                 }
             }
 
             // SKILLS
             for (int i = 0; i < 8; i++)
             {
-                int skill = character.Skills[i];
-                if (NumberLRSetting(o2 + i, key, 0, character.FreeSkillPoints + skill+1, ref skill))
+                int skill = client.Character.Skills[i];
+                if (NumberLRSetting(o2 + i, key, 0, client.Character.FreeSkillPoints + skill + 1, ref skill))
                 {
                     redraw = true;
-                    character.Skills[i] = skill;
+                    client.Character.Skills[i] = skill;
                 }
             }
 
