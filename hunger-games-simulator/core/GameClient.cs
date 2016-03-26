@@ -12,21 +12,23 @@ namespace hunger_games_simulator.core
 {
     class GameClient
     {
-        Arena ClientArena;
+        public Arena ClientArena;
+        public PlayerCharacter Charcter;
 
         TcpClient tcpClient;
         public IPEndPoint ServerEp;
         public bool Connected { get { return tcpClient.Connected; } }
         bool busy = false;
 
-        public GameClient(IPEndPoint ip)
+        public GameClient()
         {
-            ServerEp = ip;
             tcpClient = new TcpClient();
+            Charcter = PlayerCharacter.Random(new Random());
         }
 
-        public void Connect()
+        public void Connect(IPEndPoint ip)
         {
+            ServerEp = ip;
             tcpClient.BeginConnect(ServerEp.Address, ServerEp.Port, new AsyncCallback(OnConnect), this);
         }
 

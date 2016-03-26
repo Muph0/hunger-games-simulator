@@ -5,6 +5,7 @@ using System.Text;
 using ConsoleBufferApi;
 using System.Threading;
 using hunger_games_simulator.core;
+using System.Net;
 
 namespace hunger_games_simulator.ui
 {
@@ -26,12 +27,12 @@ namespace hunger_games_simulator.ui
             headline.Write(connecting_str);
         }
 
-        public void Show(GameClient client)
+        public void Show(GameClient client, IPEndPoint ep)
         {
             buffer.SetCursorPosition(10, 3);
             buffer.ForegroundColor = ConsoleColor.Gray;
             buffer.InsertBuffer(headline, 26, 4);
-            string ip = client.ServerEp.Address.ToString();
+            string ip = ep.Address.ToString();
             buffer.SetCursorPosition((80 - ip.Length) / 2, 8);
             buffer.Write(ip);
             buffer.DrawSelf();
@@ -44,15 +45,17 @@ namespace hunger_games_simulator.ui
             Console.Write("Cancel");
             Console.ResetColor();
 
-            client.Connect();
+            client.Connect(ep);
 
 
 
             long starttime = Program.Time;
             while (starttime > Program.Time - 20 * 1000/*ms*/)
             {
-                double time = Program.Time / 500.0 * Math.PI;
+                double time = Program.Time / 120.0;
                 ConsoleBuffer slider = new ConsoleBuffer(headline.Width, 1);
+                //slider.BackgroundColor = ConsoleColor.DarkBlue;
+                slider.Clear();
 
                 string s = "██████";
                 slider.DrawText(s, (int)(0.55 * Math.Sin(time) * slider.Width + 0.5 * slider.Width) - s.Length / 2, 0, this.SelectedColor, ConsoleColor.Black);

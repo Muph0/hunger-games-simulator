@@ -73,8 +73,6 @@ namespace hunger_games_simulator.core
         {
             NetworkStream stream = connection.Socket.GetStream();
             ClientRequest req = ClientRequest.ReceiveFrom(stream);
-
-
         }
 
         public void Close()

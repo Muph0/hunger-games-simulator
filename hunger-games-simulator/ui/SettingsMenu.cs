@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ConsoleBufferApi;
+using hunger_games_simulator.core;
 
 namespace hunger_games_simulator.ui
 {
     class SettingsMenu : Menu
     {
         const string Enabled = "TRUE", Disabled = "FALSE";
-        int width = 40;
-        static readonly string[] proitems = new string[] { "Fullscreen", "!", "Character", "!", "Back" };
+        static readonly string[] proitems = new string[] { "Fullscreen", "!", "Edit character...", "!", "Back" };
 
         public SettingsMenu()
             : base(proitems.ToArray())
         {
+            width = 40;
             this.SelectedColor = ConsoleColor.DarkCyan;
             UpdateItems();
         }
@@ -42,7 +43,7 @@ namespace hunger_games_simulator.ui
             return k;
         }
 
-        public void Show()
+        public void Show(GameClient client)
         {
             while (true)
             {
@@ -57,6 +58,10 @@ namespace hunger_games_simulator.ui
                 buffer.SetCursorPosition(10, 6);
                 this.ReadMenu();
 
+                if (Selected == Items.Length - 3)
+                {
+                    new CharacterEditMenu(client.Charcter).Show();
+                }
                 if (Selected == Items.Length - 1)
                     return;
             }

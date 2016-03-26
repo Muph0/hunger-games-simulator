@@ -18,10 +18,12 @@ namespace hunger_games_simulator.ui
 
         public void Show()
         {
+            GameClient client = new GameClient();
+
             while (true)
             {
                 buffer = new ConsoleBuffer();
-                
+
                 ConsoleColor logo1 = ConsoleColor.Red, logo2 = ConsoleColor.DarkCyan, black = ConsoleColor.Black;
 
                 buffer.Clear();
@@ -53,10 +55,10 @@ namespace hunger_games_simulator.ui
                     int X = buffer.CursorLeft, Y = buffer.CursorTop;
                     for (int i = 0; i < online.Length; i++)
                     {
-                        int x = i % (online.Length/6) + X, y = i / (online.Length/6) + Y;
+                        int x = i % (online.Length / 6) + X, y = i / (online.Length / 6) + Y;
                         ConsoleBuffer.CharInfo ci = buffer[x, y];
                         char overchar = ' ';
-                        if (ci.Char.AsciiChar == ConsoleBuffer.ASCII.IndexOf('░'))                        
+                        if (ci.Char.AsciiChar == ConsoleBuffer.ASCII.IndexOf('░'))
                             overchar = '▒';
                         if (ci.Char.AsciiChar == ConsoleBuffer.ASCII.IndexOf('▒'))
                             overchar = '▓';
@@ -76,7 +78,7 @@ namespace hunger_games_simulator.ui
                         }
                         else
                         {
-                            buffer.DrawText(online_char.ToString(), x, y, logo2, overchar != ' ' ? black: black);
+                            buffer.DrawText(online_char.ToString(), x, y, logo2, overchar != ' ' ? black : black);
                         }
                     }
                 }
@@ -89,7 +91,7 @@ namespace hunger_games_simulator.ui
                 {
                     GameServer server = new GameServer();
                     server.LoadAssets();
-                    new MapPreviewMenu().Show(server);
+                    new MapPreviewMenu().Show(server, client);
                 }
                 if (selected == 1)
                 {
@@ -111,8 +113,7 @@ namespace hunger_games_simulator.ui
                     if (IPAddress.TryParse(result, out ip))
                     {
                         IPEndPoint ep = new IPEndPoint(ip, port);
-                        GameClient client = new GameClient(ep);
-                        new ConnectingMenu().Show(client);
+                        new ConnectingMenu().Show(client, ep);
                     }
                     else
                     {
@@ -121,7 +122,7 @@ namespace hunger_games_simulator.ui
                 }
                 if (selected == 3)
                 {
-                    new SettingsMenu().Show();
+                    new SettingsMenu().Show(client);
                 }
                 if (selected == Items.Length - 1)
                 {

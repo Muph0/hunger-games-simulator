@@ -11,8 +11,6 @@ namespace hunger_games_simulator.ui
 {
     class MapPreviewMenu : Menu
     {
-        int width = 25;
-
         int seed = 0;
         int biome_count = 30;
         int port = GameServer.DEFAULT_PORT;
@@ -27,6 +25,7 @@ namespace hunger_games_simulator.ui
         public MapPreviewMenu()
             : base(proitems)
         {
+            this.width = 25;
             this.SelectedColor = ConsoleColor.DarkGreen;
 
             seed = (int)(DateTime.Now.Ticks % 100000);
@@ -40,7 +39,7 @@ namespace hunger_games_simulator.ui
             Items[11] = proitems[11] + max_players.ToString().PadLeft(width - proitems[11].Length);
         }
 
-        public void Show(GameServer server)
+        public void Show(GameServer server, GameClient client)
         {
             while (true)
             {
@@ -68,46 +67,12 @@ namespace hunger_games_simulator.ui
                     server.Open(gs);
 
                     IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
-                    GameClient client = new GameClient(ep);
-                    new ConnectingMenu().Show(client);
+                    new ConnectingMenu().Show(client, ep);
 
                     server.Close();
                     return;
                 }
             }
-        }
-
-        public bool NumberSetting(int index, ConsoleKeyInfo key, int min, int max, int length, ref int val)
-        {
-            int oldval = val;
-            if (Selected == index)
-            {
-                if (key.Key == ConsoleKey.Enter)
-                {
-                    Console.BackgroundColor = this.SelectedColor;
-                    Console.SetCursorPosition(this.X + width + 2, this.Y + Selected);
-                    ConsoleBuffer.SendKeys(val.ToString());
-                    val = int.Parse(buffer.ReadNumberAlignRight(length, min));
-                    Console.ResetColor();
-                }
-
-                if (key.Key == ConsoleKey.RightArrow)
-                    val++;
-                if (key.Key == ConsoleKey.LeftArrow)
-                    val--;
-
-                if (val == min - 1)
-                    val = max - 1;
-                if (val == max)
-                    val = min;
-
-                if (val >= max)
-                    val = max - 1;
-                if (val < min)
-                    val = min;
-            }
-
-            return oldval != val;
         }
 
         public override ConsoleKeyInfo Read()

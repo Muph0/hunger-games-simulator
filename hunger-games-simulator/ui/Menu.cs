@@ -10,13 +10,14 @@ namespace hunger_games_simulator.ui
     {
         public string pretoken;
         public int Selected = 0;
-        public bool Backround = true, Escapable = false;
+        public bool fillBackround = true, Escapable = false;
         public ConsoleColor BackgroundColor, ForegroundColor, SelectedColor, HeadingColor;
 
         public ConsoleBuffer buffer;
 
         public string[] Items;
         protected int X, Y;
+        protected int width;
 
         public int SelectableItemCount
         {
@@ -63,6 +64,73 @@ namespace hunger_games_simulator.ui
             ForegroundColor = ConsoleColor.Gray;
             SelectedColor = ConsoleColor.DarkRed;
             HeadingColor = ConsoleColor.White;
+        }
+
+        public bool NumberSetting(int index, ConsoleKeyInfo key, int min, int max, int length, ref int val)
+        {
+            int oldval = val;
+            if (Selected == index)
+            {
+                if (key.Key == ConsoleKey.Enter)
+                {
+                    Console.BackgroundColor = this.SelectedColor;
+                    Console.SetCursorPosition(this.X + width + 2, this.Y + Selected);
+                    ConsoleBuffer.SendKeys(val.ToString());
+                    val = buffer.ReadNumberAlignRight(length, min);
+                    Console.ResetColor();
+                }
+
+                if (key.Key == ConsoleKey.RightArrow)
+                    val++;
+                if (key.Key == ConsoleKey.LeftArrow)
+                    val--;
+
+                if (val == min - 1)
+                    val = max - 1;
+                if (val == max)
+                    val = min;
+
+                if (val >= max)
+                    val = max - 1;
+                if (val < min)
+                    val = min;
+            }
+
+            return oldval != val;
+        }
+        public bool NumberLRSetting(int index, ConsoleKeyInfo key, int min, int max, ref int val)
+        {
+            int oldval = val;
+            if (Selected == index)
+            {
+                if (key.Key == ConsoleKey.RightArrow)
+                    val++;
+                if (key.Key == ConsoleKey.LeftArrow)
+                    val--;
+
+                if (val == min - 1)
+                    val = max - 1;
+                if (val == max)
+                    val = min;
+            }
+            return val != oldval;
+        }
+        public bool StringSetting(int index, ConsoleKeyInfo key, int length, ref string val)
+        {
+            string oldval = val;
+            if (Selected == index)
+            {
+                if (key.Key == ConsoleKey.Enter)
+                {
+                    Console.BackgroundColor = this.SelectedColor;
+                    Console.SetCursorPosition(this.X + width + 2, this.Y + Selected);
+                    ConsoleBuffer.SendKeys(val.ToString());
+                    val = buffer.ReadLineAlingRight(length);
+                    Console.ResetColor();
+                }
+            }
+
+            return val != oldval;
         }
 
         public virtual int ReadMenu()
@@ -125,8 +193,11 @@ namespace hunger_games_simulator.ui
                     buffer.ForegroundColor = SelectedColor;
                     buffer.Write(pretoken);
 
-                    buffer.ForegroundColor = ForegroundColor;
-                    buffer.BackgroundColor = SelectedColor;
+                    if (fillBackround)
+                    {
+                        buffer.ForegroundColor = ForegroundColor;
+                        buffer.BackgroundColor = SelectedColor;
+                    }
                 }
                 else
                 {
