@@ -11,7 +11,7 @@ namespace hunger_games_simulator.core.networking
     [Serializable]
     class ClientRequest
     {
-        public RequestType Purpose;
+        public RequestPurpose Purpose;
         public int ClientID;
         public object[] Data;
 
@@ -20,13 +20,6 @@ namespace hunger_games_simulator.core.networking
             this.ClientID = ClientID;
         }
 
-        public enum RequestType
-        {
-            Connect = 0, // { (string)PlayerName }
-            Ping, // { }
-            SendMeSurroundings,
-            Action,
-        }
         public static ClientRequest ReceiveFrom(Stream stream)
         {
             try
@@ -52,5 +45,14 @@ namespace hunger_games_simulator.core.networking
                 throw e;
             }
         }
+    }
+
+    public enum RequestPurpose
+    {
+        Login = 0, // { (string)PlayerName }
+        Update, // { }
+        LobbyStatus,
+        SendMeSurroundings,
+        Action,
     }
 }

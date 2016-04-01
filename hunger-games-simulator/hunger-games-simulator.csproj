@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ConsoleBufferApi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\ConsoleBufferApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +45,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="tcpServer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\tcpServer.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="assets\BiomeAsset.cs" />
@@ -50,6 +58,7 @@
     <Compile Include="core\GameServer.cs" />
     <Compile Include="core\GameState.cs" />
     <Compile Include="core\networking\ClientRequest.cs" />
+    <Compile Include="core\networking\ClientsideServerInfo.cs" />
     <Compile Include="core\networking\ServerResponse.cs" />
     <Compile Include="core\networking\ServersideClientInfo.cs" />
     <Compile Include="core\PlayerCharacter.cs" />
@@ -67,20 +76,11 @@
     <Compile Include="ui\CharacterEditMenu.cs" />
     <Compile Include="ui\ConnectingMenu.cs" />
     <Compile Include="ui\InputBox.cs" />
+    <Compile Include="ui\LobbyMenu.cs" />
     <Compile Include="ui\MainMenu.cs" />
     <Compile Include="ui\MapPreviewMenu.cs" />
     <Compile Include="ui\Menu.cs" />
     <Compile Include="ui\SettingsMenu.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\MazeGenerator\ConsoleBufferApi\ConsoleBufferApi.csproj">
-      <Project>{49ED6BDC-48CE-42D1-840A-F1161AD26D00}</Project>
-      <Name>ConsoleBufferApi</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TcpServer\tcpServer\tcpServer.csproj">
-      <Project>{537D46B1-F453-4EE7-B0F9-0336D7AF745A}</Project>
-      <Name>tcpServer</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -16,9 +16,9 @@ namespace hunger_games_simulator.core.networking
 
         public ServerResponse()
         {
-            
+
         }
-        
+
         public static ServerResponse ReceiveFrom(Stream stream)
         {
             IFormatter formatter = new BinaryFormatter();
@@ -30,14 +30,14 @@ namespace hunger_games_simulator.core.networking
             IFormatter formatter = new BinaryFormatter();
             formatter.Serialize(stream, this);
         }
-
-        public enum ResponseType
-        {
-            Handshake = 0, // (int)ID
-            Surroundings,
-            ActionDenied,
-            ActionAllowed,
-            NewTurn,
-        }
+    }
+    public enum ResponseType
+    {
+        LoginAccepted = 0, // (int)ID
+        Surroundings,
+        ActionDenied,
+        ActionAllowed,
+        NewTurn,
+        LobbyInfo,
     }
 }

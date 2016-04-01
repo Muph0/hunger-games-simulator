@@ -2,9 +2,7 @@ c:\users\honky\documents\visual studio 2010\Projects\hunger-games-simulator\hung
 c:\users\honky\documents\visual studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\bin\Debug\hunger-games-simulator.pdb
 c:\users\honky\documents\visual studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\obj\x86\Debug\hunger-games-simulator.exe
 c:\users\honky\documents\visual studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\obj\x86\Debug\hunger-games-simulator.pdb
-C:\Users\Honky\Documents\Visual Studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\bin\Debug\ConsoleBufferApi.dll
 C:\Users\Honky\Documents\Visual Studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\bin\Debug\ConsoleBufferApi.pdb
 C:\Users\Honky\Documents\Visual Studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\obj\x86\Debug\hunger-games-simulator.csprojResolveAssemblyReference.cache
 C:\Users\Honky\Documents\Visual Studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\bin\Debug\assets\items.ini
-C:\Users\Honky\Documents\Visual Studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\bin\Debug\tcpServer.dll
 C:\Users\Honky\Documents\Visual Studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\bin\Debug\tcpServer.pdb

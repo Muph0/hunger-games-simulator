@@ -15,12 +15,13 @@ namespace hunger_games_simulator.ui
         int biome_count = 30;
         int port = GameServer.DEFAULT_PORT;
         int max_players = 12;
+        string game_name = "Hunger Online";
 
         Arena arena;
 
         static string[] proitems = new string[] { "!!Map options", "!", "Seed:", "Number of biomes:",
             "!", "!", "!", "!", "!!Server settings", "!", "Port:",
-            "Max players:", "!", "!", "!", "!", "!", "!", "Start server", "Back"
+            "Max players:", "!Game name:", "!", "!", "!", "!", "!", "Start server", "Back"
         };
         public MapPreviewMenu()
             : base(proitems)
@@ -37,6 +38,7 @@ namespace hunger_games_simulator.ui
             Items[3] = proitems[3] + biome_count.ToString().PadLeft(width - proitems[3].Length);
             Items[10] = proitems[10] + ((port == GameServer.DEFAULT_PORT ? "(default) " : "") + port).PadLeft(width - proitems[10].Length);
             Items[11] = proitems[11] + max_players.ToString().PadLeft(width - proitems[11].Length);
+            Items[13] = game_name.PadLeft(width);
         }
 
         public void Show(GameServer server, GameClient client)
@@ -63,12 +65,13 @@ namespace hunger_games_simulator.ui
                     return;
                 if (Selected == proitems.Length - 2)
                 {
-                    GameState gs = new GameState(arena, max_players, port);
+                    GameState gs = new GameState(arena, max_players, port, game_name);
                     server.Open(gs);
 
                     IPEndPoint ep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
                     new ConnectingMenu().Show(client, ep);
 
+                    client.Close();
                     server.Close();
                     return;
                 }
@@ -94,6 +97,10 @@ namespace hunger_games_simulator.ui
 
             // max players
             if (NumberSetting(11, key, 1, 100, 2, ref max_players))
+                redraw = true;
+
+            // Game name
+            if (StringSetting(13, key, width, ref game_name))
                 redraw = true;
 
             if (key.Key == ConsoleKey.Enter && Selected == proitems.Length - 1)

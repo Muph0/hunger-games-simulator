@@ -16,10 +16,17 @@ namespace hunger_games_simulator.core
         public GameAssets GameAssets;
         public GameState CurrentGame { get { return cur_game; } }
         GameState cur_game;
-        List<ServersideClientInfo> clients;
+        public List<ServersideClientInfo> Clients;
 
         TcpServer server;
 
+        public int FreeSlots
+        {
+            get
+            {
+                return CurrentGame.MaxPlayers - Clients.Count;
+            }
+        }
 
         public void LoadAssets()
         {
@@ -29,18 +36,27 @@ namespace hunger_games_simulator.core
 
         public GameServer()
         {
-            clients = new List<ServersideClientInfo>();
-
+            Clients = new List<ServersideClientInfo>();
             server = new TcpServer();
-            server.OnConnect += new tcpServerConnectionChanged(OnConnect);
-            server.OnDataAvailable += new tcpServerConnectionChanged(OnDataAvailable);
         }
 
         public void Open(GameState gs)
         {
             this.cur_game = gs;
             server.Port = gs.Port;
+            server.OnConnect += new tcpServerConnectionChanged(OnConnect);
+            server.OnDataAvailable += new tcpServerConnectionChanged(OnDataAvailable);
             server.Open();
+        }
+
+        void Update()
+        {
+            for (int i = 0; i < Clients.Count; i++)
+            {
+                ServersideClientInfo client = Clients[i];
+
+
+            }
         }
 
         void OnConnect(TcpServerConnection connection)
@@ -56,23 +72,66 @@ namespace hunger_games_simulator.core
                 return;
             }
 
-            if (req.Purpose == ClientRequest.RequestType.Connect)
+            if (req.Purpose == RequestPurpose.Login)
             {
-                ServersideClientInfo client = new ServersideClientInfo();
-                client.ID = clients.Count;
-                clients.Add(client);
+                if (FreeSlots > 0 && CurrentGame.Phase == GamePhase.Lobby)
+                {
+                    ServersideClientInfo client = new ServersideClientInfo();
+                    client.Connection = connection;
+                    client.PlayerName = (string)req.Data[0];
+                    client.ClientID = Clients.Count;
+                    Clients.Add(client);
 
-                ServerResponse toSend = new ServerResponse();
-                toSend.Purpose = ServerResponse.ResponseType.Handshake;
-                toSend.Data = new object[] { client.ID };
-                toSend.SendTo(stream);
+                    ServerResponse toSend = new ServerResponse();
+                    toSend.Purpose = ResponseType.LoginAccepted;
+                    toSend.Data = new object[] { client.ClientID, new ClientsideServerInfo(this) };
+                    toSend.SendTo(stream);
+                }
+                else
+                {
+                    ServerResponse toSend = new ServerResponse();
+                    toSend.Purpose = ResponseType.ActionDenied;
+                    toSend.Data = new object[] { "" };
+                    if (FreeSlots == 0)
+                    {
+                        toSend.Data[0] = "Server full";
+                    }
+                    else
+                    {
+                        toSend.Data[0] = "Game in progress";
+                    }
+
+                    toSend.SendTo(stream);
+                    server.Connections.Remove(connection);
+                }
             }
         }
-
         void OnDataAvailable(TcpServerConnection connection)
         {
             NetworkStream stream = connection.Socket.GetStream();
             ClientRequest req = ClientRequest.ReceiveFrom(stream);
+
+            ServerResponse resp = ProcessRequest(req);
+            resp.SendTo(stream);
+        }
+
+        public ServerResponse ProcessRequest(ClientRequest req)
+        {
+            if (CurrentGame.Phase == GamePhase.Lobby)
+            {
+                if (req.Purpose == RequestPurpose.LobbyStatus)
+                {
+                    ServerResponse toSend = new ServerResponse();
+                    toSend.Purpose = ResponseType.LobbyInfo;
+                    toSend.Data = new object[] { new ClientsideServerInfo(this) };
+                    return toSend;
+                }
+            }
+
+            ServerResponse denied = new ServerResponse();
+            denied.Purpose = ResponseType.ActionDenied;
+            denied.Data = new object[] { "" };
+            return denied;
         }
 
         public void Close()

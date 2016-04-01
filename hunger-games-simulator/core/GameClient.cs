@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using hunger_games_simulator.core.networking;
+using hunger_games_simulator.ui;
 
 namespace hunger_games_simulator.core
 {
@@ -14,14 +15,23 @@ namespace hunger_games_simulator.core
     {
         public Arena ClientArena;
         public PlayerCharacter Character;
+        public int LocalID = 0;
+        public ClientsideServerInfo ServerInfo;
+        public LobbyMenu LobbyMenu;
 
         TcpClient tcpClient;
         public IPEndPoint ServerEp;
+        public bool LoggedIn;
         public bool Connected { get { return tcpClient.Connected; } }
-        bool busy = false;
+        public string ErrorMessage = "<err>";
+
+        int work = 0;
+        Timer UpdateTimer;
 
         public GameClient()
         {
+            LobbyMenu = new LobbyMenu(this);
+            ServerInfo = new ClientsideServerInfo();
             tcpClient = new TcpClient();
             Character = new PlayerCharacter();
             Character.Randomize();
@@ -29,33 +39,75 @@ namespace hunger_games_simulator.core
 
         public void Connect(IPEndPoint ip)
         {
+            LoggedIn = false;
             ServerEp = ip;
             tcpClient.BeginConnect(ServerEp.Address, ServerEp.Port, new AsyncCallback(OnConnect), this);
+            UpdateTimer = new Timer(new TimerCallback(Update), null, 500, 500);
+        }
+
+        public void Close()
+        {
+            tcpClient.Close();
+            tcpClient = new TcpClient();
         }
 
         public void Sync()
         {
-            while (busy)
+            while (work > 0)
             {
                 Thread.Sleep(50);
             }
         }
 
+        public void Send(ClientRequest req)
+        {
+            NetworkStream stream = tcpClient.GetStream();
+            req.SendTo(stream);
+        }
+
+        void Update(object o)
+        {
+            if (LoggedIn)
+            {
+                ClientRequest req = new ClientRequest(this.LocalID);
+
+                if (ServerInfo.GamePhase == GamePhase.Lobby)
+                {
+                    req.Purpose = RequestPurpose.LobbyStatus;
+                }
+            }
+        }
+
         void OnConnect(IAsyncResult result)
         {
-            busy = true;
-            Thread.Sleep(1000);
+            work++;
             if (tcpClient.Connected)
             {
                 NetworkStream stream = tcpClient.GetStream();
 
                 ClientRequest req = new ClientRequest(-1);
-                req.Purpose = ClientRequest.RequestType.Connect;
+                req.Purpose = RequestPurpose.Login;
+                req.Data = new object[] { Character.Name };
                 req.SendTo(stream);
 
                 ServerResponse resp = ServerResponse.ReceiveFrom(stream);
+                if (resp.Purpose == ResponseType.LoginAccepted)
+                {
+                    this.LocalID = (int)resp.Data[0];
+                    this.ServerInfo = (ClientsideServerInfo)resp.Data[1];
+                    LoggedIn = true;
+                }
+                else // resp.Purpose == ResponseType.ActionDenied;
+                {
+                    this.ErrorMessage = (string)resp.Data[0];
+                }
             }
-            busy = false;
+            work--;
         }
+
+        public void ProcessResponse(ServerResponse resp)
+        {
+
+        }   
     }
 }

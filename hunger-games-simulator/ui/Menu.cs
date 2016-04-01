@@ -136,6 +136,9 @@ namespace hunger_games_simulator.ui
 
         public virtual int ReadMenu()
         {
+            while (Items[Selected].First() == '!')
+                Selected++;
+
             this.X = buffer.CursorLeft;
             this.Y = buffer.CursorTop;
 

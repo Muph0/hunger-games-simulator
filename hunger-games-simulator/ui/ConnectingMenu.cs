@@ -67,23 +67,30 @@ namespace hunger_games_simulator.ui
 
                 if (Console.KeyAvailable)
                     if (Console.ReadKey(true).Key == ConsoleKey.Enter)
+                    {
+                        client.Close();
                         return;
+                    }
 
                 if (client.Connected)
                     break;
             }
 
-            buffer.DrawSelf();
             buffer.SetCursorPosition(26, 10);
-
-            if (client.Connected)
+            buffer.Write("Connected! Logging in...");
+            buffer.DrawSelf();
+            buffer.SetCursorPosition(26, 11);
+            
+            // waits for client to finish stuff
+            client.Sync();
+            
+            if (client.LoggedIn)
             {
-                buffer.Write("Connected!");
-                buffer.DrawSelf();
-                client.Sync(); // waits for client to finish stuff
+                client.LobbyMenu.Show();
             }
             else
             {
+                Items[0] = proitems1[0] + " " + client.ErrorMessage;
                 this.ReadMenu();
             }
         }
