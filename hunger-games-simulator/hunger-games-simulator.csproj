@@ -65,6 +65,7 @@
     <Compile Include="core\TurnState.cs" />
     <Compile Include="Halton.cs" />
     <Compile Include="IniFile.cs" />
+    <Compile Include="IniFormatter.cs" />
     <Compile Include="level\ArenaGenerator.cs" />
     <Compile Include="level\Biome.cs" />
     <Compile Include="level\Entity.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="ui\MainMenu.cs" />
     <Compile Include="ui\MapPreviewMenu.cs" />
     <Compile Include="ui\Menu.cs" />
+    <Compile Include="ui\MessageBox.cs" />
     <Compile Include="ui\SettingsMenu.cs" />
   </ItemGroup>
   <ItemGroup />

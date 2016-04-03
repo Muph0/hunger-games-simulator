@@ -11,7 +11,9 @@ namespace hunger_games_simulator.core.networking
     {
         public int ClientID;
         public string PlayerName;
+        public string CharacterToString;
         public long LastRequestTime;
+        public bool Ready;
 
         [NonSerialized]
         public TcpServerConnection Connection;

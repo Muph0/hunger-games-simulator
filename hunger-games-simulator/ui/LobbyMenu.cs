@@ -20,7 +20,7 @@ namespace hunger_games_simulator.ui
             width = 40;
         }
 
-        void UpdateItems()
+        public void UpdateItems()
         {
             Items = new string[client.ServerInfo.Playerlist.Length * 2 + 2];
             Items[0] = "!" + client.ServerInfo.GameName + " hosted on " + client.ServerEp.Address.ToString();
@@ -29,7 +29,7 @@ namespace hunger_games_simulator.ui
             for (int i = 0; i < client.ServerInfo.Playerlist.Length; i++)
             {
                 Items[2 * i + 2] = (i + 1) + ". " + client.ServerInfo.Playerlist[i].PlayerName;
-                Items[2 * i + 3] = "!";
+                Items[2 * i + 3] = "!    " + client.ServerInfo.Playerlist[i].CharacterToString;
             }
         }
 

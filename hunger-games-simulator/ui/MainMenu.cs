@@ -5,11 +5,14 @@ using System.Text;
 using ConsoleBufferApi;
 using hunger_games_simulator.core;
 using System.Net;
+using System.IO;
 
 namespace hunger_games_simulator.ui
 {
     class MainMenu : Menu
     {
+        private GameClient client;
+
         public MainMenu()
             : base(new string[] { "Host game", "Join game", "!", "Settings", "Exit" })
         {
@@ -18,7 +21,12 @@ namespace hunger_games_simulator.ui
 
         public void Show()
         {
-            GameClient client = new GameClient();
+            client = new GameClient();
+
+            if (File.Exists("player.char"))
+            {
+                client.Character = PlayerCharacter.ReadFromFile("player.char");
+            }
 
             while (true)
             {

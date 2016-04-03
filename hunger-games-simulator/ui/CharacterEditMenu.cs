@@ -14,7 +14,7 @@ namespace hunger_games_simulator.ui
             "Stat points left:",
             "Strength", "Agility", "Inteligence", "Metabolic", 
             "!", "Skill points left:",
-            "Crafting", "Archery", "Light weapons", "Heavy weapons", "Cooking", "Sneaking", "Running", "Climbing",
+            "Crafting", "Archery", "Light weapons", "Guns", "Cooking", "Sneaking", "Running", "Climbing",
             "!", "Random", "Done"
         };
 
@@ -46,14 +46,22 @@ namespace hunger_games_simulator.ui
         {
             while (true)
             {
-                buffer.SetCursorPosition(30, 2);
+                buffer.Clear();
+                buffer.SetCursorPosition(42, 18);
+                string chr_str = client.Character.ToString();
+                buffer.Write(chr_str.PadLeft(36 / 2 + chr_str.Length / 2));
+                buffer.SetCursorPosition(4, 2);
+
                 UpdateItems();
                 this.ReadMenu();
 
                 if (Selected == Items.Length - 2)
                     client.Character.Randomize();
                 if (Selected == Items.Length - 1)
+                {
+                    client.Character.WriteToFile("player.char");
                     return;
+                }
             }
         }
 
@@ -89,7 +97,7 @@ namespace hunger_games_simulator.ui
 
             if (redraw)
             {
-                UpdateItems();
+                return new ConsoleKeyInfo('\n', ConsoleKey.Enter, false, false, false);
             }
 
             return key;

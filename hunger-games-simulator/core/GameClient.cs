@@ -67,13 +67,21 @@ namespace hunger_games_simulator.core
 
         void Update(object o)
         {
-            if (LoggedIn)
+            if (LoggedIn && Connected)
             {
+                NetworkStream stream = tcpClient.GetStream();
                 ClientRequest req = new ClientRequest(this.LocalID);
 
                 if (ServerInfo.GamePhase == GamePhase.Lobby)
                 {
                     req.Purpose = RequestPurpose.LobbyStatus;
+                    req.Data = new object[] { new ServersideClientInfo() };
+                    req.SendTo(stream);
+
+                    ServerResponse resp = ServerResponse.ReceiveFrom(stream);
+                    this.ServerInfo = (ClientsideServerInfo)resp.Data[0];
+                    this.LobbyMenu.UpdateItems();
+                    this.LobbyMenu.Draw();
                 }
             }
         }
@@ -87,7 +95,7 @@ namespace hunger_games_simulator.core
 
                 ClientRequest req = new ClientRequest(-1);
                 req.Purpose = RequestPurpose.Login;
-                req.Data = new object[] { Character.Name };
+                req.Data = new object[] { Character.Name, Character.ToString() };
                 req.SendTo(stream);
 
                 ServerResponse resp = ServerResponse.ReceiveFrom(stream);

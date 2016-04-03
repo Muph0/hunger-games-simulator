@@ -79,6 +79,7 @@ namespace hunger_games_simulator.core
                     ServersideClientInfo client = new ServersideClientInfo();
                     client.Connection = connection;
                     client.PlayerName = (string)req.Data[0];
+                    client.CharacterToString = (string)req.Data[1];
                     client.ClientID = Clients.Count;
                     Clients.Add(client);
 
@@ -121,6 +122,8 @@ namespace hunger_games_simulator.core
             {
                 if (req.Purpose == RequestPurpose.LobbyStatus)
                 {
+                    this.Clients[req.ClientID] = (ServersideClientInfo)req.Data[0];
+
                     ServerResponse toSend = new ServerResponse();
                     toSend.Purpose = ResponseType.LobbyInfo;
                     toSend.Data = new object[] { new ClientsideServerInfo(this) };

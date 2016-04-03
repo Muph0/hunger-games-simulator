@@ -12,7 +12,7 @@ namespace hunger_games_simulator.ui
     class ConnectingMenu : Menu
     {
         ConsoleBuffer headline;
-        static string[] proitems1 = new string[] { "!Failed", "!", "OK" };
+        static string[] proitems1 = new string[] { "!Failed:", "!", "OK" };
         public ConnectingMenu()
             : base(proitems1)
         {
@@ -50,7 +50,7 @@ namespace hunger_games_simulator.ui
 
 
             long starttime = Program.Time;
-            while (starttime > Program.Time - 20 * 1000/*ms*/)
+            while (true)
             {
                 double time = Program.Time / 120.0;
                 ConsoleBuffer slider = new ConsoleBuffer(headline.Width, 1);
@@ -74,11 +74,17 @@ namespace hunger_games_simulator.ui
 
                 if (client.Connected)
                     break;
+
+                if (starttime < Program.Time - 20 * 1000)
+                {
+                    client.ErrorMessage = "Connection timed out.";
+                    break;
+                }
             }
 
-            buffer.SetCursorPosition(26, 10);
-            buffer.Write("Connected! Logging in...");
-            buffer.DrawSelf();
+            Console.SetCursorPosition(26, 10);
+            Console.Write("Connected! Logging in...");
+            //buffer.DrawSelf();
             buffer.SetCursorPosition(26, 11);
             
             // waits for client to finish stuff
@@ -93,6 +99,7 @@ namespace hunger_games_simulator.ui
                 Items[0] = proitems1[0] + " " + client.ErrorMessage;
                 this.ReadMenu();
             }
+            client.Close();
         }
     }
 }
