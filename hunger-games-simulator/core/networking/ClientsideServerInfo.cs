@@ -12,14 +12,16 @@ namespace hunger_games_simulator.core.networking
         public string GameName;
         public GamePhase GamePhase;
 
-        public ClientsideServerInfo()
-        {
 
-        }
-        public ClientsideServerInfo(GameServer serv)
+
+        public static ClientsideServerInfo FromServer(GameServer serv)
         {
-            GameName = serv.CurrentGame.GameName;
-            Playerlist = serv.Clients.ToArray();
+            ClientsideServerInfo info = new ClientsideServerInfo();
+
+            info.GameName = serv.CurrentGame.GameName;
+            info.Playerlist = serv.Clients.ToArray();
+
+            return info;
         }
     }
 }

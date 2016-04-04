@@ -85,7 +85,7 @@ namespace hunger_games_simulator.core
 
                     ServerResponse toSend = new ServerResponse();
                     toSend.Purpose = ResponseType.LoginAccepted;
-                    toSend.Data = new object[] { client.ClientID, new ClientsideServerInfo(this) };
+                    toSend.Data = new object[] { client.ClientID, ClientsideServerInfo.FromServer(this) };
                     toSend.SendTo(stream);
                 }
                 else
@@ -126,7 +126,7 @@ namespace hunger_games_simulator.core
 
                     ServerResponse toSend = new ServerResponse();
                     toSend.Purpose = ResponseType.LobbyInfo;
-                    toSend.Data = new object[] { new ClientsideServerInfo(this) };
+                    toSend.Data = new object[] { ClientsideServerInfo.FromServer(this) };
                     return toSend;
                 }
             }

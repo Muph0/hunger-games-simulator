@@ -92,9 +92,17 @@ namespace hunger_games_simulator.ui
             
             if (client.LoggedIn)
             {
-                client.LobbyMenu.Show();
+                try
+                {
+                    client.LobbyMenu.Show();
+                }
+                catch (Exception e)
+                {
+                    client.ErrorMessage = e.Message;
+                }
             }
-            else
+            
+            if (!(client.LoggedIn && client.Connected))
             {
                 Items[0] = proitems1[0] + " " + client.ErrorMessage;
                 this.ReadMenu();

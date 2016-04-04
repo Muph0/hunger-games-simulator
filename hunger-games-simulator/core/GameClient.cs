@@ -8,6 +8,7 @@ using System.Net;
 using System.Threading;
 using hunger_games_simulator.core.networking;
 using hunger_games_simulator.ui;
+using System.Diagnostics;
 
 namespace hunger_games_simulator.core
 {
@@ -15,12 +16,13 @@ namespace hunger_games_simulator.core
     {
         public Arena ClientArena;
         public PlayerCharacter Character;
-        public int LocalID = 0;
+        public int LocalID = 0, Ping = 10;
         public ClientsideServerInfo ServerInfo;
         public LobbyMenu LobbyMenu;
 
         TcpClient tcpClient;
         public IPEndPoint ServerEp;
+        public bool Ready = false;
         public bool LoggedIn;
         public bool Connected { get { return tcpClient.Connected; } }
         public string ErrorMessage = "<err>";
@@ -74,14 +76,20 @@ namespace hunger_games_simulator.core
 
                 if (ServerInfo.GamePhase == GamePhase.Lobby)
                 {
+                    Stopwatch stopky = new Stopwatch();
+                    stopky.Start();
+
                     req.Purpose = RequestPurpose.LobbyStatus;
-                    req.Data = new object[] { new ServersideClientInfo() };
+                    req.Data = new object[] { ServersideClientInfo.FromClient(this) };
                     req.SendTo(stream);
 
                     ServerResponse resp = ServerResponse.ReceiveFrom(stream);
                     this.ServerInfo = (ClientsideServerInfo)resp.Data[0];
                     this.LobbyMenu.UpdateItems();
                     this.LobbyMenu.Draw();
+
+                    stopky.Stop();
+                    this.Ping = (int)stopky.ElapsedMilliseconds;
                 }
             }
         }
