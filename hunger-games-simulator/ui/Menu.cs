@@ -14,10 +14,11 @@ namespace hunger_games_simulator.ui
         public ConsoleColor BackgroundColor, ForegroundColor, SelectedColor, HeadingColor;
 
         public ConsoleBuffer buffer;
+        public int BufferX, BufferY;
 
         public string[] Items;
         protected int X, Y;
-        protected int width;
+        public int width;
 
         public int SelectableItemCount
         {
@@ -181,7 +182,7 @@ namespace hunger_games_simulator.ui
             return key;
         }
 
-        public void Draw()
+        public virtual void Draw()
         {
             buffer.ForegroundColor = ForegroundColor;
             for (int i = 0; i < Items.Length; i++)
@@ -224,7 +225,7 @@ namespace hunger_games_simulator.ui
                 buffer.BackgroundColor = BackgroundColor;
             }
 
-            buffer.DrawSelf();
+            buffer.DrawSelf(this.BufferX, this.BufferY);
         }
 
         public static bool IsValidMenuItem(string item)

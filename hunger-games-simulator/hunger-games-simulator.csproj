@@ -74,6 +74,8 @@
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextBreaker.cs" />
+    <Compile Include="ui\ActionMenu.cs" />
     <Compile Include="ui\CharacterEditMenu.cs" />
     <Compile Include="ui\ConnectingMenu.cs" />
     <Compile Include="ui\InputBox.cs" />

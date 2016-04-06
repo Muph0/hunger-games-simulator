@@ -44,7 +44,7 @@ namespace hunger_games_simulator.core
             LoggedIn = false;
             ServerEp = ip;
             tcpClient.BeginConnect(ServerEp.Address, ServerEp.Port, new AsyncCallback(OnConnect), this);
-            UpdateTimer = new Timer(new TimerCallback(Update), null, 500, 500);
+            UpdateTimer = new Timer(new TimerCallback(Update), null, 500, 1000);
         }
 
         public void Close()

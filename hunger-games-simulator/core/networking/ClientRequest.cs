@@ -53,6 +53,7 @@ namespace hunger_games_simulator.core.networking
         Update, // { }
         LobbyStatus,
         SendMeSurroundings,
+        StartGame,
         Action,
     }
 }

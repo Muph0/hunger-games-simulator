@@ -103,6 +103,7 @@ namespace hunger_games_simulator.ui
                 }
                 if (selected == 1)
                 {
+                    bool valid = true;
                     string result = "";
                     IPAddress ip = null;
                     int port = GameServer.DEFAULT_PORT;
@@ -114,7 +115,7 @@ namespace hunger_games_simulator.ui
                             result = result.Split(':')[0];
                         else
                         {
-
+                            valid = false;
                         }
                     }
 
@@ -125,7 +126,12 @@ namespace hunger_games_simulator.ui
                     }
                     else
                     {
+                        valid = false;
+                    }
 
+                    if (!valid)
+                    {
+                        MessageBox.Show("Invalid IP address format. Lorem ipsum dolor sit amet blah blah blah. Yo mama is so fat, that blah blah blah. Lorem ipsum dolor sit amet.", MessageBox.Buttons.OK);
                     }
                 }
                 if (selected == 3)
