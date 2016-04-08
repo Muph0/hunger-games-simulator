@@ -6,3 +6,4 @@ C:\Users\Honky\Documents\Visual Studio 2010\Projects\hunger-games-simulator\hung
 C:\Users\Honky\Documents\Visual Studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\obj\x86\Debug\hunger-games-simulator.csprojResolveAssemblyReference.cache
 C:\Users\Honky\Documents\Visual Studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\bin\Debug\assets\items.ini
 C:\Users\Honky\Documents\Visual Studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\bin\Debug\tcpServer.pdb
+C:\Users\Honky\Documents\Visual Studio 2010\Projects\hunger-games-simulator\hunger-games-simulator\bin\Debug\assets\biomes.ini

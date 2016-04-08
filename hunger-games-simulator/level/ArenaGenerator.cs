@@ -65,8 +65,7 @@ namespace hunger_games_simulator.level
                 arena.Biomes[i].AssetName = gameAssets.PickBiomeAmountBased(rnd);
             }
 
-            // time to POPULATE 
-            //                 *biomes*
+            // time to populate   *BIOMES*
             for (int b = 0; b < biome_count; b++)
             {
                 Biome biome = arena.Biomes[b];
@@ -78,6 +77,8 @@ namespace hunger_games_simulator.level
                     arena.Tiles[biome.TilesOwned[t]] = tile;
                 }
             }
+
+            // time to populate   *TILES*
 
 
             return arena;

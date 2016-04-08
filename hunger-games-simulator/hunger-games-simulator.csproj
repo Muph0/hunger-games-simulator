@@ -65,7 +65,6 @@
     <Compile Include="core\TurnState.cs" />
     <Compile Include="Halton.cs" />
     <Compile Include="IniFile.cs" />
-    <Compile Include="IniFormatter.cs" />
     <Compile Include="level\ArenaGenerator.cs" />
     <Compile Include="level\Biome.cs" />
     <Compile Include="level\Entity.cs" />
@@ -88,6 +87,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="assets\biomes.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="assets\items.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
