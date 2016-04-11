@@ -66,6 +66,7 @@ namespace hunger_games_simulator.level
             }
 
             // time to populate   *BIOMES*
+            // TODO: add special tiles
             for (int b = 0; b < biome_count; b++)
             {
                 Biome biome = arena.Biomes[b];
@@ -79,7 +80,10 @@ namespace hunger_games_simulator.level
             }
 
             // time to populate   *TILES*
+            for (int i = 0; i < arena.Tiles.Length; i++)
+            {
 
+            }
 
             return arena;
         }

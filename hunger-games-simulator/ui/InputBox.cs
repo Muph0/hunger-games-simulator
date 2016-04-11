@@ -36,6 +36,10 @@ namespace hunger_games_simulator.ui
             buf.DrawSelf(Xoffset, Yoffset);
             Console.SetCursorPosition(4 + Xoffset, 2 + Yoffset);
             bool vis = Console.CursorVisible;
+
+            Console.ForegroundColor = buf.ForegroundColor;
+            Console.BackgroundColor = buf.BackgroundColor;
+
             Console.CursorVisible = true;
             result = Console.ReadLine();
             Console.CursorVisible = vis;

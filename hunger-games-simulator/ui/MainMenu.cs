@@ -131,7 +131,7 @@ namespace hunger_games_simulator.ui
 
                     if (!valid)
                     {
-                        MessageBox.Show("Invalid IP address format. Lorem ipsum dolor sit amet blah blah blah. Yo mama is so fat, that blah blah blah. Lorem ipsum dolor sit amet.", MessageBox.Buttons.OK);
+                        MessageBox.Show("Invalid IP address format.", MessageBox.Buttons.OK);
                     }
                 }
                 if (selected == 3)

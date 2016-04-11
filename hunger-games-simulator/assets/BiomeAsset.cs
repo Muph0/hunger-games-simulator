@@ -6,7 +6,7 @@ using System.Text;
 namespace hunger_games_simulator.assets
 {
     [Serializable]
-    class BiomeAsset
+    class BiomeAsset // : Asset
     {
         public string[] Chars;
         public ConsoleColor[] Foregrounds, Backgrounds;

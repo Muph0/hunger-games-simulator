@@ -51,7 +51,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="assets\Asset.cs" />
     <Compile Include="assets\BiomeAsset.cs" />
+    <Compile Include="assets\ContainerAsset.cs" />
     <Compile Include="assets\ItemAsset.cs" />
     <Compile Include="core\GameAssets.cs" />
     <Compile Include="core\GameClient.cs" />
