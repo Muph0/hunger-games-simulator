@@ -8,37 +8,48 @@ namespace hunger_games_simulator.assets
     [Serializable]
     class ItemAsset
     {
-        public bool[] Usage = new bool[(int)UsageType.Length];
+        public bool[] Usage = new bool[(int)UsageType._Length];
         public string FancyName;
         public int MassMin, MassMax; // g
         public string[] SpawnLocation;
         public int[] SpawnMin;
         public int[] SpawnMax;
 
-        public ItemAsset(IniFile ini, string name)
+        private ItemAsset()
         {
+
+        }
+
+        public static ItemAsset Load(IniFile ini, string name)
+        {
+            ItemAsset result = new ItemAsset();
+
             Exception e = new Exception("Error parsing item " + name + " in file " + ini.path);
             string[] split = ini.GetEntryValue("item:" + name, "usage").ToString().Split(',');
-            for (int i = 0; i < (int)UsageType.Length; i++)
+            for (int i = 0; i < (int)UsageType._Length; i++)
             {
-                if (split.Contains(((UsageType)i).ToString()))
-                    Usage[i] = true;
+                if (split.Contains(((UsageType)i).ToString().ToUpper()))
+                    result.Usage[i] = true;
             }
 
-            this.FancyName = ini.GetEntryValue("item:" + name, "fancyname").ToString();
+            result.FancyName = ini.GetEntryValue("item:" + name, "fancyname").ToString();
 
             string m = ini.GetEntryValue("item:" + name, "mass").ToString();
             split = m.Split('-');
             if (split.Length == 1)
             {
-                MassMax = 1 + (MassMin = int.Parse(split[0]));
+                result.MassMax = 1 + (result.MassMin = int.Parse(split[0]));
             }
             else if (split.Length == 2)
             {
-                MassMin = int.Parse(split[0]);
-                MassMax = int.Parse(split[1]);
+                result.MassMin = int.Parse(split[0]);
+                result.MassMax = int.Parse(split[1]);
             }
             else throw e;
+
+            m = ini.GetEntryValue("item:" + name, "spawn").ToString();
+
+            return result;
         }
 
         public enum UsageType
@@ -46,7 +57,8 @@ namespace hunger_games_simulator.assets
             Weapon = 0,
             Defence,
             Build,
-            Length
+            Ranged,
+            _Length
         }
     }
 }
