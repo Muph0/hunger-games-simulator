@@ -54,7 +54,12 @@
     <Compile Include="assets\Asset.cs" />
     <Compile Include="assets\BiomeAsset.cs" />
     <Compile Include="assets\ContainerAsset.cs" />
+    <Compile Include="assets\info\SpawnLocation.cs" />
+    <Compile Include="assets\info\TileSpawnColors.cs" />
     <Compile Include="assets\ItemAsset.cs" />
+    <Compile Include="assets\SpawnableAsset.cs" />
+    <Compile Include="assets\TileAsset.cs" />
+    <Compile Include="assets\UsableAsset.cs" />
     <Compile Include="core\GameAssets.cs" />
     <Compile Include="core\GameClient.cs" />
     <Compile Include="core\GameServer.cs" />

@@ -6,7 +6,7 @@ using System.Text;
 namespace hunger_games_simulator.assets
 {
     [Serializable]
-    class BiomeAsset // : Asset
+    class BiomeAsset : Asset
     {
         public string[] Chars;
         public ConsoleColor[] Foregrounds, Backgrounds;
@@ -14,11 +14,17 @@ namespace hunger_games_simulator.assets
         public int[] Excepts;
         public int Amount;
 
-        public BiomeAsset(IniFile ini, string name)
+        public BiomeAsset(string name)
+            : base(name, Class.biome)
         {
-            Exception e = new Exception("Error parsing biome " + name + " in file " + ini.path);
+            
+        }
 
-            string[] split = ini.GetEntryValue("biome:" + name, "colors").ToString().Split(',');
+        public void LoadFrom(IniFile ini)
+        {
+            Exception e = new Exception("Error parsing biome " + this.Name + " in file " + ini.path);
+
+            string[] split = ini.GetEntryValue("biome:" + this.Name, "colors").ToString().Split(',');
             this.Foregrounds = new ConsoleColor[split.Length];
             this.Backgrounds = new ConsoleColor[split.Length];
             this.Chars = new string[split.Length];
@@ -26,12 +32,12 @@ namespace hunger_games_simulator.assets
             {
                 string str = split[i];
                 if (str.Length < 3) throw e;
-                Foregrounds[i] = (ConsoleColor)Convert.ToInt32(str[0].ToString(), 16);
-                Backgrounds[i] = (ConsoleColor)Convert.ToInt32(str[1].ToString(), 16);
-                Chars[i] = str.Substring(2);
+                this.Foregrounds[i] = (ConsoleColor)Convert.ToInt32(str[0].ToString(), 16);
+                this.Backgrounds[i] = (ConsoleColor)Convert.ToInt32(str[1].ToString(), 16);
+                this.Chars[i] = str.Substring(2);
             }
 
-            string amt = ini.GetEntryValue("biome:" + name, "amount").ToString();
+            string amt = ini.GetEntryValue("biome:" + this.Name, "amount").ToString();
             this.Amount = int.Parse(amt);
         }
 

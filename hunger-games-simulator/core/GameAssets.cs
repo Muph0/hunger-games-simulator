@@ -11,11 +11,13 @@ namespace hunger_games_simulator.core
     {
         public Dictionary<string, BiomeAsset> BiomeAssets;
         public Dictionary<string, ItemAsset> ItemAssets;
+        public Dictionary<string, TileAsset> TileAssets;
 
         public GameAssets()
         {
             BiomeAssets = new Dictionary<string, BiomeAsset>();
             ItemAssets = new Dictionary<string, ItemAsset>();
+            TileAssets = new Dictionary<string, TileAsset>();
         }
 
         public void LoadLocal()
@@ -43,12 +45,13 @@ namespace hunger_games_simulator.core
 
             List<string> biomes_list = new List<string>();
             List<string> items_list = new List<string>();
+            List<string> tiles_list = new List<string>();
 
             foreach (string sec in section_names)
             {
-                string entry = sec.Split(':')[0];
+                string entry_type = sec.Split(':')[0];
                 string name = sec.Split(':')[1];
-                switch (entry)
+                switch (entry_type)
                 {
                     case "biome":
                         biomes_list.Add(name);
@@ -56,13 +59,31 @@ namespace hunger_games_simulator.core
                     case "item":
                         items_list.Add(name);
                         break;
+                    case "tile":
+                        tiles_list.Add(name);
+                        break;
                 }
             }
 
-            foreach (string biome in biomes_list)
+            foreach (string name in biomes_list)
             {
-                BiomeAsset b = new BiomeAsset(ini, biome);
-                this.BiomeAssets.Add(biome, b);
+                BiomeAsset b = new BiomeAsset(name);
+                b.LoadFrom(ini);
+                this.BiomeAssets.Add(name, b);
+            }
+
+            foreach (string name in tiles_list)
+            {
+                TileAsset t = new TileAsset(name);
+                t.LoadFrom(ini);
+                this.TileAssets.Add(name, t);
+            }
+
+            foreach (string name in items_list)
+            {
+                ItemAsset i = new ItemAsset(name);
+                i.Load(ini);
+                this.ItemAssets.Add(name, i);
             }
         }
 

@@ -7,27 +7,18 @@ namespace hunger_games_simulator.assets
 {
     class Asset
     {
-        protected Asset() { }
-
-        public string Name;
-        public AssetType Type;
-
-        protected Exception e;
-
-        protected void LoadUsage(IniFile ini, ref bool[] usage)
+        protected Asset(string name, Class type) 
         {
-            usage = new bool[(int)UsageType._Length];
-
-            string[] split = ini.GetEntryValue("item:" + Name, "usage").ToString().Split(',');
-            for (int i = 0; i < usage.Length; i++)
-            {
-                if (split.Contains(((UsageType)i).ToString().ToUpper()))
-                    usage[i] = true;
-            }
+            this.Name = name;
+            this.Type = type;
         }
 
+        public string Name;
+        public Class Type;
 
-        protected void ParseNumberOrTuple(string str, ref int n0, ref int n1)
+        
+
+        public void ParseNumberOrTuple(string str, ref int n0, ref int n1)
         {
             string[] split = str.Split('-');
             if (split.Length == 1)
@@ -39,23 +30,15 @@ namespace hunger_games_simulator.assets
                 n0 = int.Parse(split[0]);
                 n1 = int.Parse(split[1]);
             }
-            else throw e;
+            else throw new Exception("Error parsing " + this.Type + " " + this.Name + "."); ;
         }
 
-        public enum UsageType
-        {
-            Weapon = 0,
-            Defence,
-            Build,
-            Ranged,
-            _Length
-        }
-
-        public enum AssetType
+        public enum Class
         {
             item = 0,
             biome,
-            container
+            container,
+            tile
         }
     }
 }

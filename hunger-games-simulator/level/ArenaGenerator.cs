@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using hunger_games_simulator.core;
 using hunger_games_simulator.assets;
+using hunger_games_simulator.assets.info;
 
 namespace hunger_games_simulator.level
 {
@@ -66,15 +67,50 @@ namespace hunger_games_simulator.level
             }
 
             // time to populate   *BIOMES*
-            // TODO: add special tiles
             for (int b = 0; b < biome_count; b++)
             {
                 Biome biome = arena.Biomes[b];
                 BiomeAsset biome_asset = gameAssets.BiomeAssets[biome.AssetName];
 
+                List<TileAsset> special_tiles = new List<TileAsset>();
+                foreach (TileAsset t in gameAssets.TileAssets.Values)
+                {
+                    if (t.SpawnLocations.Length > 0 && 
+                        t.SpawnLocations.Where(a => a.Name == biome_asset.Name).Count() > 0)
+                    {
+                        special_tiles.Add(t);
+                    }
+                }
+
                 for (int t = 0; t < biome.TilesOwned.Length; t++)
                 {
                     Tile tile = biome_asset.GenerateTile(rnd);
+
+                    // test, if current tile shouldn't be special tile
+                    foreach (TileAsset ta in special_tiles)
+                    {
+                        SpawnLocation local = ta.SpawnLocations.Where(a => a.Name == biome_asset.Name).First();
+
+                        if (local.Min < local.Max)
+                        {
+                            // SOME HARDCORE MATH SHIT HERE
+
+                            // approx. how many tiles i want in this biome
+                            int desired_amount = rnd.Next(local.Min, local.Max);
+
+                            // what is the perfect probability to get the desired amount
+                            double desired_probability = desired_amount / (double)biome.TilesOwned.Length;
+
+                            // roll a dice of (1/des_prob) sides
+                            int dice = rnd.Next((int)(1 / desired_probability));
+
+                            if (dice == 1)
+                            {
+                                //tile.
+                            }
+                        }
+                    }
+
                     arena.Tiles[biome.TilesOwned[t]] = tile;
                 }
             }
