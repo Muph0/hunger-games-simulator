@@ -12,8 +12,7 @@ namespace hunger_games_simulator.assets.info
         public string Name { get; private set; }
         public int Min, Max;
 
-        private SpawnLocation()
-        {}
+        private SpawnLocation() { }
         public SpawnLocation(SpawnableAsset asset)
         {
             this.asset = asset;

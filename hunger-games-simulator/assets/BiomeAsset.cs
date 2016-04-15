@@ -22,9 +22,9 @@ namespace hunger_games_simulator.assets
 
         public void LoadFrom(IniFile ini)
         {
-            Exception e = new Exception("Error parsing biome " + this.Name + " in file " + ini.path);
+            Exception e = new Exception("Error parsing " + this.ToString() + " in file " + ini.path);
 
-            string[] split = ini.GetEntryValue("biome:" + this.Name, "colors").ToString().Split(',');
+            string[] split = ini.GetEntryValue(this.ToString(), "colors").ToString().Split(',');
             this.Foregrounds = new ConsoleColor[split.Length];
             this.Backgrounds = new ConsoleColor[split.Length];
             this.Chars = new string[split.Length];
@@ -37,8 +37,8 @@ namespace hunger_games_simulator.assets
                 this.Chars[i] = str.Substring(2);
             }
 
-            string amt = ini.GetEntryValue("biome:" + this.Name, "amount").ToString();
-            this.Amount = int.Parse(amt);
+            string amt = ini.GetEntryValue(this.ToString(), "amount").ToString();
+            int.TryParse(amt, out this.Amount);
         }
 
         public level.Tile GenerateTile(Random rnd)
@@ -48,6 +48,7 @@ namespace hunger_games_simulator.assets
             int picked = rnd.Next(Foregrounds.Length);
             tile.Foreground = Foregrounds[picked];
             tile.Background = Backgrounds[picked];
+            tile.AssetName = this.Name;
 
             tile.Char = Chars[picked][rnd.Next(Chars[picked].Length)];
 
