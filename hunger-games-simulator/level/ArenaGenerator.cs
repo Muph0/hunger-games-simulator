@@ -27,7 +27,7 @@ namespace hunger_games_simulator.level
             double[] heatmap = GenerateNoise(seed, 3);
             for (int i = 0; i < arena.Heatmap.Length; i++)
             {
-                arena.Heatmap[i] = (int)((heatmap[i] - 0.5) * 30 - 5 + 0.9 * (i % arena.Width));
+                arena.Heatmap[i] = (int)((heatmap[i] - 0.5) * 30 + 0.8 * (i % arena.Width));
             }
 
             // set locations of biome pivots
@@ -100,24 +100,30 @@ namespace hunger_games_simulator.level
                     foreach (TileAsset ta in special_tiles)
                     {
                         SpawnLocation local = ta.SpawnLocations.Where(a => a.Name == biome_asset.Name).First();
+                        double desired_probability = double.Epsilon;
 
                         if (local.Min < local.Max)
                         {
                             // SOME HARDCORE MATH SHIT HERE
 
                             // approx. how many tiles i want in this biome
-                            int desired_amount = rnd.Next(local.Min, local.Max);
+                            int desired_amount = (local.Min + local.Max) / 2;
 
                             // what is the perfect probability to get the desired amount
-                            double desired_probability = desired_amount / (double)biome.TilesOwned.Length;
+                            desired_probability = desired_amount / (double)biome.TilesOwned.Length;
+                        }
+                        else
+                        {
+                            // desired probability is encoded in Max/Min
+                            desired_probability = local.Max / (double)local.Min;
+                        }
 
-                            // roll a dice of (1/des_prob) sides
-                            int dice = rnd.Next((int)(1 / desired_probability));
+                        // roll a dice of (1/des_prob) sides
+                        int dice = rnd.Next((int)(1 / desired_probability));
 
-                            if (dice == 1)
-                            {
-                                //tile.
-                            }
+                        if (dice == 1)
+                        {
+                            tile = ta.GenerateTile(rnd);
                         }
                     }
 

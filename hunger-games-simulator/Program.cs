@@ -26,6 +26,8 @@ namespace hunger_games_simulator
             Console.BufferWidth = 80;
             Console.Clear();
 
+            
+
             //ConsoleBuffer.Fullscreen = true;
             new MainMenu().Show();
 
