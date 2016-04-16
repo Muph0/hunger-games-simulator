@@ -12,15 +12,16 @@ namespace hunger_games_simulator.ui
     class MapPreviewMenu : Menu
     {
         int seed = 0;
-        int biome_count = 30;
+        int biome_count = 75;
         int port = GameServer.DEFAULT_PORT;
         int max_players = 12;
         string game_name = "Hunger Online";
+        bool tempView = false;
 
         Arena arena;
 
         static string[] proitems = new string[] { "!!Map options", "!", "Seed:", "Number of biomes:",
-            "!", "!", "!", "!", "!!Server settings", "!", "Port:",
+            "View:", "!", "!", "!", "!!Server settings", "!", "Port:",
             "Max players:", "!Game name:", "!", "!", "!", "!", "!", "Start server", "Back"
         };
         public MapPreviewMenu()
@@ -36,6 +37,7 @@ namespace hunger_games_simulator.ui
         {
             Items[2] = proitems[2] + seed.ToString().PadLeft(width - proitems[2].Length);
             Items[3] = proitems[3] + biome_count.ToString().PadLeft(width - proitems[3].Length);
+            Items[4] = proitems[4] + (tempView ? "Heatmap" : "Biomes").PadLeft(width - proitems[4].Length);
             Items[10] = proitems[10] + ((port == GameServer.DEFAULT_PORT ? "(default) " : "") + port).PadLeft(width - proitems[10].Length);
             Items[11] = proitems[11] + max_players.ToString().PadLeft(width - proitems[11].Length);
             Items[13] = game_name.PadLeft(width);
@@ -48,7 +50,7 @@ namespace hunger_games_simulator.ui
                 arena = ArenaGenerator.Generate(server.GameAssets, seed, biome_count);
                 UpdateItems();
 
-                ConsoleBuffer mapbuf = arena.MapBuffer();
+                ConsoleBuffer mapbuf = arena.MapBuffer(tempView);
                 buffer = new ConsoleBuffer();
                 buffer.InsertBuffer(mapbuf, 0, 0);
                 buffer.SetCursorPosition(mapbuf.Width, 0);
@@ -89,6 +91,10 @@ namespace hunger_games_simulator.ui
 
             // Biome ct
             if (NumberSetting(3, key, 1, 200, 3, ref biome_count))
+                regen = true;
+            
+            // View
+            if (BoolSetting(4, key, ref tempView))
                 regen = true;
 
             // server port

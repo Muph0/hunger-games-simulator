@@ -5,22 +5,30 @@ using System.Text;
 using hunger_games_simulator.core;
 using hunger_games_simulator.assets;
 using hunger_games_simulator.assets.info;
+using System.Drawing;
 
 namespace hunger_games_simulator.level
 {
     class ArenaGenerator
     {
+        public const int WIDTH = 50, HEIGHT = 25;
         public static Arena Generate(GameAssets gameAssets, int seed, int biome_count)
         {
             // Prepare stuff
-            Arena arena = new Arena(50, 25);
+            Arena arena = new Arena(WIDTH, HEIGHT);
             arena.Biomes = new Biome[biome_count];
             arena.Seed = seed;
             List<int>[] biome_tiles_list = new List<int>[biome_count];
-
             // halton sequence is used for generating evenly distributed points
             Random rnd = new Random(seed);
             HaltonSet hlt = new HaltonSet(seed);
+
+            // generate heatmap
+            double[] heatmap = GenerateNoise(seed, 3);
+            for (int i = 0; i < arena.Heatmap.Length; i++)
+            {
+                arena.Heatmap[i] = (int)((heatmap[i] - 0.5) * 30 - 5 + 0.9 * (i % arena.Width));
+            }
 
             // set locations of biome pivots
             for (int i = 0; i < biome_count; i++)
@@ -62,8 +70,10 @@ namespace hunger_games_simulator.level
             // assign the calculated tiles to actual biomes
             for (int i = 0; i < biome_count; i++)
             {
+                int pivotPos = arena.Biomes[i].Pivot.X + arena.Biomes[i].Pivot.Y * arena.Width;
+
                 arena.Biomes[i].TilesOwned = biome_tiles_list[i].ToArray();
-                arena.Biomes[i].AssetName = gameAssets.PickBiomeAmountBased(rnd);
+                arena.Biomes[i].AssetName = gameAssets.PickBiomeAmountBased(rnd, arena.Heatmap[pivotPos]);
             }
 
             // time to populate   *BIOMES*
@@ -75,7 +85,7 @@ namespace hunger_games_simulator.level
                 List<TileAsset> special_tiles = new List<TileAsset>();
                 foreach (TileAsset t in gameAssets.TileAssets.Values)
                 {
-                    if (t.SpawnLocations.Length > 0 && 
+                    if (t.SpawnLocations.Length > 0 &&
                         t.SpawnLocations.Where(a => a.Name == biome_asset.Name).Count() > 0)
                     {
                         special_tiles.Add(t);
@@ -122,6 +132,49 @@ namespace hunger_games_simulator.level
             }
 
             return arena;
+        }
+
+        public static double[] GenerateNoise(int seed, int depth, int startDepth = 1)
+        {
+            string name = "heatmaps/heatmap-" + seed;
+            Random rnd = new Random(seed);
+
+            // Function that returns bitmap with grayscale noise
+            Func<Random, int, int, Bitmap> getNoise = new Func<Random, int, int, Bitmap>(delegate(Random r, int side, int alpha)
+            {
+                Bitmap res = new Bitmap(side * WIDTH / HEIGHT, side);
+                for (int i = 0; i < res.Width * res.Height; i++)
+                {
+                    byte clr = (byte)r.Next(256);
+                    res.SetPixel(i % res.Width, i / res.Width, Color.FromArgb(alpha, clr, clr, clr));
+                }
+                return res;
+            });
+
+            Bitmap result_bmp = new Bitmap(WIDTH, HEIGHT);
+            for (int level = 0; level < depth; level++)
+            {
+                // prepare to draw on result buffer
+                Graphics rg = Graphics.FromImage(result_bmp);
+
+                // calculate properities of new layer
+                int side = (int)Math.Pow(2, level + startDepth);
+                int alpha = 255 / (level + 1);
+                // generate new layer of noise
+                Bitmap new_layer = getNoise(rnd, side, alpha);
+                //new_layer.Save(name + "-lvl" + level + ".bmp");
+
+                // draw the new layer onto the result buffer
+                rg.DrawImage(new_layer, new Rectangle(0, 0, result_bmp.Width, result_bmp.Height));
+            }
+
+            //result_bmp.Save(name + ".bmp");
+
+            double[] result = new double[WIDTH * HEIGHT];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = result_bmp.GetPixel(i % WIDTH, i / WIDTH).R / 255.0;
+
+            return result;
         }
     }
 }

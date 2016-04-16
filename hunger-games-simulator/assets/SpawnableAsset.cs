@@ -20,16 +20,22 @@ namespace hunger_games_simulator.assets
         {
             string line = ini.GetEntryValue(this.Type.ToString() + ":" + this.Name, "spawn").ToString();
 
+            if (line == "")
+            {
+                this.SpawnLocations = new SpawnLocation[0];
+                return;
+            }
+
             string[] locations = line.Split(',');
-            SpawnLocations = new SpawnLocation[locations.Length];
+            this.SpawnLocations = new SpawnLocation[locations.Length];
 
             for (int i = 0; i < locations.Length; i++)
             {
                 if (locations[i].Length == 0)
                     continue;
 
-                SpawnLocations[i] = new SpawnLocation(this);
-                SpawnLocations[i].LoadFromString(locations[i]);
+                this.SpawnLocations[i] = new SpawnLocation(this);
+                this.SpawnLocations[i].LoadFromString(locations[i]);
             }
         }
     }

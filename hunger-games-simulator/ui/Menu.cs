@@ -116,6 +116,20 @@ namespace hunger_games_simulator.ui
             }
             return val != oldval;
         }
+        public bool BoolSetting(int index, ConsoleKeyInfo key, ref bool val)
+        {
+            bool oldval = val;
+
+            if (Selected == index)
+            {
+                if (key.Key == ConsoleKey.Enter || key.Key == ConsoleKey.LeftArrow || key.Key == ConsoleKey.RightArrow)
+                    val = !val;
+
+                return oldval != val;
+            }
+
+            return false;
+        }
         public bool StringSetting(int index, ConsoleKeyInfo key, int length, ref string val)
         {
             string oldval = val;

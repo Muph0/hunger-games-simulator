@@ -87,21 +87,25 @@ namespace hunger_games_simulator.core
             }
         }
 
-        public string PickBiomeAmountBased(Random rnd)
+        public string PickBiomeAmountBased(Random rnd, int temp)
         {
-            int[] amts = new int[BiomeAssets.Count];
-            string[] names = new string[BiomeAssets.Count];
+            Dictionary<string, BiomeAsset> localClimaBiomes;
+            localClimaBiomes = BiomeAssets
+                .Where(a => (temp >= a.Value.minTemp && temp <= a.Value.maxTemp)).ToDictionary(v => v.Key, v => v.Value);
+
+            int[] amts = new int[localClimaBiomes.Count];
+            string[] names = new string[localClimaBiomes.Count];
             int amt_total = 0;
-            for (int i = 0; i < BiomeAssets.Count; i++)
+            for (int i = 0; i < localClimaBiomes.Count; i++)
             {
-                amt_total += BiomeAssets.ElementAt(i).Value.Amount;
+                amt_total += localClimaBiomes.ElementAt(i).Value.Amount;
                 amts[i] = amt_total;
-                names[i] = BiomeAssets.ElementAt(i).Key;
+                names[i] = localClimaBiomes.ElementAt(i).Key;
             }
 
             int pick = rnd.Next(amt_total);
 
-            for (int i = 0; i < BiomeAssets.Count; i++)
+            for (int i = 0; i < localClimaBiomes.Count; i++)
             {
                 if (pick < amts[i])
                 {

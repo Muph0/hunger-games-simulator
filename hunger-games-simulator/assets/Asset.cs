@@ -33,6 +33,11 @@ namespace hunger_games_simulator.assets
             else throw new Exception("Error parsing " + this.Type + " " + this.Name + "."); ;
         }
 
+        public override string ToString()
+        {
+            return this.Type + ":" + this.Name;
+        }
+
         public enum Class
         {
             item = 0,
