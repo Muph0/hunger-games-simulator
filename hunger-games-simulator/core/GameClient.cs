@@ -84,9 +84,13 @@ namespace hunger_games_simulator.core
                     req.SendTo(stream);
 
                     ServerResponse resp = ServerResponse.ReceiveFrom(stream);
-                    this.ServerInfo = (ClientsideServerInfo)resp.Data[0];
-                    this.LobbyMenu.UpdateItems();
-                    this.LobbyMenu.Draw();
+
+                    if (resp.Purpose == ResponseType.LobbyInfo)
+                    {
+                        this.ServerInfo = (ClientsideServerInfo)resp.Data[0];
+                        this.LobbyMenu.UpdateItems();
+                        this.LobbyMenu.Draw();
+                    }
 
                     stopky.Stop();
                     this.Ping = (int)stopky.ElapsedMilliseconds;

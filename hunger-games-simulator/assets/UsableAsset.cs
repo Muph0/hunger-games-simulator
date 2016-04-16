@@ -27,7 +27,7 @@ namespace hunger_games_simulator.assets
             }
         }
 
-        public enum Class
+        public new enum Class
         {
             Weapon = 0,
             Defence,
