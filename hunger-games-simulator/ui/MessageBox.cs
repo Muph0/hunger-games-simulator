@@ -33,12 +33,10 @@ namespace hunger_games_simulator.ui
             Menu menu = new Menu(options) { width = 10, SelectedColor = ConsoleColor.Yellow, fillBackround = false };
 
             int width = 60;
-            if (text.Length < 40)
+            if (text.Length < 60)
                 width = text.Length + 4;
-            if (text.Length < 160)
-                width = 40;
 
-            text = new TextBreaker().Break(text, width - 4);
+            text = TextBreaker.BreakText(text, width - 4);
             int height = 3 + text.Count(x => x == '\n') + options.Length;
 
             ConsoleBuffer buf = new ConsoleBuffer(width, height) { ForegroundColor = ConsoleColor.Yellow };
@@ -52,6 +50,8 @@ namespace hunger_games_simulator.ui
             buf.WriteVertical("".PadRight(height - 2, '|'));
             buf.SetCursorPosition(width - 1, 1);
             buf.WriteVertical("".PadRight(height - 2, '|'));
+
+            buf.ForegroundColor = ConsoleColor.Gray;
 
             string[] lines = text.Split('\n');
             for (int i = 0; i < lines.Length; i++)

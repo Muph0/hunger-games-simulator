@@ -5,15 +5,15 @@ using System.Text;
 
 namespace hunger_games_simulator.assets.info
 {
-    class SpawnLocation
+    class SpawnDestination
     {
         SpawnableAsset asset;
 
         public string Name { get; private set; }
         public int Min, Max;
 
-        private SpawnLocation() { }
-        public SpawnLocation(SpawnableAsset asset)
+        private SpawnDestination() { }
+        public SpawnDestination(SpawnableAsset asset)
         {
             this.asset = asset;
         }
@@ -26,10 +26,10 @@ namespace hunger_games_simulator.assets.info
             this.asset.ParseNumberOrTuple(bits[1], ref this.Min, ref this.Max);
         }
 
-        public static SpawnLocation FromBiome(BiomeAsset asset)
+        public static SpawnDestination FromBiome(BiomeAsset asset)
         {
-            SpawnLocation result = new SpawnLocation();
-            result.Name = asset.Name;
+            SpawnDestination result = new SpawnDestination();
+            result.Name = asset.AssetName;
             return result;
         }
     }

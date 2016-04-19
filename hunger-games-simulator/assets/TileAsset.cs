@@ -10,15 +10,16 @@ namespace hunger_games_simulator.assets
         private BiomeAsset localBiome;
 
         public TileAsset(string name)
-            : base (name, Class.tile)
+            : base(name, AssetType.tile)
         {
-            localBiome = new BiomeAsset(this.Name) { Type = Class.tile };
+            localBiome = new BiomeAsset(this.AssetName) { Type = AssetType.tile };
         }
 
         public void LoadFrom(IniFile ini)
         {
-            this.LoadSpawn(ini);
             localBiome.LoadFrom(ini);
+
+            base.LoadFrom(ini);
         }
 
         public level.Tile GenerateTile(Random rnd)

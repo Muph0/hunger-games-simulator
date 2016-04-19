@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using hunger_games_simulator.assets;
+using hunger_games_simulator.assets.info;
 
 namespace hunger_games_simulator.core
 {
@@ -30,7 +31,7 @@ namespace hunger_games_simulator.core
             foreach (FileInfo file in dir.GetFiles("*.ini"))
             {
                 if (file.Name.First() != '_')
-                ParseLocal(file.FullName);
+                    ParseLocal(file.FullName);
             }
             foreach (DirectoryInfo d in dir.GetDirectories())
             {
@@ -43,48 +44,84 @@ namespace hunger_games_simulator.core
             IniFile ini = new IniFile(filename);
             string[] section_names = ini.GetSectionNames();
 
-            List<string> biomes_list = new List<string>();
-            List<string> items_list = new List<string>();
-            List<string> tiles_list = new List<string>();
+            List<string> ignored_assets = new List<string>();
 
             foreach (string sec in section_names)
             {
                 string entry_type = sec.Split(':')[0];
                 string name = sec.Split(':')[1];
-                switch (entry_type)
+
+                Asset asset = null;
+
+                if (entry_type == Asset.AssetType.biome.ToString())
                 {
-                    case "biome":
-                        biomes_list.Add(name);
-                        break;
-                    case "item":
-                        items_list.Add(name);
-                        break;
-                    case "tile":
-                        tiles_list.Add(name);
-                        break;
+                    BiomeAsset biomeAsset = new BiomeAsset(name);
+                    biomeAsset.LoadFrom(ini);
+                    asset = biomeAsset;
+                }
+                if (entry_type == Asset.AssetType.tile.ToString())
+                {
+                    TileAsset tileAsset = new TileAsset(name);
+                    tileAsset.LoadFrom(ini);
+                    asset = tileAsset;
+                }
+
+                if (asset != null)
+                    this.AddNew(asset);
+                else
+                {
+                    ignored_assets.Add(sec);
                 }
             }
 
-            foreach (string name in biomes_list)
+            if (ignored_assets.Count > 0)
             {
-                BiomeAsset b = new BiomeAsset(name);
-                b.LoadFrom(ini);
-                this.BiomeAssets.Add(name, b);
+                FileInfo file = new FileInfo(filename);
+                string errormsg = file.Name + ": " + "Following assets could not be loaded, because parser for their type is either not present or not working:\n\n";
+
+                foreach (string s in ignored_assets)
+                    errormsg += s + ", ";
+
+                errormsg = errormsg.Substring(0, errormsg.Length - 2);
+
+                ui.MessageBox.Show(errormsg + "\n", ui.MessageBox.Buttons.OK);
+            }
+        }
+
+        public void AddNew(Asset a)
+        {
+            string name = a.AssetName;
+            bool exists = true;
+
+            try
+            {
+                this.GetAssetByName(name);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                exists = false;
             }
 
-            foreach (string name in tiles_list)
+            if (!exists)
             {
-                TileAsset t = new TileAsset(name);
-                t.LoadFrom(ini);
-                this.TileAssets.Add(name, t);
+                if (a.Type == Asset.AssetType.biome)
+                    BiomeAssets.Add(a.AssetName, (BiomeAsset)a);
+                else if (a.Type == Asset.AssetType.tile)
+                    TileAssets.Add(a.AssetName, (TileAsset)a);
+                else if (a.Type == Asset.AssetType.item)
+                    ItemAssets.Add(a.AssetName, (ItemAsset)a);
             }
+        }
+        public Asset GetAssetByName(string name)
+        {
+            if (BiomeAssets.ContainsKey(name))
+                return BiomeAssets[name];
+            if (TileAssets.ContainsKey(name))
+                return BiomeAssets[name];
+            if (ItemAssets.ContainsKey(name))
+                return BiomeAssets[name];
 
-            foreach (string name in items_list)
-            {
-                ItemAsset i = new ItemAsset(name);
-                i.Load(ini);
-                this.ItemAssets.Add(name, i);
-            }
+            throw new ArgumentOutOfRangeException("Asset '" + name + "' does not exist");
         }
 
         public string PickBiomeAmountBased(Random rnd, int temp)

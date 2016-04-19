@@ -19,11 +19,11 @@ namespace hunger_games_simulator.level
             arena.Biomes = new Biome[biome_count];
             arena.Seed = seed;
             List<int>[] biome_tiles_list = new List<int>[biome_count];
-            // halton sequence is used for generating evenly distributed points
+            
             Random rnd = new Random(seed);
-            HaltonSet hlt = new HaltonSet(seed);
+            HaltonSet hlt = new HaltonSet(seed);    // halton sequence is used for generating evenly distributed points
 
-            // generate heatmap
+            // generate temperature map
             double[] heatmap = GenerateNoise(seed, 3);
             for (int i = 0; i < arena.Heatmap.Length; i++)
             {
@@ -50,11 +50,12 @@ namespace hunger_games_simulator.level
 
                 // go thru all the pivots and pick the closest to current tile
                 for (int p = 0; p < biome_count; p++)
-                {
-                    Point noise = new Point((int)((rnd.NextDouble() - 0.5) * 2.5), (int)((rnd.NextDouble() - 0.5) * 2));
-                    Point pivot = new Point(arena.Biomes[p].Pivot.X, arena.Biomes[p].Pivot.Y) + noise;
-                    // add a bit of noise
+                {                    
+                    Point pivot = new Point(arena.Biomes[p].Pivot.X, arena.Biomes[p].Pivot.Y);
 
+                    // add a bit of noise
+                    Point noise = new Point((int)((rnd.NextDouble() - 0.5) * 2.5), (int)((rnd.NextDouble() - 0.5) * 2));
+                    pivot += noise;
 
                     int dist2 = tile_pos.distanceSquared(pivot);
                     if (dist2 < minDist2)
@@ -77,6 +78,7 @@ namespace hunger_games_simulator.level
             }
 
             // time to populate   *BIOMES*
+            // with tiles
             for (int b = 0; b < biome_count; b++)
             {
                 Biome biome = arena.Biomes[b];
@@ -85,8 +87,8 @@ namespace hunger_games_simulator.level
                 List<TileAsset> special_tiles = new List<TileAsset>();
                 foreach (TileAsset t in gameAssets.TileAssets.Values)
                 {
-                    if (t.SpawnLocations.Length > 0 &&
-                        t.SpawnLocations.Where(a => a.Name == biome_asset.Name).Count() > 0)
+                    if (t.SpawnDestinations.Length > 0 &&
+                        t.SpawnDestinations.Where(a => a.Name == biome_asset.AssetName).Count() > 0)
                     {
                         special_tiles.Add(t);
                     }
@@ -99,7 +101,7 @@ namespace hunger_games_simulator.level
                     // test, if current tile shouldn't be special tile
                     foreach (TileAsset ta in special_tiles)
                     {
-                        SpawnLocation local = ta.SpawnLocations.Where(a => a.Name == biome_asset.Name).First();
+                        SpawnDestination local = ta.SpawnDestinations.Where(a => a.Name == biome_asset.AssetName).First();
                         double desired_probability = double.Epsilon;
 
                         if (local.Min < local.Max)
@@ -134,7 +136,17 @@ namespace hunger_games_simulator.level
             // time to populate   *TILES*
             for (int i = 0; i < arena.Tiles.Length; i++)
             {
+                Tile tile = arena.Tiles[i];
+                Asset tileAsset = null;
+                
+                // tileAsset can be a regular biome asset or a special tile asset
+                tileAsset = gameAssets.GetAssetByName(tile.AssetName);
 
+                foreach (string spwnHere in tileAsset.SpawnsHere)
+                {
+                    // following asset will be spawned in current tile
+                    SpawnableAsset assetToSpawn = (SpawnableAsset)gameAssets.GetAssetByName(spwnHere);
+                }
             }
 
             return arena;

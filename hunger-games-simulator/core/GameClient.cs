@@ -65,6 +65,9 @@ namespace hunger_games_simulator.core
         {
             NetworkStream stream = tcpClient.GetStream();
             req.SendTo(stream);
+
+            ServerResponse resp = ServerResponse.ReceiveFrom(stream);
+            ProcessResponse(resp);
         }
 
         void Update(object o)
@@ -90,6 +93,10 @@ namespace hunger_games_simulator.core
                         this.ServerInfo = (ClientsideServerInfo)resp.Data[0];
                         this.LobbyMenu.UpdateItems();
                         this.LobbyMenu.Draw();
+                    }
+                    else
+                    {
+                        throw new NotImplementedException();
                     }
 
                     stopky.Stop();

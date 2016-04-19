@@ -12,6 +12,9 @@ namespace hunger_games_simulator
 {
     class TextBreaker
     {
+        private TextBreaker()
+        { }
+
         struct Slovo
         {
             public string sl;
@@ -81,7 +84,26 @@ namespace hunger_games_simulator
             text[pred].predchozi_zlom = nejlepsi_zlom;
         }
 
-        public string Break(string str, int line_len)
+        public static string BreakText(string s, int line_len)
+        {
+            string[] paragraphs = s.Split('\n');
+
+            for (int i = 0; i < paragraphs.Length; i++)
+            {
+                paragraphs[i] = new TextBreaker().Break(paragraphs[i], line_len);
+            }
+
+            paragraphs[paragraphs.Length - 1] = paragraphs.Last().TrimEnd("\n ".ToArray());
+
+            return string.Join("", paragraphs);
+        }
+
+        public static string BreakParagraph(string s, int line_len)
+        {
+            return new TextBreaker().Break(s, line_len);
+        }
+
+        string Break(string str, int line_len)
         {
             str = str.Replace('\n', ' ');
             string[] buf = str.Split(' ').ToArray();

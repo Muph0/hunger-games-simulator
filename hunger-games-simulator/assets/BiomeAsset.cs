@@ -17,12 +17,12 @@ namespace hunger_games_simulator.assets
         public int Amount;
 
         public BiomeAsset(string name)
-            : base(name, Class.biome)
+            : base(name, AssetType.biome)
         {
 
         }
 
-        public void LoadFrom(IniFile ini)
+        public override void LoadFrom(IniFile ini)
         {
             Exception e = new Exception("Error parsing " + this.ToString() + " in file " + ini.path);
 
@@ -39,7 +39,7 @@ namespace hunger_games_simulator.assets
                 this.Chars[i] = str.Substring(2);
             }
 
-            if (this.Type == Class.biome)
+            if (this.Type == AssetType.biome)
             {
                 string amt = ini.GetEntryValue(this.ToString(), "amount").ToString();
                 this.Amount = int.Parse(amt);
@@ -57,7 +57,7 @@ namespace hunger_games_simulator.assets
             int picked = rnd.Next(Foregrounds.Length);
             tile.Foreground = Foregrounds[picked];
             tile.Background = Backgrounds[picked];
-            tile.AssetName = this.Name;
+            tile.AssetName = this.AssetName;
 
             tile.Char = Chars[picked][rnd.Next(Chars[picked].Length)];
 

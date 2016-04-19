@@ -12,23 +12,21 @@ namespace hunger_games_simulator.assets
         public int MassMin, MassMax; // g
 
         public ItemAsset(string name)
-            : base(name, Asset.Class.item)
+            : base(name, Asset.AssetType.item)
         {
 
         }
-        public ItemAsset(string name, Asset.Class type)
+        public ItemAsset(string name, Asset.AssetType type)
             : base(name, type)
         {
 
         }
 
-        public void Load(IniFile ini)
+        public override void LoadFrom(IniFile ini)
         {
+            base.LoadFrom(ini);
 
-            this.Type = Asset.Class.item;
-            this.LoadUsage(ini);
             this.FancyName = ini.GetEntryValue(this.ToString(), "fancyname").ToString();
-
             string mass = ini.GetEntryValue(this.ToString(), "mass").ToString();
             this.ParseNumberOrTuple(mass, ref MassMin, ref MassMax);
         }

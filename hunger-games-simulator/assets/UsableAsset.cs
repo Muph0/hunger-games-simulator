@@ -7,27 +7,33 @@ namespace hunger_games_simulator.assets
 {
     class UsableAsset : SpawnableAsset
     {
-        public bool[] Usage = new bool[(int)UsableAsset.Class._Length];
+        public bool[] Usage = new bool[(int)UsableAsset.UsageType._Length];
 
-        public UsableAsset(string name, Asset.Class type)
+        public UsableAsset(string name, Asset.AssetType type)
             : base(name, type)
         {
 
         }
 
-        protected void LoadUsage(IniFile ini)
+        public override void LoadFrom(IniFile ini)
         {
-            this.Usage = new bool[(int)UsableAsset.Class._Length];
+            base.LoadFrom(ini);
+            this.LoadUsage(ini);
+        }
 
-            string[] split = ini.GetEntryValue("item:" + Name, "usage").ToString().Split(',');
+        private void LoadUsage(IniFile ini)
+        {
+            this.Usage = new bool[(int)UsableAsset.UsageType._Length];
+
+            string[] split = ini.GetEntryValue("item:" + AssetName, "usage").ToString().Split(',');
             for (int i = 0; i < this.Usage.Length; i++)
             {
-                if (split.Contains(((UsableAsset.Class)i).ToString().ToUpper()))
+                if (split.Contains(((UsableAsset.UsageType)i).ToString().ToUpper()))
                     this.Usage[i] = true;
             }
         }
 
-        public new enum Class
+        public enum UsageType
         {
             Weapon = 0,
             Defence,

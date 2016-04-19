@@ -7,15 +7,16 @@ namespace hunger_games_simulator.assets
 {
     class Asset
     {
-        protected Asset(string name, Class type) 
+        protected Asset(string name, AssetType type) 
         {
-            this.Name = name;
+            this.AssetName = name;
             this.Type = type;
         }
 
-        public string Name;
-        public Class Type;
+        public string AssetName;
+        public AssetType Type;
 
+        public List<string> SpawnsHere = new List<string>();
         
 
         public void ParseNumberOrTuple(string str, ref int n0, ref int n1)
@@ -30,20 +31,26 @@ namespace hunger_games_simulator.assets
                 n0 = int.Parse(split[0]);
                 n1 = int.Parse(split[1]);
             }
-            else throw new Exception("Error parsing " + this.Type + " " + this.Name + "."); ;
+            else throw new Exception("Error parsing " + this.Type + " " + this.AssetName + "."); ;
+        }
+
+        public virtual void LoadFrom(IniFile ini)
+        {
+            throw new NotImplementedException();
         }
 
         public override string ToString()
         {
-            return this.Type + ":" + this.Name;
+            return this.Type + ":" + this.AssetName;
         }
 
-        public enum Class
+        public enum AssetType
         {
             item = 0,
             biome,
             container,
-            tile
+            tile,
+            _last
         }
     }
 }
