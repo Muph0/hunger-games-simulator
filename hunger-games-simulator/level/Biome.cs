@@ -14,10 +14,11 @@ namespace hunger_games_simulator.level
             Pivot = new Point(pivX, pivY);
         }
 
-        public string AssetName;
+        public string AssetName { get { return Asset.AssetName; } }
         public Point Pivot;
         public int[] TilesOwned;
 
-        [NonSerialized] public Arena Arena;
+        [NonSerialized]
+        public BiomeAsset Asset;
     }
 }

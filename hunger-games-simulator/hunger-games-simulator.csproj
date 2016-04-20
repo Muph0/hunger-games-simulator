@@ -55,7 +55,7 @@
     <Compile Include="assets\Asset.cs" />
     <Compile Include="assets\BiomeAsset.cs" />
     <Compile Include="assets\ContainerAsset.cs" />
-    <Compile Include="assets\info\SpawnLocation.cs" />
+    <Compile Include="assets\info\SpawnDestination.cs" />
     <Compile Include="assets\info\TileSpawnColors.cs" />
     <Compile Include="assets\ItemAsset.cs" />
     <Compile Include="assets\SpawnableAsset.cs" />
@@ -75,12 +75,15 @@
     <Compile Include="IniFile.cs" />
     <Compile Include="level\ArenaGenerator.cs" />
     <Compile Include="level\Biome.cs" />
-    <Compile Include="level\Entity.cs" />
+    <Compile Include="lore\entity\Entity.cs" />
     <Compile Include="level\Arena.cs" />
+    <Compile Include="lore\entity\ItemStackEntity.cs" />
     <Compile Include="level\Tile.cs" />
+    <Compile Include="lore\item\Item.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomRange.cs" />
     <Compile Include="TextBreaker.cs" />
     <Compile Include="ui\ActionMenu.cs" />
     <Compile Include="ui\CharacterEditMenu.cs" />

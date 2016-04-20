@@ -74,11 +74,11 @@ namespace hunger_games_simulator.level
                 int pivotPos = arena.Biomes[i].Pivot.X + arena.Biomes[i].Pivot.Y * arena.Width;
 
                 arena.Biomes[i].TilesOwned = biome_tiles_list[i].ToArray();
-                arena.Biomes[i].AssetName = gameAssets.PickBiomeAmountBased(rnd, arena.Heatmap[pivotPos]);
+                arena.Biomes[i].Asset = gameAssets.PickBiomeAmountBased(rnd, arena.Heatmap[pivotPos]);
             }
 
             // time to populate   *BIOMES*
-            // with tiles
+            // (with tiles)
             for (int b = 0; b < biome_count; b++)
             {
                 Biome biome = arena.Biomes[b];
@@ -102,28 +102,9 @@ namespace hunger_games_simulator.level
                     foreach (TileAsset ta in special_tiles)
                     {
                         SpawnDestination local = ta.SpawnDestinations.Where(a => a.Name == biome_asset.AssetName).First();
-                        double desired_probability = double.Epsilon;
 
-                        if (local.Min < local.Max)
-                        {
-                            // SOME HARDCORE MATH SHIT HERE
-
-                            // approx. how many tiles i want in this biome
-                            int desired_amount = (local.Min + local.Max) / 2;
-
-                            // what is the perfect probability to get the desired amount
-                            desired_probability = desired_amount / (double)biome.TilesOwned.Length;
-                        }
-                        else
-                        {
-                            // desired probability is encoded in Max/Min
-                            desired_probability = local.Max / (double)local.Min;
-                        }
-
-                        // roll a dice of (1/des_prob) sides
-                        int dice = rnd.Next((int)(1 / desired_probability));
-
-                        if (dice == 1)
+                        int amt = local.Amount.Evaluate(rnd);
+                        if (amt > 0)
                         {
                             tile = ta.GenerateTile(rnd);
                         }
@@ -146,6 +127,13 @@ namespace hunger_games_simulator.level
                 {
                     // following asset will be spawned in current tile
                     SpawnableAsset assetToSpawn = (SpawnableAsset)gameAssets.GetAssetByName(spwnHere);
+
+                    SpawnDestination local = assetToSpawn.SpawnDestinations.Where(a => a.Name == tile.AssetName).First();
+
+                    if (assetToSpawn is ItemAsset)
+                    {
+                        int amt = local.Amount.Evaluate(rnd);
+                    }
                 }
             }
 

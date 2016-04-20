@@ -10,7 +10,7 @@ namespace hunger_games_simulator.assets.info
         SpawnableAsset asset;
 
         public string Name { get; private set; }
-        public int Min, Max;
+        public RandomRange Amount = new RandomRange();
 
         private SpawnDestination() { }
         public SpawnDestination(SpawnableAsset asset)
@@ -23,9 +23,8 @@ namespace hunger_games_simulator.assets.info
             string[] bits = str.Split(' ');
 
             this.Name = bits[0];
-            this.asset.ParseNumberOrTuple(bits[1], ref this.Min, ref this.Max);
+            this.asset.ParseNumberOrTuple(bits[1], ref this.Amount.Min, ref this.Amount.Max);
         }
-
         public static SpawnDestination FromBiome(BiomeAsset asset)
         {
             SpawnDestination result = new SpawnDestination();

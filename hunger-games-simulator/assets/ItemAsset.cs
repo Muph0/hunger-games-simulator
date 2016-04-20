@@ -1,4 +1,5 @@
-﻿using System;
+﻿using hunger_games_simulator.lore.item;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace hunger_games_simulator.assets
     class ItemAsset : UsableAsset
     {
         public string FancyName;
-        public int MassMin, MassMax; // g
+        public RandomRange Mass;
 
         public ItemAsset(string name)
             : base(name, Asset.AssetType.item)
@@ -22,13 +23,21 @@ namespace hunger_games_simulator.assets
 
         }
 
+        public Item GenerateItem()
+        {
+            Item item = new Item(this);
+
+            return item;
+        }
+
         public override void LoadFrom(IniFile ini)
         {
             base.LoadFrom(ini);
 
             this.FancyName = ini.GetEntryValue(this.ToString(), "fancyname").ToString();
             string mass = ini.GetEntryValue(this.ToString(), "mass").ToString();
-            this.ParseNumberOrTuple(mass, ref MassMin, ref MassMax);
+            this.Mass = new RandomRange();
+            this.ParseNumberOrTuple(mass, ref Mass.Min, ref Mass.Max);
         }
     }
 }

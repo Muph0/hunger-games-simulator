@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace hunger_games_simulator.level
+namespace hunger_games_simulator.lore.entity
 {
     class Entity
     {

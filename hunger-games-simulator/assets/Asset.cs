@@ -31,7 +31,7 @@ namespace hunger_games_simulator.assets
                 n0 = int.Parse(split[0]);
                 n1 = int.Parse(split[1]);
             }
-            else throw new Exception("Error parsing " + this.Type + " " + this.AssetName + "."); ;
+            else throw new Exception("Error parsing " + this.Type + " " + this.AssetName + ".");
         }
 
         public virtual void LoadFrom(IniFile ini)

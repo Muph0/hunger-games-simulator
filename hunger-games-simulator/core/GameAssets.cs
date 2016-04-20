@@ -65,6 +65,12 @@ namespace hunger_games_simulator.core
                     tileAsset.LoadFrom(ini);
                     asset = tileAsset;
                 }
+                if (entry_type == Asset.AssetType.item.ToString())
+                {
+                    ItemAsset itemAsset = new ItemAsset(name);
+                    itemAsset.LoadFrom(ini);
+                    asset = itemAsset;
+                }
 
                 if (asset != null)
                     this.AddNew(asset);
@@ -104,6 +110,32 @@ namespace hunger_games_simulator.core
 
             if (!exists)
             {
+                if (a is SpawnableAsset)
+                {
+                    SpawnableAsset asset = (SpawnableAsset)a;
+                    foreach (SpawnDestination sd in asset.SpawnDestinations)
+                    {
+                        Asset dest = null;
+                        try
+                        {
+                            dest = this.GetAssetByName(sd.Name);
+                        }
+                        catch (ArgumentException e)
+                        {
+                            throw new FormatException("Spawn destination '" + sd.Name + "' is unknown.", e);
+                        }
+
+                        if (!dest.SpawnsHere.Contains(sd.Name))
+                        {
+                            dest.SpawnsHere.Add(asset.AssetName);
+                        }
+                        else
+                        {
+                            throw new Exception("Spawned twice in the same place.");
+                        }
+                    }
+                }
+
                 if (a.Type == Asset.AssetType.biome)
                     BiomeAssets.Add(a.AssetName, (BiomeAsset)a);
                 else if (a.Type == Asset.AssetType.tile)
@@ -111,20 +143,25 @@ namespace hunger_games_simulator.core
                 else if (a.Type == Asset.AssetType.item)
                     ItemAssets.Add(a.AssetName, (ItemAsset)a);
             }
+            else
+            {
+                // asset is already defined
+                throw new Exception();
+            }
         }
         public Asset GetAssetByName(string name)
         {
             if (BiomeAssets.ContainsKey(name))
                 return BiomeAssets[name];
             if (TileAssets.ContainsKey(name))
-                return BiomeAssets[name];
+                return TileAssets[name];
             if (ItemAssets.ContainsKey(name))
-                return BiomeAssets[name];
+                return ItemAssets[name];
 
             throw new ArgumentOutOfRangeException("Asset '" + name + "' does not exist");
         }
 
-        public string PickBiomeAmountBased(Random rnd, int temp)
+        public BiomeAsset PickBiomeAmountBased(Random rnd, int temp)
         {
             Dictionary<string, BiomeAsset> localClimaBiomes;
             localClimaBiomes = BiomeAssets
@@ -151,7 +188,7 @@ namespace hunger_games_simulator.core
                 }
             }
 
-            return names[pick];
+            return BiomeAssets[names[pick]];
         }
     }
 }

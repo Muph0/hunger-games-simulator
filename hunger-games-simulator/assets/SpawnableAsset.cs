@@ -20,7 +20,6 @@ namespace hunger_games_simulator.assets
         {
             this.LoadSpawn(ini);
         }
-
         private void LoadSpawn(IniFile ini)
         {
             string line = ini.GetEntryValue(this.Type.ToString() + ":" + this.AssetName, "spawn").ToString();
