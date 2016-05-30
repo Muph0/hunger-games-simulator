@@ -30,9 +30,9 @@ Will (maybe) include:
 
 
 ###### Requirements:
-* Legit OS (That means Windows 7)
 * Electricity
 * Wooden PC  
+* Legit OS (That means Windows 7)
 * Internet connection so you can have fun with *friends**
 <br><br><br>
 *Friends are not included
