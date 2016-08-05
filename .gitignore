@@ -1,15 +1,2 @@
-*.pdb
-*.suo
-*.cache
-*.vshost.exe
-*.pdb
-obj/*
-hunger-games-simulator.suo
-hunger-games-simulator/bin/Debug/ConsoleBufferApi.pdb
-hunger-games-simulator/bin/Debug/hunger-games-simulator.pdb
-hunger-games-simulator/obj/*
-hunger-games-simulator/bin/Debug/hunger-games-simulator.pdb
-hunger-games-simulator/bin/Debug/hunger-games-simulator.vshost.exe
-st.exesimulator.csprojResolveAssemblyReference.cache
-*manifest*
+*.lnk
 
