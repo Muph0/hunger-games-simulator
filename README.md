@@ -1,5 +1,6 @@
+[![Floobits Status](https://floobits.com/Muph0/hunger-games-simulator.svg)](https://floobits.com/Muph0/hunger-games-simulator/redirect)
+
 # Hunger Games Simulator
-<br><br>
 Simple text-based simulator gamed inspired by Hunger Games.
 Will (maybe) include:
 * Singleplayer!
@@ -9,25 +10,6 @@ Will (maybe) include:
 * Fire!
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ###### Requirements:
 * Electricity
