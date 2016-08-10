@@ -10,6 +10,8 @@ function Keyboard()
         self.Keys[String.fromCharCode(i)] = i;
     }
 
+    self.Buffer = [];
+
     // create reversed dictionary
     var keys_reverted = {}
     for (var key in self.Keys)
@@ -32,6 +34,15 @@ function Keyboard()
     self.keydown = function(event)
     {
         keyboard_state[event.keyCode] = true;
+
+        if (event.keyCode === self.Keys.Backspace)
+        {
+            self.Buffer.pop();
+        }
+    }
+    self.keypress = function(event)
+    {
+        self.Buffer.push(event.key);
     }
 
     self.GetState = function()
