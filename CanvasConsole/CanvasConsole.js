@@ -15,7 +15,7 @@ window.CanvasConsole = function(width, height, img) {
     var height = defaultFor(height, 25);
 
     var canvas = null;
-    var ctx = null
+    var ctx = null;
 
     var font_spritesheet = null;
 
