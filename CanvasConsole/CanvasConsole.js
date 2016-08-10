@@ -2,6 +2,7 @@
 window.CanvasConsole = function(width, height, img) {
 
     // Constants & aliases
+    var ASCII = "\0☺☻♥♦♣♠•◘○\n♂♀\r♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~⌂ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿⌐¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■ ";
     var CHAR_WIDTH = 7, CHAR_HEIGHT = 12;
     var self = this;
 
@@ -47,6 +48,9 @@ window.CanvasConsole = function(width, height, img) {
     {
         return [self.CursorX, self.CursorY];
     }
+
+    self.GetWidth = function() { return width; }
+    self.GetHeight = function() { return height; }
 
     self.LoadFont = function(path_or_img, onload_callback) {
 
@@ -112,14 +116,17 @@ window.CanvasConsole = function(width, height, img) {
         if (document.body === null)
             throw new Error('document.body is null - you should call this method later.')
 
-        parentElement = defaultFor(parentElement, document.body);
-        parentElement.appendChild(canvas);
+        if (parentElement !== null)
+        {
+            parentElement = defaultFor(parentElement, document.body);
+            parentElement.appendChild(canvas);
+        }
         self.Clear();
     }
 
     self.DrawChar = function(chr, cx, cy)
     {
-        var index = chr.charCodeAt(0);
+        var index = ASCII.indexOf(chr);
 
         // calc the source location in the font spritesheet
         var x = (index % 64) * CHAR_WIDTH;
@@ -211,6 +218,20 @@ window.CanvasConsole = function(width, height, img) {
         ctx.fillStyle = rgb(self.Background);
         ctx.fillRect(0, 0, width * CHAR_WIDTH, height * CHAR_HEIGHT)
         self.SetCursor(0,0);
+    }
+    self.ClearRectangle = function(rect_width, rect_height)
+    {
+        ctx.fillStyle = rgb(self.Background);
+        ctx.fillRect(self.CursorX * CHAR_WIDTH, self.CursorY * CHAR_WIDTH, width * CHAR_WIDTH, height * CHAR_HEIGHT)
+    }
+
+    self.WriteImage = function(img)
+    {
+        ctx.drawImage(img, self.CursorX * CHAR_WIDTH, self.CursorY * CHAR_WIDTH);
+    }
+    self.GetCanvas = function()
+    {
+        return canvas;
     }
 
 constructor(); }
