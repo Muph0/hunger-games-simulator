@@ -1,5 +1,4 @@
 
-
 function main(body)
 {
     var img = document.getElementById('ascii');
@@ -25,13 +24,12 @@ function main(body)
         {
             canvas.css("margin-top", 0);
 
-            canvas.css("width", winH * aspect_ratio);
+            canvas.css("width", winH * aspect_ratio - 10);
             canvas.css("margin-left", (winW - canvas.width()) / 2 + "px");
         }
     };
 
-    $(window).resize(resize_adjust);
-    resize_adjust();
+    $(window).resize(resize_adjust); resize_adjust();
 
     var game = new GameBase(Console);
     game.Start();
