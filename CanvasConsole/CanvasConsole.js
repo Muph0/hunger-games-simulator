@@ -1,8 +1,8 @@
 
-window.CanvasConsole = function(width, height, img) {
+window.CanvasConsole = function(_width, _height, img) {
 
     // Constants & aliases
-    var ASCII = "\0☺☻♥♦♣♠•◘○\n♂♀\r♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~⌂ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿⌐¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■ ";
+    var ASCII = "\0☺☻♥♦♣♠•◘○\n♂♀\r♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~⌂ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿⌐¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■ ěščřžýáíéďťňúůóĚŠČŘŽÝÁÍÉĎŤŇÚŮÓ";
     var CHAR_WIDTH = 7, CHAR_HEIGHT = 12;
     var self = this;
 
@@ -11,8 +11,8 @@ window.CanvasConsole = function(width, height, img) {
     var rgb = function(color) { return 'rgb(' + color.slice(0,3).join(',') + ')'; }
     var defaultFor = function(variable, value) { return typeof variable !== 'undefined' ? variable : value; }
 
-    var width = defaultFor(width, 80);
-    var height = defaultFor(height, 25);
+    var width = defaultFor(_width, 80);
+    var height = defaultFor(_height, 25);
 
     var canvas = null;
     var ctx = null;
@@ -25,11 +25,24 @@ window.CanvasConsole = function(width, height, img) {
 
     ////////////////////
     //  Public sector
-    self.Foreground = [0, 200, 200];
+    self.Foreground = [200, 200, 200];
     self.Background = [0, 0, 0];
 
-    self.CursorX = 0;
-    self.CursorY = 0;
+    var cursor_x = 0;
+    var cursor_y = 0;
+
+    self.__defineGetter__('CursorX', function() { return cursor_x; });
+    self.__defineGetter__('CursorY', function() { return cursor_y; });
+    self.__defineSetter__("CursorX", function(val) {
+        if (isNaN(val)) throw new Error("Value is NaN");
+        cursor_x = Math.floor(val);
+    });
+    self.__defineSetter__("CursorY", function(val) {
+        if (isNaN(val)) throw new Error("Value is NaN");
+        cursor_y = Math.floor(val);
+    });
+
+    self.CursorVisible = true;
 
     self.SetCursor = function(x, y)
     {
@@ -49,8 +62,8 @@ window.CanvasConsole = function(width, height, img) {
         return [self.CursorX, self.CursorY];
     }
 
-    self.GetWidth = function() { return width; }
-    self.GetHeight = function() { return height; }
+    self.__defineGetter__('Width', function() { return width; });
+    self.__defineGetter__('Height', function() { return height; });
 
     self.LoadFont = function(path_or_img, onload_callback) {
 
@@ -122,6 +135,20 @@ window.CanvasConsole = function(width, height, img) {
             parentElement.appendChild(canvas);
         }
         self.Clear();
+    }
+
+    self.BlinkCursor = function(time)
+    {
+        if (!self.CursorVisible || Math.floor(time % 4) === 0) return;
+
+        // calc the destination location on the canvas
+        var X = self.CursorX * CHAR_WIDTH;
+        var Y = (self.CursorY) * CHAR_HEIGHT;
+
+        // draw the cursor
+        ctx.fillStyle = rgb(self.Foreground);
+        ctx.fillRect(X, Y + CHAR_HEIGHT - 3, CHAR_WIDTH, 2)
+        //ctx.fillRect(X-1, Y, 2, CHAR_HEIGHT)
     }
 
     self.DrawChar = function(chr, cx, cy)
@@ -222,12 +249,12 @@ window.CanvasConsole = function(width, height, img) {
     self.ClearRectangle = function(rect_width, rect_height)
     {
         ctx.fillStyle = rgb(self.Background);
-        ctx.fillRect(self.CursorX * CHAR_WIDTH, self.CursorY * CHAR_WIDTH, width * CHAR_WIDTH, height * CHAR_HEIGHT)
+        ctx.fillRect(self.CursorX * CHAR_WIDTH, self.CursorY * CHAR_WIDTH, rect_width * CHAR_WIDTH, rect_height * CHAR_HEIGHT)
     }
 
     self.WriteImage = function(img)
     {
-        ctx.drawImage(img, self.CursorX * CHAR_WIDTH, self.CursorY * CHAR_WIDTH);
+        ctx.drawImage(img, self.CursorX * CHAR_WIDTH, self.CursorY * CHAR_HEIGHT);
     }
     self.GetCanvas = function()
     {
