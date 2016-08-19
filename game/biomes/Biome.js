@@ -1,30 +1,26 @@
 
 function Biome(pivX, pivY)
 {
-    var self = this;
+    this.X = pivX;
+    this.Y = pivY;
 
-    self.X = pivX;
-    self.Y = pivY;
+    this.TilesOwned = [];
+    this.Optionset = [];
+    this.TempRange = [];
 
-    self.TilesOwned = [];
-    self.Optionset = [];
-    self.TempRange = [];
-
-    self.__defineGetter__('Optionset', function() { throw new Error("Not implemented."); });
-    self.__defineGetter__('TempRange', function() { throw new Error("Not implemented."); });
-
-    self.GenerateTile = function(seed)
+    this.GenerateTile = function(rnd)
     {
-        var rnd = new Random(seed);
+        var opt = rnd.choice(this.Optionset);
 
-        var chr = rnd.choice(self.CharSet);
-        var fg = rnd.choice(self.ForegroundSet);
-        var bg = rnd.choice(self.BackgroundSet);
+        var fg = opt.fg;
+        var bg = opt.bg;
+        var chr = rnd.choice(opt.chars.split(''));
 
         var result = new Tile(chr, fg, bg);
 
         return result;
     }
+
 }
 Biome.RegisterBiomes = function()
 {

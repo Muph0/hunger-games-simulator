@@ -7,4 +7,8 @@ function Arena(width, height)
     self.Heatmap = [];
     self.Seed = 0;
 
+    self.ImportState = function(json_data)
+    {
+
+    }
 }

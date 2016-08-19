@@ -1,56 +1,104 @@
 
-function Menu(Console, game, itemlist) {
+function Menu(Console, game, width) {
     var self = this;
 
-    self.Selected = 0;
-    self.HighlightFG = [255, 255, 255];
-    self.HighlightBG = [80,0,0];
-    self.Itemlist = itemlist;
+    this.Selected = 0;
+    this.HighlightFG = [255, 255, 255];
+    this.HighlightBG = [100,0,0];
+    this.Itemlist = [];
+    this.Width = width;
+    this.MaxHeight = Infinity;
+    this.ViewPortPos = 0;
+    this.HighlightSelected = true;
+    this.Spacing = 1;
 
-    self.Draw = function()
+    this.GetSelected = function()
     {
-        var cur = Console.GetCursor();
-        var curx = Console.CursorX;
-        var cury = Console.CursorY;
-        var stdFG = Console.Foreground;
-        var stdBG = Console.Background;
+        return this.Itemlist[this.Selected];
+    }
 
+    this.Show = function()
+    {
+        this.Itemlist[this.Selected].OnSelect();
+    }
 
-        for (var i = 0; i < itemlist.length; i++)
+    this.Draw = function()
+    {
+        if (this.Itemlist.length === 0)
+            return Console.Write("[empty menu]");
+
+        while (this.Itemlist[this.Selected].Skip) this.Selected++;
+
+        var height = this.Itemlist.length;
+        if (this.MaxHeight !== Infinity)
         {
-            Console.SetCursor(curx, cury + i);
-            if (i === self.Selected)
-            {
-                Console.Foreground = self.HighlightFG;
-                Console.Background = self.HighlightBG;
-                Console.Write("> ");
-            }
-            else Console.Write("  ");
+            height = Math.min(this.MaxHeight, this.Itemlist.length);
+        }
 
-            // Don't draw leading '!'
-            var option = itemlist[i];
-            if (option[0] === '!')
-                option = option.substring(1);
+        var X = Console.CursorX;
+        var Y = Console.CursorY;
 
-            Console.Write(option);
+        for (var i = 0; i < height; i++)
+        {
+            var item = this.Itemlist[i + this.ViewPortPos];
+            if (this.HighlightSelected && i + this.ViewPortPos === this.Selected || (item.Text === '' && item.Skip)) continue;
 
-            Console.Foreground = stdFG;
-            Console.Background = stdBG;
+            Console.SetCursor(X, Y + i * this.Spacing);
+            Console.Write('  ');
+
+            item.Draw(Console, this);
+        }
+
+        if (this.HighlightSelected && this.ViewPortPos <= this.Selected && this.Selected < this.ViewPortPos + height)
+        {
+            var FG = Console.Foreground;
+            var BG = Console.Background;
+            Console.Foreground = this.HighlightFG;
+            Console.Background = this.HighlightBG;
+
+            Console.SetCursor(X, Y + (this.Selected - this.ViewPortPos) * this.Spacing);
+            Console.Write("> ");
+
+            this.Itemlist[this.Selected].Draw(Console, this);
+
+            Console.Foreground = FG;
+            Console.Background = BG;
         }
     }
 
-    self.Update = function()
+    this.Update = function()
     {
+        if (this.Itemlist.length === 0)
+            return;
+
+        var old_sel = this.Selected;
 
         //Cursor movement in menu
         do
         {
             if (game.IsKeyPressed(Keyboard.Keys.Up))
-                self.Selected--;
+            {
+                this.Selected--;
+            }
             if (game.IsKeyPressed(Keyboard.Keys.Down))
-                self.Selected++;
-            self.Selected = (self.Selected + itemlist.length) % itemlist.length;
+            {
+                this.Selected++;
+            }
+            this.Selected = (this.Selected + this.Itemlist.length) % this.Itemlist.length;
         }
-        while (itemlist[self.Selected][0] === '!');
+        while (this.Itemlist[this.Selected].Skip);
+
+        if (this.MaxHeight !== Infinity && this.Selected >= 0)
+        {
+            if (this.Selected < this.ViewPortPos)
+                this.ViewPortPos--;
+            if (this.Selected >= this.ViewPortPos + this.MaxHeight)
+                this.ViewPortPos++;
+        }
+
+        if (old_sel !== this.Selected)
+            this.Itemlist[this.Selected].OnSelect();
+
+        this.Itemlist[this.Selected].Update();
     }
 }

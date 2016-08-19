@@ -4,8 +4,8 @@ function HaltonSet(seed)
     var k2, k3;
 
     var rnd = new Random(seed);
-    k2 = 2 * rnd.Next(10000) + 1;
-    k3 = 3 * rnd.Next(10000) + 1 + rnd.Next(2);
+    k2 = 2 * rnd.nextRange(0,10000) + 1;
+    k3 = 3 * rnd.nextRange(0,10000) + 1 + rnd.nextRange(0,2);
 
 
     this.Seq2 = function(i)

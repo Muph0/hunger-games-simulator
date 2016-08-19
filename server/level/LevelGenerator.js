@@ -1,8 +1,7 @@
 
 function LevelGenerator()
 {
-    var self = this;
-    self.Generate = function(seed, biome_count)
+    this.Generate = function(seed, biome_count)
     {
         var width = 50;
         var height = 25;
@@ -17,9 +16,9 @@ function LevelGenerator()
 
         // generate temperature map
         var heatmap = perlin.generatePerlinNoise(width, height);
-        for (var i = 0; i < arena.Heatmap.length; i++)
+        for (var i = 0; i < width * height; i++)
         {
-            arena.Heatmap[i] = (heatmap[i] - 0.5) * 20 + 0.8 * (i % width);
+            arena.Heatmap[i] = Math.floor((heatmap[i] - 0.5) * 20 + 0.8 * (i % width));
         }
 
         // decide which biome to use & set locations of biome pivots
@@ -33,7 +32,7 @@ function LevelGenerator()
 
             var temp = arena.Heatmap[pivX + pivY * width];
 
-            var biomes_filtered = Biome.Types.filter(function(val){
+            var biomes_filtered = Biome.Types.filter(function(val) {
                 return temp >= new val(0,0).TempRange[0] && temp <= new val(0,0).TempRange[1];
             });
 
@@ -56,11 +55,11 @@ function LevelGenerator()
                 var pivot = [arena.Biomes[p].PivotX, arena.Biomes[p].PivotY];
 
                 // add a bit of noise
-                var noise = [(rnd.NextFloat() - 0.5) * 2.5, (rnd.NextFloat() - 0.5) * 2];
+                var noise = [(rnd.nextFloat() - 0.5) * 2.5, (rnd.nextFloat() - 0.5) * 2];
                 pivot[0] += noise[0];
                 pivot[1] += noise[1];
 
-                int dist2 = tile_pos * tile_pos;
+                var dist2 = tile_pos * tile_pos;
                 if (dist2 < mindist2)
                 {
                     mindist2 = dist2;
@@ -68,9 +67,13 @@ function LevelGenerator()
                 }
             }
 
+
             arena.Biomes[owner].TilesOwned.push(i);
 
-
+            arena.Tiles[i] = arena.Biomes[owner].GenerateTile(rnd);
         }
+
+        return arena;
     }
 }
+LevelGenerator = new LevelGenerator();

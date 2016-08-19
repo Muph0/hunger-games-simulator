@@ -3,18 +3,24 @@ function GameBase(Console)
 {
     var self = this;
     var kbs = [], lkbs = [];
-    self.render_mgr = new RenderManager(Console, self);
 
-    self.Time = 0;
+    this.Client = new Client(this);
+    this.Character = new PlayerCharacter();
 
-    self.Start = function()
+    this.ConnectionManager = new ConnectionManager(this);
+    this.RenderManager = new RenderManager(Console, this);
+    this.ServerInfo = new ServerInfo();
+
+    this.Time = 0;
+
+    this.Start = function()
     {
         Biome.RegisterBiomes();
 
-        window.requestAnimationFrame(self.Run);
+        window.requestAnimationFrame(this.Run);
     }
 
-    self.Run = function(time)
+    this.Run = function(time)
     {
         self.Time = time;
         self.Update();
@@ -22,28 +28,31 @@ function GameBase(Console)
         if (true) window.requestAnimationFrame(self.Run);
     }
 
-    self.IsKeyDown = function(key)
+    this.IsKeyDown = function(key)
     {
         return kbs[key];
     }
-    self.IsKeyPressed = function(key)
+    this.IsKeyPressed = function(key)
     {
         return kbs[key] && !lkbs[key];
     }
-    self.IsKeyReleased = function(key)
+    this.IsKeyReleased = function(key)
     {
         return !kbs[key] && lkbs[key];
     }
 
-    self.Update = function()
+    this.Update = function()
     {
+        Console.CursorVisible = false;
         lkbs = kbs;
         kbs = Keyboard.GetState();
 
-        self.render_mgr.Update();
+        this.RenderManager.Update();
     }
-    self.Draw = function()
+    this.Draw = function()
     {
-        self.render_mgr.Draw();
+        this.RenderManager.Draw();
+
+        Console.BlinkCursor(this.Time / 200);
     }
 }

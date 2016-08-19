@@ -1,6 +1,6 @@
 @echo off
 
-node app.js
+node debug app.js
 
 if not "%ERRORLEVEL%" == "0" (
     echo.

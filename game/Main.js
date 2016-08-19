@@ -1,3 +1,39 @@
+ErrorCode = {
+    InvalidVersion: 4001,
+    ProtocolFailure: 4002,
+    BrokenJSON: 4003,
+}
+
+Object.prototype.merge = function(obj2)
+{
+    for (key in obj2)
+    {
+        this[key] = obj2[key];
+    }
+
+    return this;
+}
+String._padding = Array(80).join(' ');
+String.prototype.padLeft = function(width) {
+    var pad = String._padding.substring(0, width);
+    if (typeof this === 'undefined')
+        return pad;
+    return (pad + this).slice(-pad.length);
+}
+String.prototype.padRight = function(width) {
+    var pad = String._padding.substring(0, width);
+    if (typeof this === 'undefined')
+        return pad;
+    return (this + pad).substring(0, pad.length);
+}
+
+function inherit(that, parent)
+{
+    for (key in parent)
+    {
+        that[key] = parent[key];
+    }
+}
 
 function main(body)
 {
@@ -31,6 +67,6 @@ function main(body)
 
     $(window).resize(resize_adjust); resize_adjust();
 
-    var game = new GameBase(Console);
+    game = new GameBase(Console);
     game.Start();
 }

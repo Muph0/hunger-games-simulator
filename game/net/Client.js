@@ -1,38 +1,105 @@
-function Server()
+
+function Client(game)
 {
     var self = this;
-    var server;
+    var client;
+    var connection_started = 0;
+    var connection_ended = null;
 
-    self.Connect = function(IP, port)
+    this.State = ClientState.Disconnected;
+    this.LastEvent = null;
+    this.Error = null;
+    this.Ping = 0;
+
+    this.Responses = [];
+
+    this.__defineGetter__('ServerIP', function() {
+        return client.url.split('/')[2].split(':')[0];
+    });
+    this.__defineGetter__('Duration', function() {
+        if (connection_ended)
+            return connection_ended - connection_started;
+        return game.Time - connection_started;
+    });
+
+    this.Connect = function(IP, Port)
     {
-        server = new WebSocket("ws://" + IP + ":" + port);
-        server.onopen = on_open; 
-        server.onmessage = on_message;
-        server.onclose = on_close;
+        self.State = ClientState.Connecting;
+
+        client = new WebSocket("ws://" + IP + ':' + Port);
+        connection_started = game.Time;
+
+        client.onopen = on_open;
+        client.onmessage = on_message;
+        client.onclose = on_close;
+        client.onerror = on_error;
     }
 
-    self.Send = function(data)
+    this.Send = function(data)
     {
-        server.send(data);
+        client.send(data);
     }
 
-    self.Close = function()
+    this.Close = function()
     {
-        server.close();
+        client.close();
     }
 
-    var on_open = function(data)
+    var on_open = function(evt)
     {
-        console.log(data);
+        self.State = ClientState.Connected;
+        self.LastEvent = evt;
+        client.send(JSON.stringify({protocol: "0.1", character: game.Character}));
     }
 
-    var on_message = function(data)
+    var on_message = function(evt)
     {
-        console.log(data);
+        try
+        {
+            var data = JSON.parse(evt.data);
+
+            if (data.Error)
+            {
+                self.Error = evt;
+
+                console.log("Client on_message (user error):");
+                console.log(evt);
+
+                client.close();
+            }
+
+            self.Responses.push(data);
+        }
+        catch (e)
+        {
+            console.error(e);
+            console.error("Server sent broken JSON.")
+        }
+
+        self.LastEvent = evt;
     }
 
-    var on_close = function(data)
+    var on_close = function(evt)
     {
-        console.log(data);
+        self.State = ClientState.Disconnected;
+        self.LastEvent = evt;
+        console.log("Client on_close: (lasted " + Math.floor(self.Duration) / 1000 + " seconds)" );
+        console.log(evt);
+        self.LastEvent = evt;
+        connection_ended = game.Time;
     }
+
+    var on_error = function(evt)
+    {
+        self.State = ClientState.Disconnected;
+        console.log("Client on_error:");
+        console.log(evt);
+        self.Error = evt;
+    }
+}
+
+ClientState = {
+    Disconnected: 0,
+    Connected: 1,
+    Connecting: 2,
 }

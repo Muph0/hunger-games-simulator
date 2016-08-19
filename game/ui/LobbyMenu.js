@@ -1,55 +1,105 @@
+
 function LobbyMenu(Console, game)
 {
     var self = this;
-    var menu = new Menu(Console, game, ["", "Back to menu"]);
-    var server = new Server();
+    var sys_menu = new Menu(Console, game, 20);
+    sys_menu.Itemlist = [
+        new MenuItem(game, 'Edit character'),
+        new StringMenuItem(game, 'Chat:'),
+        new MenuItem(game, '').merge({Skip: true}),
+        new MenuItem(game, 'Leave game'),
+    ];
 
-    self.Show = function()
+    var playerlist_menu = new Menu(Console, game, 35);
+    playerlist_menu.MaxHeight = 5;
+    playerlist_menu.Spacing = 2;
+
+    var leftmenu = true;
+
+    this.Show = function()
     {
+        playerlist_menu.Itemlist = [];
+        leftmenu = true;
+
         return DrawState.LobbyMenu;
     }
 
-    self.Connect = function()
+    this.Update = function()
     {
-        server.Connect('192.168.1.253', 12321);
-    }
-
-    self.Draw = function()
-    {
-        Console.Clear();
-        Console.SetCursor(3,1);
-        menu.Draw();
-    }
-
-    self.Update = function()
-    {
-        menu.Update();
+        if (leftmenu)
+        {
+            sys_menu.Update();
+        }
+        else
+        {
+            playerlist_menu.Update();
+        }
 
         if (game.IsKeyPressed(Keyboard.Keys.Enter))
         {
-            switch (menu.Selected)
+            switch (sys_menu.Selected)
             {
                 case 1:
-                    menu.Selected = 0;
-                    server.Close();
-                    return game.render_mgr.main_menu.Show();
-
+                    game.Client.Send(sys_menu.Itemlist[0].Value);
+                    sys_menu.Itemlist[0].Value = "";
+                    break;
+                case 3:
+                    game.Client.Close();
+                    break;
             }
         }
 
-        if (menu.Selected == 0)
+        if (leftmenu && game.IsKeyPressed(Keyboard.Keys.Right) && sys_menu.Selected !== 1)
+            leftmenu = false;
+        if (!leftmenu && game.IsKeyPressed(Keyboard.Keys.Left))
+            leftmenu = true;
+
+        if (playerlist_menu.Itemlist.length !== game.ServerInfo.Playerlist.length)
         {
-            var last_enter = Keyboard.Buffer.lastIndexOf('Enter');
-            Keyboard.Buffer = Keyboard.Buffer.slice(last_enter + 1);
-
-            if (game.IsKeyPressed(Keyboard.Keys.Enter))
+            playerlist_menu.Itemlist = [];
+            for (var i = 0; i < game.ServerInfo.Playerlist.length; i++)
             {
-                server.Send(menu.Itemlist[0]);
+                playerlist_menu.Itemlist[i] = new LobbyMenuItem(game, game.ServerInfo.Playerlist[i]);
             }
 
-            menu.Itemlist[0] = Keyboard.Buffer.join('');
+            if (leftmenu)
+            {
+                leftmenu = false;
+                this.Draw();
+                leftmenu = true;
+            }
         }
 
-        return DrawState.LobbyMenu;
+        return game.ConnectionManager.Update(DrawState.LobbyMenu);
+    }
+
+    this.Draw = function()
+    {
+        var half_w = Math.floor(Console.Width * 1/3);
+
+        if (leftmenu || sys_menu.HighlightSelected !== leftmenu)
+        {
+            sys_menu.HighlightSelected = leftmenu;
+            Console.SetCursor(0, 0);
+            Console.ClearRectangle(half_w, 25);
+
+            Console.CursorX += 3;
+            Console.CursorY += 2;
+            sys_menu.Draw();
+        }
+        if (!leftmenu || playerlist_menu.HighlightSelected === leftmenu)
+        {
+            playerlist_menu.HighlightSelected = !leftmenu;
+            Console.SetCursor(half_w, 0);
+            Console.ClearRectangle(Console.Width - half_w, 25);
+
+            Console.CursorX += 1;
+            Console.CursorY += 2;
+            playerlist_menu.Draw();
+        }
     }
 }
+
+
+
+
