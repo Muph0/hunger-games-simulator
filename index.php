@@ -33,7 +33,6 @@
             padding: 0;
         }
         body {
-            image-rendering: pixelated;
             background-color: #111;
         }
     </style>
