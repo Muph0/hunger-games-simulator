@@ -3,30 +3,19 @@ function ClientVerifier(server)
 {
     this.AcceptMessage = function(client, data)
     {
-        var accepted_info = {};
-        try
+        if (data.protocol !== server.PROTOCOL_VERSION)
         {
-            accepted_info = JSON.parse(data);
-        }
-        catch (e)
-        {
-            console.log('ERROR: Client sent broken JSON.');
-            client.close(ErrorCode.BrokenJSON)
-            return;
-        }
-
-        if (accepted_info.protocol !== server.PROTOCOL_VERSION)
-        {
+            debugger;
             console.log('ERROR: InvalidVersion.');
             client.close(ErrorCode.InvalidVersion);
             return;
         }
 
-        if (accepted_info.character)
+        if (data.character)
         {
             client.info.Character = new PlayerCharacter();
             try {
-                client.info.Character.Import(accepted_info.character);
+                client.info.Character.Import(data.character);
 
                 // TODO: check free points >= 0
 

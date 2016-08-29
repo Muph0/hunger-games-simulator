@@ -72,10 +72,25 @@ function Server()
         var client = this;
         console.log(client.info.ID + ' sent: ' + data);
 
+        var parsed_data = {};
+        try
+        {
+            parsed_data = JSON.parse(data);
+        }
+        catch (e)
+        {
+            console.log('ERROR: Client sent broken JSON.');
+            client.close(ErrorCode.BrokenJSON)
+            return;
+        }
+
         switch (client.info.Stage)
         {
             case ClientStage.Verifying:
-                self.Verifier.AcceptMessage(client, data);
+                self.Verifier.AcceptMessage(client, parsed_data);
+                break;
+            case ClientStage.Lobby:
+                self.LobbyManager.AcceptMessage(client, parsed_data);
                 break;
         }
     }

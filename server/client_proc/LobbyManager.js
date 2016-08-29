@@ -14,6 +14,23 @@ function LobbyManager(server)
 
     this.AcceptMessage = function(client, data)
     {
+        if (data.msg)
+        {
+            // TODO: chat
+        }
+        if (data.ready)
+        {
+            client.info.LobbyReady = !client.info.LobbyReady;
 
+            var response = {
+                lobby: this.GetPlayerlist(),
+            }
+
+            server.Broadcast(JSON.stringify(response));
+        }
+        if (data.start)
+        {
+            // TODO: start the game
+        }
     }
 }
