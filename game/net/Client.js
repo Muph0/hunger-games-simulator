@@ -2,6 +2,8 @@
 function Client(game)
 {
     var self = this;
+    this.__defineGetter__('PROTOCOL_VERSION', function() { return "0.1"; });
+
     var client;
     var connection_started = 0;
     var connection_ended = null;
@@ -49,7 +51,7 @@ function Client(game)
     {
         self.State = ClientState.Connected;
         self.LastEvent = evt;
-        client.send(JSON.stringify({protocol: "0.1", character: game.Character}));
+        client.send(JSON.stringify({protocol: self.PROTOCOL_VERSION, character: game.Character}));
     }
 
     var on_message = function(evt)

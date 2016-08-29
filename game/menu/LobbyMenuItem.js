@@ -24,9 +24,9 @@ function LobbyMenuItem(game, client_info)
         var ping = game.Client.Ping.toString();
         Console.Write(ping.padRight(4));
 
-        var ready = this.ClientInfo.Ready;
+        var ready = this.ClientInfo.LobbyReady;
         var bg = Console.Background;
-        Console.Background = ready? [0, 160, 0] : [180, 0, 0];
+        Console.Background = ready? [0, 160, 0] : [220, 0, 0];
         Console.Write('    ')
         Console.Background = bg;
     }

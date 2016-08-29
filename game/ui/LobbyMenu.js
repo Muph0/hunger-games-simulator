@@ -4,6 +4,7 @@ function LobbyMenu(Console, game)
     var self = this;
     var sys_menu = new Menu(Console, game, 20);
     sys_menu.Itemlist = [
+        new MenuItem(game, 'Ready'),
         new MenuItem(game, 'Edit character'),
         new StringMenuItem(game, 'Chat:'),
         new MenuItem(game, '').merge({Skip: true}),
@@ -13,6 +14,8 @@ function LobbyMenu(Console, game)
     var playerlist_menu = new Menu(Console, game, 35);
     playerlist_menu.MaxHeight = 5;
     playerlist_menu.Spacing = 2;
+
+    var lobby_hash;
 
     var leftmenu = true;
     var lastmenu = true;
@@ -44,20 +47,26 @@ function LobbyMenu(Console, game)
 
         if (game.IsKeyPressed(Keyboard.Keys.Enter))
         {
-            switch (sys_menu.Selected)
+            switch (sys_menu.GetSelected().Text)
             {
-                case 1:
-                    game.Client.Send(sys_menu.Itemlist[1].Value);
-                    sys_menu.Itemlist[1].Value = "";
+                case 'Ready':
+                    var data = {
+                        ready: 1,
+                    }
+                    game.Client.Send(JSON.stringify(data));
                     break;
-                case 3:
+                case 'Leave game':
                     game.Client.Close();
                     break;
             }
         }
 
-        if (playerlist_menu.Itemlist.length !== game.ServerInfo.Playerlist.length)
+        if (lobby_hash !== hash(game.ServerInfo.Playerlist))
         {
+            console.log("Creating new playerlist_menu");
+            console.log(game.ServerInfo.Playerlist);
+            lobby_hash = hash(game.ServerInfo.Playerlist);
+
             playerlist_menu.Itemlist = [];
             for (var i = 0; i < game.ServerInfo.Playerlist.length; i++)
             {
