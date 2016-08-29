@@ -15,6 +15,7 @@ function LobbyMenu(Console, game)
     playerlist_menu.Spacing = 2;
 
     var leftmenu = true;
+    var lastmenu = true;
 
     this.Show = function()
     {
@@ -26,13 +27,19 @@ function LobbyMenu(Console, game)
 
     this.Update = function()
     {
+        lastmenu = leftmenu;
+
         if (leftmenu)
         {
+            if (game.IsKeyPressed(Keyboard.Keys.Right) && (sys_menu.Selected !== 1 || sys_menu.Itemlist[1].CursorPos === sys_menu.Itemlist[1].Value.length))
+                leftmenu = false;
             sys_menu.Update();
         }
         else
         {
             playerlist_menu.Update();
+            if (game.IsKeyPressed(Keyboard.Keys.Left))
+                leftmenu = true;
         }
 
         if (game.IsKeyPressed(Keyboard.Keys.Enter))
@@ -40,19 +47,14 @@ function LobbyMenu(Console, game)
             switch (sys_menu.Selected)
             {
                 case 1:
-                    game.Client.Send(sys_menu.Itemlist[0].Value);
-                    sys_menu.Itemlist[0].Value = "";
+                    game.Client.Send(sys_menu.Itemlist[1].Value);
+                    sys_menu.Itemlist[1].Value = "";
                     break;
                 case 3:
                     game.Client.Close();
                     break;
             }
         }
-
-        if (leftmenu && game.IsKeyPressed(Keyboard.Keys.Right) && sys_menu.Selected !== 1)
-            leftmenu = false;
-        if (!leftmenu && game.IsKeyPressed(Keyboard.Keys.Left))
-            leftmenu = true;
 
         if (playerlist_menu.Itemlist.length !== game.ServerInfo.Playerlist.length)
         {
@@ -64,9 +66,9 @@ function LobbyMenu(Console, game)
 
             if (leftmenu)
             {
-                leftmenu = false;
+                lastmenu = false;
                 this.Draw();
-                leftmenu = true;
+                lastmenu = true;
             }
         }
 
@@ -77,7 +79,7 @@ function LobbyMenu(Console, game)
     {
         var half_w = Math.floor(Console.Width * 1/3);
 
-        if (leftmenu || sys_menu.HighlightSelected !== leftmenu)
+        if (leftmenu || lastmenu)
         {
             sys_menu.HighlightSelected = leftmenu;
             Console.SetCursor(0, 0);
@@ -87,7 +89,7 @@ function LobbyMenu(Console, game)
             Console.CursorY += 2;
             sys_menu.Draw();
         }
-        if (!leftmenu || playerlist_menu.HighlightSelected === leftmenu)
+        if (!leftmenu || !lastmenu)
         {
             playerlist_menu.HighlightSelected = !leftmenu;
             Console.SetCursor(half_w, 0);

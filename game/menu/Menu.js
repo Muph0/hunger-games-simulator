@@ -59,7 +59,9 @@ function Menu(Console, game, width) {
             Console.SetCursor(X, Y + (this.Selected - this.ViewPortPos) * this.Spacing);
             Console.Write("> ");
 
-            this.Itemlist[this.Selected].Draw(Console, this);
+            this.GetSelected().Draw(Console, this);
+            if (!(this.GetSelected() instanceof StringMenuItem))
+                Console.CursorVisible = false;
 
             Console.Foreground = FG;
             Console.Background = BG;
