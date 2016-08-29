@@ -81,7 +81,7 @@ function ConnectingMenu(Console, game)
 
             case ClientState.Disconnected:
 
-                var msg = 'w';
+                var msg = 'unhandled';
 
                 if (game.Client.LastEvent.type === "close")
                 {
@@ -113,14 +113,18 @@ function ConnectingMenu(Console, game)
                         case ErrorCode.BrokenJSON:
                             msg = "Server received broken JSON."
                             break;
-
-
                     }
-
                 }
 
                 Console.SetCursor(Math.floor(Console.Width / 2 - msg.length / 2), Console.Height / 2 - 2);
                 Console.Write(msg);
+
+                if (msg === 'unhandled')
+                {
+                    debugger;
+                    console.log(game.Client);
+                    null.end();
+                }
 
                 break;
 
