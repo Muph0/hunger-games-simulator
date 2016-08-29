@@ -14,7 +14,7 @@ Will (maybe) include:
 ###### Requirements:
 * Electricity
 * Wooden PC  
-* Legit OS (That means Windows 7)
+* Internet browser
 * Internet connection so you can have fun with *friends**
 <br><br><br>
 *Friends are not included
