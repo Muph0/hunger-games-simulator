@@ -38,7 +38,7 @@ function ListMenuItem(game, text, list)
         Console.Write(this.Text)
         var str_value = this.toString();
 
-        var whitespace = "".padLeft(menu.Width - this.Text.length - str_value.length - (selected ? 4 : 0));
+        var whitespace = "".padLeft(menu.Width - this.Text.length - str_value.length - (selected ? 4 : 2));
         Console.Write(whitespace);
 
         var FG = Console.Foreground;
@@ -57,6 +57,10 @@ function ListMenuItem(game, text, list)
         {
             if (game.IsKeyDown(Keyboard.Keys.Right)) Console.Foreground = fg2;
             Console.Write(' >');
+        }
+        else
+        {
+            Console.Write('  ');
         }
 
         Console.Foreground = FG;

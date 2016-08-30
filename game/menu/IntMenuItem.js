@@ -82,15 +82,33 @@ function IntMenuItem(game, text)
     {
         var selected = (menu.GetSelected() === this);
         Console.Write(this.Text);
-
         var str_value = this.toString();
+
+        var whitespace = "".padLeft(menu.Width - this.Text.length - str_value.length - (selected ? 4 : 2));
+        Console.Write(whitespace);
+
+        var FG = Console.Foreground;
+        var fg2 = [60, 60, 60];
+
         if (selected)
-            str_value = '< ' + str_value + ' >';
-        else
-            str_value += '  ';
+        {
+            if (game.IsKeyDown(Keyboard.Keys.Left)) Console.Foreground = fg2;
+            Console.Write('< ');
+        }
 
-        str_value = str_value.padLeft(menu.Width - this.Text.length);
-
+        Console.Foreground = FG;
         Console.Write(str_value);
+
+        if (selected)
+        {
+            if (game.IsKeyDown(Keyboard.Keys.Right)) Console.Foreground = fg2;
+            Console.Write(' >');
+        }
+        else
+        {
+            Console.Write('  ');
+        }
+
+        Console.Foreground = FG;
     }
 }
