@@ -9,3 +9,9 @@ function Tile(chr, foreground, background)
 
     self.Asset = null;
 }
+Tile.RegisterTiles = function()
+{
+    Tile.Types = [];
+
+    Tile.Types.push(LakeTile);
+}
