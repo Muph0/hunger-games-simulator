@@ -37,7 +37,7 @@
         }
     </style>
 </head>
-<body onload="main(this)" onkeydown="Keyboard.keydown(event)" onkeyup="Keyboard.keyup(event)" onkeypress="Keyboard.keypress(event)">
+<body onload="main(this)" onkeydown="KEYBOARD.keydown(event)" onkeyup="KEYBOARD.keyup(event)" onkeypress="KEYBOARD.keypress(event)">
     <input type="text" style="opacity: 0; position: absolute; top: 0; left: 0;" autofocus>
     <img id="ascii" src="CanvasConsole/ascii.png" style="display: none;">
 </body>

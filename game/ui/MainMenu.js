@@ -5,7 +5,6 @@
 function MainMenu(Console, game)
 {
     var self = this;
-    var img = document.getElementById('ascii');
 
     var menu = new Menu(Console, game, 10);
     menu.Itemlist = [
@@ -18,6 +17,7 @@ function MainMenu(Console, game)
     ];
     menu.MaxHeight = 6;
 
+    var img = document.getElementById('ascii');
     this.LogoBuffer = new CanvasConsole(52, 16, img);
     this.LogoBuffer.CreateCanvas(null);
 

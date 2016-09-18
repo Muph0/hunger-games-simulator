@@ -96,7 +96,7 @@ function StringMenuItem(game, text)
         var half = Math.floor(viewport / 2);
         Console.Write(this.toString(viewport).padLeft(viewport))
 
-        if (selected)
+        if (selected && menu.HighlightSelected)
         {
             if (this.toString(viewport).length !== viewport)
             {
