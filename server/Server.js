@@ -2,13 +2,14 @@
 function Server()
 {
     var self = this;
-    this.__defineGetter__('PROTOCOL_VERSION', function() { return "0.1"; });
+    this.PROTOCOL_VERSION = "0.1";
 
     var server;
     var ID_autoincrement = 0;
 
     this.Verifier = new ClientVerifier(this);
     this.LobbyManager = new LobbyManager(this);
+    this.ChatManager = new ChatManager(this);
 
     this.Arena = null;
     this.Clients = [];
@@ -43,6 +44,8 @@ function Server()
 
     this.Broadcast = function(data, exclude)
     {
+        if (typeof data !== 'string') throw new Error('What are you trying to send?');
+
         for (var i = 0; i < this.Clients.length; i++)
         {
             var client = this.Clients[i];

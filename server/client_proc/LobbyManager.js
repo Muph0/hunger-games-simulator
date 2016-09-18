@@ -16,7 +16,7 @@ function LobbyManager(server)
     {
         if (data.msg)
         {
-            // TODO: chat
+            server.ChatManager.AcceptMessage(client, data.msg);
         }
         if (data.ready)
         {
