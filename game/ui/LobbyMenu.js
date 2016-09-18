@@ -18,10 +18,14 @@ function LobbyMenu(Console, game)
     playerlist_menu.MaxHeight = 5;
     playerlist_menu.Spacing = 2;
 
-    var lobby_hash;
+    // chat window
+    var img = document.getElementById('ascii');
+    var chat_buffer = new CanvasConsole(69, 6, img);
+    chat_buffer.CreateCanvas(null);
+
+    var lobby_hash, chat_hash = -1;
 
     var leftmenu = true;
-    var lastmenu = true;
 
     this.Show = function()
     {
@@ -37,15 +41,20 @@ function LobbyMenu(Console, game)
 
         if (leftmenu)
         {
-            if (game.IsKeyPressed(Keyboard.Keys.Right) && (sys_menu.Selected !== 1 || sys_menu.Itemlist[1].CursorPos === sys_menu.Itemlist[1].Value.length))
+            if (game.IsKeyPressed(Keyboard.Keys.Right) && (sys_menu.Selected !== 2 || sys_menu.Itemlist[2].CursorPos === sys_menu.Itemlist[2].Value.length))
+            {
                 leftmenu = false;
+            }
             sys_menu.Update();
         }
         else
         {
             playerlist_menu.Update();
             if (game.IsKeyPressed(Keyboard.Keys.Left))
+            {
                 leftmenu = true;
+                sys_menu.Show();
+            }
         }
 
         if (game.IsKeyPressed(Keyboard.Keys.Enter))
@@ -56,6 +65,15 @@ function LobbyMenu(Console, game)
                     var data = {
                         ready: 1,
                     }
+                    game.client.Send(JSON.stringify(data));
+                    break;
+                case 'Chat:':
+                    var data = {
+                        msg: {
+                            text: sys_menu.GetSelected().Value,
+                        }
+                    }
+                    sys_menu.GetSelected().Value = "";
                     game.client.Send(JSON.stringify(data));
                     break;
                 case 'Leave game':
@@ -84,6 +102,34 @@ function LobbyMenu(Console, game)
             }
         }
 
+        if (chat_hash !== hash(game.serverInfo.ChatHistory.slice(-1)[0]))
+        {
+            chat_hash = hash(game.serverInfo.ChatHistory.slice(-1)[0]);
+
+            chat_buffer.Foreground = [200, 200, 200];
+            chat_buffer.Background = [6, 6, 6];
+            chat_buffer.Clear();
+
+            var display_count = chat_buffer.getHeight();
+            var lines = [];
+
+            for (var i = 0; i < display_count; i++)
+            {
+                var offset = Math.max(game.serverInfo.ChatHistory.length - display_count, 0);
+                if (i + offset >= game.serverInfo.ChatHistory.length)
+                    break;
+
+                var msg = game.serverInfo.ChatHistory[i + offset];
+                var time = new Date(msg.time);
+                var playername = game.serverInfo.getPlayerByToken(msg.token).Character.Name;
+
+                var line = ''+time.getHours()+':'+time.getMinutes()+' <'+playername+'> ' + msg.text;
+                lines.push(line);
+            }
+
+            chat_buffer.Write(lines.join('\n'));
+        }
+
         return game.connectionManager.Update(DrawState.LobbyMenu);
     }
 
@@ -91,26 +137,22 @@ function LobbyMenu(Console, game)
     {
         var half_w = Math.floor(Console.getWidth() * 1/3);
 
-        if (leftmenu || lastmenu)
-        {
-            sys_menu.HighlightSelected = leftmenu;
-            Console.setCursor(0, 0);
-            Console.ClearRectangle(half_w, 25);
+        // set where to highlight
+        playerlist_menu.HighlightSelected = !leftmenu;
+        sys_menu.HighlightSelected = leftmenu;
 
-            Console.addCursorX(3);
-            Console.addCursorY(2);
-            sys_menu.Draw();
-        }
-        if (!leftmenu || !lastmenu)
-        {
-            playerlist_menu.HighlightSelected = !leftmenu;
-            Console.setCursor(half_w, 0);
-            Console.ClearRectangle(Console.getWidth() - half_w, 25);
+        Console.Clear();
 
-            Console.addCursorX(1);
-            Console.addCursorY(2);
-            playerlist_menu.Draw();
-        }
+        // Draw chat window
+        Console.setCursor(5, Console.getHeight() - chat_buffer.getHeight() - 1);
+        Console.WriteImage(chat_buffer.GetCanvas());
+
+        Console.setCursor(half_w + 3, 2)
+        playerlist_menu.Draw();
+
+        Console.setCursor(3, 2)
+        sys_menu.Draw();
+
     }
 }
 

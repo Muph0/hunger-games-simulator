@@ -24,6 +24,10 @@ function ConnectionManager(game)
             {
                 game.serverInfo.Token = resp.token;
             }
+            if (resp.msg)
+            {
+                game.serverInfo.AcceptMessage(resp.msg);
+            }
         }
 
         return defaultState;

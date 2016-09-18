@@ -27,22 +27,24 @@ String.prototype.padRight = function(width) {
     return (this + pad).substring(0, pad.length);
 }
 
-
 function hash(obj)
 {
     var str = JSON.stringify(obj);
-    str = str + str + str + str + str + str;
-    var hash = 0, i, chr, len;
-    if (str.length === 0) return hash;
+    if (typeof str === 'undefined' || str.length === 0) return 0;
+
+    var i, chr = str.charCodeAt(0), len, m = 0x80000000, a = 1109375621, b = 1987449612, c = 17209;
+    var hash = 0;
+    var state = (chr * a + c) % m;
 
     for (i = 0, len = str.length; i < len; i++)
     {
-        chr   = str.charCodeAt(i);
-        hash  = ((hash << 5) - hash) + chr;
+        state = (state * a + c) % m;
+        chr   = (str.charCodeAt(i) * b + c) % m;
+        hash  = ((hash << 5) - hash) + (chr ^ state);
         hash |= 0; // Convert to 32bit integer
     }
 
-    return hash.toString(36);
+    return hash;
 }
 
 function inherit(that, parent)

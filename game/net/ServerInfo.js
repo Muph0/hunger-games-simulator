@@ -6,14 +6,19 @@ function ServerInfo()
 {
     this.Playerlist = [];
     this.Token = null;
+    this.ChatHistory = [];
 
-    this.getLocalInfo = function() {
-        if (this.Token === null) return null;
-        var token = this.Token;
+    this.getPlayerByToken = function(token)
+    {
         return this.Playerlist.filter(function(obj) {
             return obj.Token === token;
-        });
+        })[0];
     }
+    this.getLocalInfo = function() {
+        if (this.Token === null) return null;
+        return this.getPlayerByToken(this.Token);
+    }
+
     this.AcceptPlayerList = function(list)
     {
         for (var i = 0; i < list.length; i++)
@@ -25,5 +30,10 @@ function ServerInfo()
         }
 
         this.Playerlist = list;
+    }
+    this.AcceptMessage = function(msg)
+    {
+        msg.time = new Date().getTime();
+        this.ChatHistory.push(msg);
     }
 }
