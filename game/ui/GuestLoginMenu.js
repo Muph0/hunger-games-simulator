@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function GuestLoginMenu(Console, game)
 {
     var menu = new Menu(Console, game, 40);
@@ -23,16 +26,16 @@ function GuestLoginMenu(Console, game)
             switch (menu.Selected)
             {
                 case 2:
-                    //game.Character.Randomize();
+                    //game.character.Randomize();
                     if (menu.Itemlist[0].Value)
-                        game.Character.Name = menu.Itemlist[0].Value;
+                        game.character.Name = menu.Itemlist[0].Value;
                     else
-                        game.Character.Name = "Guest";
+                        game.character.Name = "Guest";
 
-                    return game.RenderManager.create_character_menu.Show();
+                    return game.renderManager.create_character_menu.Show();
                     break;
                 case 3:
-                    return game.RenderManager.login_menu.Show();
+                    return game.renderManager.login_menu.Show();
             }
         }
 
@@ -42,7 +45,7 @@ function GuestLoginMenu(Console, game)
     this.Draw = function()
     {
         Console.Clear()
-        Console.SetCursor(20, 8);
+        Console.setCursor(20, 8);
         menu.Draw();
     }
 }

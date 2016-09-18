@@ -1,3 +1,7 @@
+
+/**
+ * @constructor
+ */
 function OptionsMenu(Console, game)
 {
     var self = this;
@@ -25,7 +29,7 @@ function OptionsMenu(Console, game)
     self.Draw = function()
     {
         Console.Clear();
-        Console.SetCursor(5, 2);
+        Console.setCursor(5, 2);
         menu.Draw();
     }
 
@@ -35,7 +39,7 @@ function OptionsMenu(Console, game)
 
         if (game.IsKeyPressed(Keyboard.Keys.Escape))
         {
-            return game.RenderManager.main_menu.Show();
+            return game.renderManager.main_menu.Show();
         }
 
         if (game.IsKeyPressed(Keyboard.Keys.Enter))
@@ -43,7 +47,7 @@ function OptionsMenu(Console, game)
             switch (menu.GetSelected().Text)
             {
                 case 'Back':
-                    return game.RenderManager.main_menu.Show();
+                    return game.renderManager.main_menu.Show();
                     break;
             }
         }
@@ -51,10 +55,10 @@ function OptionsMenu(Console, game)
         switch (menu.Itemlist[0].Value)
         {
             case 0:
-                Console.GetCanvas().style.imageRendering = 'initial';
+                Console.GetCanvas()['style']['imageRendering'] = 'initial';
                 break;
             case 1:
-                Console.GetCanvas().style.imageRendering = 'pixelated';
+                Console.GetCanvas()['style']['imageRendering'] = 'pixelated';
                 break;
         }
 

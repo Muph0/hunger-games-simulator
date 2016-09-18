@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function TundraBiome(pivX, pivY)
 {
     inherit(this, new Biome(pivX, pivY));

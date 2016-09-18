@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function LoginMenu(Console, game)
 {
     var menu = new Menu(Console, game, 16);
@@ -25,7 +28,7 @@ function LoginMenu(Console, game)
             switch (menu.Selected)
             {
                 case 1:
-                    return game.RenderManager.guest_login_menu.Show();
+                    return game.renderManager.guest_login_menu.Show();
                 case 5:
                     document.location.href = 'https://www.youtube.com/watch?v=oHg5SJYRHA0';
                     break;
@@ -40,11 +43,11 @@ function LoginMenu(Console, game)
         Console.Clear();
 
         //draws game logo
-        var logo_buffer = game.RenderManager.main_menu.LogoBuffer;
-        Console.SetCursor((Console.Width - logo_buffer.Width) / 2, 1);
+        var logo_buffer = game.renderManager.main_menu.LogoBuffer;
+        Console.setCursor((Console.getWidth() - logo_buffer.Width) / 2, 1);
         Console.WriteImage(logo_buffer.GetCanvas());
 
-        Console.SetCursor((Console.Width - menu.Width) / 2, 18)
+        Console.setCursor((Console.getWidth() - menu.Width) / 2, 18)
         menu.Draw();
     }
 }

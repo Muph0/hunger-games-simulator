@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function BrowseMenu(Console, game)
 {
     var menu = new Menu(Console, game, 40);
@@ -32,9 +35,9 @@ function BrowseMenu(Console, game)
                     var port = ip.split(':')[1];
                     ip = ip.split(':')[0];
 
-                    return game.RenderManager.connecting_menu.Show(ip, port);
+                    return game.renderManager.connecting_menu.Show(ip, port);
                 case 2:
-                    return game.RenderManager.main_menu.Show();
+                    return game.renderManager.main_menu.Show();
 
             }
         }
@@ -46,7 +49,7 @@ function BrowseMenu(Console, game)
     this.Draw = function()
     {
         Console.Clear();
-        Console.SetCursor(Console.Width / 2 - menu.Width / 2, Console.Height / 2);
+        Console.setCursor(Console.getWidth() / 2 - menu.Width / 2, Console.getHeight() / 2);
         menu.Draw();
     }
 }

@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function LobbyMenuItem(game, client_info)
 {
     inherit(this, new MenuItem(game, client_info.toString()));
@@ -12,8 +15,8 @@ function LobbyMenuItem(game, client_info)
 
     this.Draw = function(Console, menu)
     {
-        var X = Console.CursorX;
-        var Y = Console.CursorY;
+        var X = Console.getCursorX();
+        var Y = Console.getCursorY();
 
         var name = this.ClientInfo.Character.Name;
         Console.Write(name.padRight(12));
@@ -21,7 +24,7 @@ function LobbyMenuItem(game, client_info)
         var desc = this.ClientInfo.Character.toString();
         Console.Write(desc.padRight(21));
 
-        var ping = game.Client.Ping.toString();
+        var ping = game.client.Ping.toString();
         Console.Write(ping.padRight(4));
 
         var ready = this.ClientInfo.LobbyReady;

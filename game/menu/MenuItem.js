@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function MenuItem(game, text)
 {
     this.Text = text;

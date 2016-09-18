@@ -1,5 +1,8 @@
 
+/**
+ * @constructor
+ */
 function ItemEntity(item)
 {
-    inherit(this, new Entity());
+    inherit(this, new GameEntity());
 }

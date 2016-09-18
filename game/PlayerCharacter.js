@@ -1,5 +1,7 @@
 
-
+/**
+ * @constructor
+ */
 function PlayerCharacter()
 {
     this.Name = "Noname";
@@ -8,29 +10,29 @@ function PlayerCharacter()
     this.Skills = [1, 1, 1, 1, 1, 1, 1, 1];
 
     this.Stats.Names = ['Strength', 'Agility', 'Intelligence', 'Metabolism'];
-    for (var i = 0; i < this.Stats.Names.length; i++)
+    /*for (var i = 0; i < this.Stats.Names.length; i++)
     {
-        this.Stats.__defineGetter__(this.Stats.Names[i], function() { return this.Stats[i]; });
-    }
+        this.Stats.__ defineGetter__(this.Stats.Names[i], function() { return this.Stats[i]; });
+    }*/
 
     this.Skills.Names = ['Crafting', 'Archery', 'Light Weapons', 'Guns', 'Cooking', 'Sneaking', 'Running', 'Climbing'];
-    for (var i = 0; i < this.Skills.Names.length; i++)
+    /*for (var i = 0; i < this.Skills.Names.length; i++)
     {
-        this.Skills.__defineGetter__(this.Skills.Names[i], function() { return this.Skills[i]; });
-    }
+        this.Skills.__ defineGetter__(this.Skills.Names[i], function() { return this.Skills[i]; });
+    }*/
 
-    this.Stats.__defineGetter__('FreePoints', function() {
+    this.Stats.getFreePoints = function() {
         var sum = 0;
         for (var i = 0; i < this.length; i++)
             sum += this[i];
         return 19 - sum;
-    })
-    this.Skills.__defineGetter__('FreePoints', function() {
+    };
+    this.Skills.getFreePoints = function() {
         var sum = 0;
         for (var i = 0; i < this.length; i++)
             sum += this[i];
         return 23 - sum;
-    })
+    };
 
     this.Randomize = function()
     {
@@ -41,12 +43,12 @@ function PlayerCharacter()
             this.Skills[i] = 1;
         }
 
-        while (this.Stats.FreePoints > 0)
+        while (this.Stats.getFreePoints() > 0)
         {
             var dice = Math.floor(Math.random() * this.Stats.length);
             this.Stats[dice]++;
         }
-        while (this.Skills.FreePoints > 0)
+        while (this.Skills.getFreePoints() > 0)
         {
             var dice = Math.floor(Math.random() * this.Skills.length);
             this.Skills[dice]++;

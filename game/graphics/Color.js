@@ -1,8 +1,12 @@
 
+/**
+ * @constructor
+ */
 function Color(r, g, b)
 {
 
 }
+
 Color.FromHSL = function(h, s, l)
 {
     var r, g, b;

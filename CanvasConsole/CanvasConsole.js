@@ -1,5 +1,8 @@
 
-window.CanvasConsole = function(_width, _height, img) {
+/**
+ * @constructor
+ */
+function CanvasConsole(_width, _height, img) {
 
     // Constants & aliases
     var ASCII = "\0☺☻♥♦♣♠•◘○\n♂♀\r♫☼►◄↕‼¶§▬↨↑↓→←∟↔▲▼ !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~⌂ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜ¢£¥₧ƒáíóúñÑªº¿⌐¬½¼¡«»░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡±≥≤⌠⌡÷≈°∙·√ⁿ²■ ěščřžýáíéďťňúůóĚŠČŘŽÝÁÍÉĎŤŇÚŮÓ";
@@ -25,47 +28,54 @@ window.CanvasConsole = function(_width, _height, img) {
 
     ////////////////////
     //  Public sector
-    self.Foreground = [200, 200, 200];
-    self.Background = [0, 0, 0];
+    this.Foreground = [200, 200, 200];
+    this.Background = [0, 0, 0];
 
     var cursor_x = 0;
     var cursor_y = 0;
 
-    self.__defineGetter__('CursorX', function() { return cursor_x; });
-    self.__defineGetter__('CursorY', function() { return cursor_y; });
-    self.__defineSetter__("CursorX", function(val) {
+    this.getCursorX = function() { return cursor_x; };
+    this.setCursorX = function(val) {
         if (isNaN(val)) throw new Error("Value is NaN");
         cursor_x = Math.floor(val);
-    });
-    self.__defineSetter__("CursorY", function(val) {
+    };
+    this.addCursorX = function(val) {
+        this.setCursorX(cursor_x + val);
+    };
+
+    this.getCursorY = function() { return cursor_y; };
+    this.setCursorY = function(val) {
         if (isNaN(val)) throw new Error("Value is NaN");
         cursor_y = Math.floor(val);
-    });
+    };
+    this.addCursorY = function(val) {
+        this.setCursorY(cursor_y + val);
+    };
 
-    self.CursorVisible = true;
+    this.CursorVisible = true;
 
-    self.SetCursor = function(x, y)
+    this.setCursor = function(x, y)
     {
         if (x instanceof Array && typeof y === 'undefined')
         {
-            self.CursorX = defaultFor(x[0], self.CursorX);
-            self.CursorY = defaultFor(x[1], self.CursorY);
+            this.setCursorX(defaultFor(x[0], cursor_x));
+            this.setCursorY(defaultFor(x[1], cursor_y));
         }
         else
         {
-            self.CursorX = defaultFor(x, self.CursorX);
-            self.CursorY = defaultFor(y, self.CursorY);
+            this.setCursorX(defaultFor(x, cursor_x));
+            this.setCursorY(defaultFor(y, cursor_y));
         }
     }
-    self.GetCursor = function()
+    this.getCursor = function()
     {
-        return [self.CursorX, self.CursorY];
+        return [cursor_x, cursor_y];
     }
 
-    self.__defineGetter__('Width', function() { return width; });
-    self.__defineGetter__('Height', function() { return height; });
+    this.getWidth = function() { return width; };
+    this.getHeight = function() { return height; };
 
-    self.LoadFont = function(path_or_img, onload_callback) {
+    this.LoadFont = function(path_or_img, onload_callback) {
 
         var ascii_charset = null;
         var onload = function()
@@ -112,7 +122,7 @@ window.CanvasConsole = function(_width, _height, img) {
         }
     }
 
-    self.CreateCanvas = function(parentElement) {
+    this.CreateCanvas = function(parentElement) {
 
         // Create the canvas
         canvas = document.createElement('canvas');
@@ -134,24 +144,24 @@ window.CanvasConsole = function(_width, _height, img) {
             parentElement = defaultFor(parentElement, document.body);
             parentElement.appendChild(canvas);
         }
-        self.Clear();
+        this.Clear();
     }
 
-    self.BlinkCursor = function(time)
+    this.BlinkCursor = function(time)
     {
-        if (!self.CursorVisible || Math.floor(time % 4) === 0) return;
+        if (!this.CursorVisible || Math.floor(time % 4) === 0) return;
 
         // calc the destination location on the canvas
-        var X = self.CursorX * CHAR_WIDTH;
-        var Y = (self.CursorY) * CHAR_HEIGHT;
+        var X = cursor_x * CHAR_WIDTH;
+        var Y = (cursor_y) * CHAR_HEIGHT;
 
         // draw the cursor
-        ctx.fillStyle = rgb(self.Foreground);
+        ctx.fillStyle = rgb(this.Foreground);
         ctx.fillRect(X, Y + CHAR_HEIGHT - 3, CHAR_WIDTH, 2)
         //ctx.fillRect(X-1, Y, 2, CHAR_HEIGHT)
     }
 
-    self.DrawChar = function(chr, cx, cy)
+    this.DrawChar = function(chr, cx, cy)
     {
         var index = ASCII.indexOf(chr);
 
@@ -169,19 +179,19 @@ window.CanvasConsole = function(_width, _height, img) {
 
         // Draw fg color on top of the mask
         ctx.globalCompositeOperation="source-atop";
-        ctx.fillStyle = rgb(self.Foreground);
+        ctx.fillStyle = rgb(this.Foreground);
         ctx.fillRect(X, Y, CHAR_WIDTH, CHAR_HEIGHT);
 
         // fill the rest with bg color
         ctx.globalCompositeOperation="destination-over";
-        ctx.fillStyle = rgb(self.Background);
+        ctx.fillStyle = rgb(this.Background);
         ctx.fillRect(X, Y, CHAR_WIDTH, CHAR_HEIGHT);
 
         // reset globalCompositeOperation to normal
         ctx.globalCompositeOperation="source-over";
     }
 
-    self.Write = function(obj)
+    this.Write = function(obj)
     {
         if (obj === null) return;
         var str = obj.toString();
@@ -192,32 +202,32 @@ window.CanvasConsole = function(_width, _height, img) {
             {
                 case '\n':
                     // if LF, move to next line
-                    self.CursorX = 0;
-                    self.CursorY++;
+                    cursor_x = 0;
+                    cursor_y++;
                     break;
 
                 case '\t':
                     var tab_size = 4;
-                    var dif = tab_size - (self.CursorX % tab_size);
+                    var dif = tab_size - (cursor_x % tab_size);
                     var s = new Array(dif + 1).join(' ');
                     self.Write(s);
                     break;
 
                 default:
-                    self.DrawChar(str, self.CursorX, self.CursorY);
-                    self.CursorX++;
+                    self.DrawChar(str, cursor_x, cursor_y);
+                    cursor_x++;
             }
 
             // if we step over the end of line
-            if (self.CursorX >= self.width)
+            if (cursor_x >= self.width)
             {
                 // go to the next line
-                self.CursorX = 0;
-                self.CursorY++;
+                cursor_x = 0;
+                cursor_y++;
             }
 
             // if we get over the last line
-            if (self.CursorY >= self.height)
+            if (cursor_y >= self.height)
             {
                 // move everythin one line up
                 self.ctx.drawImage(self.canvas, 0, -CHAR_HEIGHT);
@@ -225,38 +235,38 @@ window.CanvasConsole = function(_width, _height, img) {
                 self.ctx.fillStyle = rgb(self.Background);
                 self.ctx.fillRect(0, (self.height - 1) * CHAR_HEIGHT, self.width * CHAR_WIDTH, CHAR_HEIGHT);
                 // move the cursor back to the last line
-                self.CursorY = height - 1;
+                cursor_y = height - 1;
             }
         }
         if (str.length > 1)
         {
-            str.split('').forEach(self.Write);
+            str.split('').forEach(this.Write);
         }
     }
 
-    self.WriteLine = function(obj)
+    this.WriteLine = function(obj)
     {
-        self.Write(obj);
-        self.Write('\n');
+        this.Write(obj);
+        this.Write('\n');
     }
 
-    self.Clear = function()
+    this.Clear = function()
     {
-        ctx.fillStyle = rgb(self.Background);
+        ctx.fillStyle = rgb(this.Background);
         ctx.fillRect(0, 0, width * CHAR_WIDTH, height * CHAR_HEIGHT)
-        self.SetCursor(0,0);
+        this.setCursor(0,0);
     }
-    self.ClearRectangle = function(rect_width, rect_height)
+    this.ClearRectangle = function(rect_width, rect_height)
     {
-        ctx.fillStyle = rgb(self.Background);
-        ctx.fillRect(self.CursorX * CHAR_WIDTH, self.CursorY * CHAR_WIDTH, rect_width * CHAR_WIDTH, rect_height * CHAR_HEIGHT)
+        ctx.fillStyle = rgb(this.Background);
+        ctx.fillRect(cursor_x * CHAR_WIDTH, cursor_y * CHAR_WIDTH, rect_width * CHAR_WIDTH, rect_height * CHAR_HEIGHT)
     }
 
-    self.WriteImage = function(img)
+    this.WriteImage = function(img)
     {
-        ctx.drawImage(img, self.CursorX * CHAR_WIDTH, self.CursorY * CHAR_HEIGHT);
+        ctx.drawImage(img, cursor_x * CHAR_WIDTH, cursor_y * CHAR_HEIGHT);
     }
-    self.GetCanvas = function()
+    this.GetCanvas = function()
     {
         return canvas;
     }

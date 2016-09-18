@@ -1,15 +1,18 @@
 
+/**
+ * @constructor
+ */
 function GameBase(Console)
 {
     var self = this;
     var kbs = [], lkbs = [];
 
-    this.Client = new Client(this);
-    this.Character = new PlayerCharacter();
+    this.client = new Client(this);
+    this.character = new PlayerCharacter();
 
-    this.ConnectionManager = new ConnectionManager(this);
-    this.RenderManager = new RenderManager(Console, this);
-    this.ServerInfo = new ServerInfo();
+    this.connectionManager = new ConnectionManager(this);
+    this.renderManager = new RenderManager(Console, this);
+    this.serverInfo = new ServerInfo();
 
     this.Time = 0;
 
@@ -47,11 +50,11 @@ function GameBase(Console)
         lkbs = kbs;
         kbs = Keyboard.GetState();
 
-        this.RenderManager.Update();
+        this.renderManager.Update();
     }
     this.Draw = function()
     {
-        this.RenderManager.Draw();
+        this.renderManager.Draw();
 
         Console.BlinkCursor(this.Time / 200);
     }

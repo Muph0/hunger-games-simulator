@@ -1,3 +1,7 @@
+
+/**
+ * @constructor
+ */
 function Arena(width, height)
 {
     var self = this;

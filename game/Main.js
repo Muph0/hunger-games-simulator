@@ -53,7 +53,7 @@ function inherit(that, parent)
     }
 }
 
-function main(body)
+window["main"] = function(body)
 {
     var img = document.getElementById('ascii');
 
@@ -69,17 +69,17 @@ function main(body)
 
         if (winW / winH <= aspect_ratio)
         {
-            canvas.css("margin-left", 0);
+            canvas['css']("margin-left", 0);
 
-            canvas.css("width", "100%");
-            canvas.css("margin-top", (winH - canvas.height()) / 2 + "px");
+            canvas['css']("width", "100%");
+            canvas['css']("margin-top", (winH - canvas.height()) / 2 + "px");
         }
         else
         {
-            canvas.css("margin-top", 0);
+            canvas['css']("margin-top", 0);
 
-            canvas.css("width", winH * aspect_ratio - 10);
-            canvas.css("margin-left", (winW - canvas.width()) / 2 + "px");
+            canvas['css']("width", winH * aspect_ratio - 10);
+            canvas['css']("margin-left", (winW - canvas.width()) / 2 + "px");
         }
     };
 

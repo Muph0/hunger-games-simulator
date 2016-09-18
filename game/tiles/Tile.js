@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function Tile(chr, foreground, background)
 {
     var self = this;

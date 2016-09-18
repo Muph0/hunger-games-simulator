@@ -1,17 +1,19 @@
 
+/**
+ * @constructor
+ */
 function ServerInfo()
 {
     this.Playerlist = [];
     this.Token = null;
 
-    this.LocalInfo = null && GETTER;
-    this.__defineGetter__('LocalInfo', function() {
+    this.getLocalInfo = function() {
         if (this.Token === null) return null;
         var token = this.Token;
         return this.Playerlist.filter(function(obj) {
             return obj.Token === token;
         });
-    });
+    }
     this.AcceptPlayerList = function(list)
     {
         for (var i = 0; i < list.length; i++)

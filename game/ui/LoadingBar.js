@@ -1,3 +1,7 @@
+
+/**
+ * @constructor
+ */
 function LoadingBar(Console, game, width)
 {
     this.Percent = 0;
@@ -17,12 +21,12 @@ function LoadingBar(Console, game, width)
 
         if (this.Percent < 0)
         {
-            var X = Console.CursorX;
-            var Y = Console.CursorY;
+            var X = Console.getCursorX();
+            var Y = Console.getCursorY();
 
             var x_offset = Math.floor(width * (Math.sin(game.Time / 200) + 1) / 2);
 
-            Console.SetCursor(X + x_offset, Y);
+            Console.setCursor(X + x_offset, Y);
             Console.Foreground = Color.FromHSL((game.Time/2000) % 1, 1, 0.5);
             Console.Write("x");
         }

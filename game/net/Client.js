@@ -1,8 +1,11 @@
 
+/**
+ * @constructor
+ */
 function Client(game)
 {
     var self = this;
-    this.__defineGetter__('PROTOCOL_VERSION', function() { return "0.1"; });
+    this.PROTOCOL_VERSION = "0.1";
 
     var client;
     var connection_started = 0;
@@ -15,14 +18,14 @@ function Client(game)
 
     this.Responses = [];
 
-    this.__defineGetter__('ServerIP', function() {
+    this.getServerIP = function() {
         return client.url.split('/')[2].split(':')[0];
-    });
-    this.__defineGetter__('Duration', function() {
+    }
+    this.getDuration = function() {
         if (connection_ended)
             return connection_ended - connection_started;
         return game.Time - connection_started;
-    });
+    }
 
     this.Connect = function(IP, Port)
     {
@@ -51,7 +54,7 @@ function Client(game)
     {
         self.State = ClientState.Connected;
         self.LastEvent = evt;
-        client.send(JSON.stringify({protocol: self.PROTOCOL_VERSION, character: game.Character}));
+        client.send(JSON.stringify({protocol: self.PROTOCOL_VERSION, character: game.character}));
     }
 
     var on_message = function(evt)
@@ -85,7 +88,7 @@ function Client(game)
     {
         self.State = ClientState.Disconnected;
         self.LastEvent = evt;
-        console.log("Client on_close: (lasted " + Math.floor(self.Duration) / 1000 + " seconds)" );
+        console.log("Client on_close: (lasted " + Math.floor(self.getDuration()) / 1000 + " seconds)" );
         console.log(evt);
         self.LastEvent = evt;
         connection_ended = game.Time;
@@ -100,7 +103,7 @@ function Client(game)
     }
 }
 
-ClientState = {
+var ClientState = {
     Disconnected: 0,
     Connected: 1,
     Connecting: 2,

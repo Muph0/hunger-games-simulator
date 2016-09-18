@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function Biome(pivX, pivY)
 {
     this.X = pivX;

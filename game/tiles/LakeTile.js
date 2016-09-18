@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function LakeTile()
 {
 

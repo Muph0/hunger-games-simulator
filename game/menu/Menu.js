@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function Menu(Console, game, width) {
     var self = this;
 
@@ -35,15 +38,15 @@ function Menu(Console, game, width) {
             height = Math.min(this.MaxHeight, this.Itemlist.length);
         }
 
-        var X = Console.CursorX;
-        var Y = Console.CursorY;
+        var X = Console.getCursorX();
+        var Y = Console.getCursorY();
 
         for (var i = 0; i < height; i++)
         {
             var item = this.Itemlist[i + this.ViewPortPos];
             if (this.HighlightSelected && i + this.ViewPortPos === this.Selected || (item.Text === '' && item.Skip)) continue;
 
-            Console.SetCursor(X, Y + i * this.Spacing);
+            Console.setCursor(X, Y + i * this.Spacing);
             Console.Write('  ');
 
             item.Draw(Console, this);
@@ -56,7 +59,7 @@ function Menu(Console, game, width) {
             Console.Foreground = this.HighlightFG;
             Console.Background = this.HighlightBG;
 
-            Console.SetCursor(X, Y + (this.Selected - this.ViewPortPos) * this.Spacing);
+            Console.setCursor(X, Y + (this.Selected - this.ViewPortPos) * this.Spacing);
             Console.Write("> ");
 
             this.GetSelected().Draw(Console, this);

@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function ForestBiome(pivX, pivY)
 {
 

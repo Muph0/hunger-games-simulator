@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function StringMenuItem(game, text)
 {
     inherit(this, new MenuItem(game, text));
@@ -97,14 +100,14 @@ function StringMenuItem(game, text)
         {
             if (this.toString(viewport).length !== viewport)
             {
-                Console.CursorX -= this.Value.length - this.CursorPos;
+                Console.addCursorX(-(this.Value.length - this.CursorPos));
             }
             else
             {
                 if (this.CursorPos > half)
-                    Console.CursorX -= Math.min(this.Value.length - this.CursorPos, half);
+                    Console.addCursorX(-Math.min(this.Value.length - this.CursorPos, half));
                 else
-                    Console.CursorX -= viewport - this.CursorPos;
+                    Console.addCursorX(-(viewport - this.CursorPos));
             }
             Console.CursorVisible = true;
         }

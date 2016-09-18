@@ -1,4 +1,8 @@
 
+
+/**
+ * @constructor
+ */
 function ListMenuItem(game, text, list)
 {
     inherit(this, new MenuItem(game, text));

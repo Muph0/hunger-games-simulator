@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function DesertBiome(pivX, pivY)
 {
     inherit(this, new Biome(pivX, pivY));

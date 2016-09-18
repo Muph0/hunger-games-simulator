@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function LobbyMenu(Console, game)
 {
     var self = this;
@@ -53,24 +56,24 @@ function LobbyMenu(Console, game)
                     var data = {
                         ready: 1,
                     }
-                    game.Client.Send(JSON.stringify(data));
+                    game.client.Send(JSON.stringify(data));
                     break;
                 case 'Leave game':
-                    game.Client.Close();
+                    game.client.Close();
                     break;
             }
         }
 
-        if (lobby_hash !== hash(game.ServerInfo.Playerlist))
+        if (lobby_hash !== hash(game.serverInfo.Playerlist))
         {
             console.log("Creating new playerlist_menu");
-            console.log(game.ServerInfo.Playerlist);
-            lobby_hash = hash(game.ServerInfo.Playerlist);
+            console.log(game.serverInfo.Playerlist);
+            lobby_hash = hash(game.serverInfo.Playerlist);
 
             playerlist_menu.Itemlist = [];
-            for (var i = 0; i < game.ServerInfo.Playerlist.length; i++)
+            for (var i = 0; i < game.serverInfo.Playerlist.length; i++)
             {
-                playerlist_menu.Itemlist[i] = new LobbyMenuItem(game, game.ServerInfo.Playerlist[i]);
+                playerlist_menu.Itemlist[i] = new LobbyMenuItem(game, game.serverInfo.Playerlist[i]);
             }
 
             if (leftmenu)
@@ -81,31 +84,31 @@ function LobbyMenu(Console, game)
             }
         }
 
-        return game.ConnectionManager.Update(DrawState.LobbyMenu);
+        return game.connectionManager.Update(DrawState.LobbyMenu);
     }
 
     this.Draw = function()
     {
-        var half_w = Math.floor(Console.Width * 1/3);
+        var half_w = Math.floor(Console.getWidth() * 1/3);
 
         if (leftmenu || lastmenu)
         {
             sys_menu.HighlightSelected = leftmenu;
-            Console.SetCursor(0, 0);
+            Console.setCursor(0, 0);
             Console.ClearRectangle(half_w, 25);
 
-            Console.CursorX += 3;
-            Console.CursorY += 2;
+            Console.addCursorX(3);
+            Console.addCursorY(2);
             sys_menu.Draw();
         }
         if (!leftmenu || !lastmenu)
         {
             playerlist_menu.HighlightSelected = !leftmenu;
-            Console.SetCursor(half_w, 0);
-            Console.ClearRectangle(Console.Width - half_w, 25);
+            Console.setCursor(half_w, 0);
+            Console.ClearRectangle(Console.getWidth() - half_w, 25);
 
-            Console.CursorX += 1;
-            Console.CursorY += 2;
+            Console.addCursorX(1);
+            Console.addCursorY(2);
             playerlist_menu.Draw();
         }
     }

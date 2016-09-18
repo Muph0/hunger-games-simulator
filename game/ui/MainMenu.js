@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function MainMenu(Console, game)
 {
     var self = this;
@@ -53,13 +56,13 @@ function MainMenu(Console, game)
         var logo_buffer = this.LogoBuffer;
 
         //draws game logo
-        Console.SetCursor((Console.Width - logo_buffer.Width) / 2, 1  );
+        Console.setCursor((Console.getWidth() - logo_buffer.getWidth()) / 2, 1  );
         Console.WriteImage(logo_buffer.GetCanvas());
 
         //draws game menu
         Console.Foreground = [200, 200, 200];
-        Console.CursorX += ((logo_buffer.Width / 2) - 7);
-        Console.CursorY += logo_buffer.Height + 1;
+        Console.addCursorX(logo_buffer.getWidth() / 2 - 7);
+        Console.addCursorY(logo_buffer.getHeight() + 1);
         menu.Draw();
     }
 
@@ -73,13 +76,13 @@ function MainMenu(Console, game)
             switch (menu.Selected)
             {
                 case 0:
-                    return game.RenderManager.browse_menu.Show();
+                    return game.renderManager.browse_menu.Show();
                     break;
                 case 2:
-                    return game.RenderManager.create_character_menu.Show();
+                    return game.renderManager.create_character_menu.Show();
                     break;
                 case 3:
-                    return game.RenderManager.options_menu.Show();
+                    return game.renderManager.options_menu.Show();
                     break;
             }
         }

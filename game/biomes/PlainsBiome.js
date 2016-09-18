@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function PlainsBiome(pivX, pivY)
 {
     inherit(this, new Biome(pivX, pivY));

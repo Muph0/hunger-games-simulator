@@ -1,4 +1,7 @@
 
+/**
+ * @constructor
+ */
 function RenderManager(Console, game)
 {
     var self = this;
@@ -77,7 +80,7 @@ function RenderManager(Console, game)
     }
 }
 
-window.DrawState = {
+var DrawState = {
     MainMenu: 0,
     ConnectingMenu: 1,
     OptionsMenu: 2,
