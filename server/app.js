@@ -1,8 +1,10 @@
 
-var WebSocketServer = require('ws').Server;
-var perlin = require('perlin-noise');
-var fs = require('fs');
-var ini = require('ini');
+var fs = require('fs'),
+    PATH = require('path'),
+    ini = require('ini');
+    WebSocketServer = require('ws').Server,
+    perlin = require('perlin-noise'),
+    window = {};
 
 var SETTINGS = {
     network: {
@@ -32,38 +34,54 @@ rl.on('line', function(line){
     if (line === 'stop')
     {
         server.Stop();
-        return 0;
+        process.exit(0);
     }
 });
 
+var scandir = function(dirname)
+{
+    if (dirname.match(/node_modules/)) return [];
+
+    var files = [];
+
+    fs.readdirSync(dirname).forEach(function(elem)
+    {
+        var file_path = PATH.resolve(dirname, elem);
+
+        if (fs.statSync(file_path).isDirectory())
+        {
+            scandir(file_path).forEach(function(ff)
+            {
+                files.push(ff);
+            });
+        }
+        else
+        {
+            files.push(PATH.relative(__dirname, file_path));
+        }
+    });
+
+    return files.filter(function(elem){return elem.match(/.*\.js$/) && !elem.match(/app\.js/); });
+}
+var run = function(file)
+{
+    eval(fs.readFileSync(file)+'');
+}
+
 var init = function()
 {
-    // include files the old way
-    eval(fs.readFileSync('Server.js')+'');
-    eval(fs.readFileSync('Random.js')+'');
-    eval( fs.readFileSync('HaltonSet.js') + '');
-    eval( fs.readFileSync('level/LevelGenerator.js') + '');
-    eval( fs.readFileSync('client_proc/ClientInfo.js') + '');
+    var includes =  scandir('./')
+            .concat(scandir('../game')
+        );
 
-    // client processors
-    eval( fs.readFileSync('client_proc/ClientVerifier.js') + '');
-    // lobby mgr
-    eval( fs.readFileSync('client_proc/LobbyManager.js') + '');
+    debugger;
+    for (var i = 0; i < includes.length; i++)
+    {
+        includes[i] = fs.readFileSync(includes[i]);
+    }
 
-    eval(fs.readFileSync('../game/Main.js')+'');
-    // load arena
-    eval(fs.readFileSync('../game/level/Arena.js')+'');
-    // load tile assets
-    eval(fs.readFileSync('../game/tiles/Tile.js')+'');
-    // load biome assets
-    eval(fs.readFileSync('../game/biomes/Biome.js')+'');
-    eval(fs.readFileSync('../game/biomes/DesertBiome.js')+'');
-    eval(fs.readFileSync('../game/biomes/ForestBiome.js')+'');
-    eval(fs.readFileSync('../game/biomes/PlainsBiome.js')+'');
-    eval(fs.readFileSync('../game/biomes/TundraBiome.js')+'');
-
-    // load character class
-    eval(fs.readFileSync('../game/PlayerCharacter.js')+'');
+    eval(includes.join('\n'));
+    debugger;
 
     SETTINGS = ini.parse(fs.readFileSync('./settings.ini', 'utf8'));
 
