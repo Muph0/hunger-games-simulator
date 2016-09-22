@@ -266,7 +266,7 @@ function CanvasConsole(_width, _height, img) {
     {
         ctx.drawImage(img, cursor_x * CHAR_WIDTH, cursor_y * CHAR_HEIGHT);
     }
-    this.GetCanvas = function()
+    this.getCanvas = function()
     {
         return canvas;
     }

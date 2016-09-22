@@ -45,7 +45,7 @@ function LoginMenu(Console, game)
         //draws game logo
         var logo_buffer = game.renderManager.main_menu.LogoBuffer;
         Console.setCursor((Console.getWidth() - logo_buffer.Width) / 2, 1);
-        Console.WriteImage(logo_buffer.GetCanvas());
+        Console.WriteImage(logo_buffer.getCanvas());
 
         Console.setCursor((Console.getWidth() - menu.Width) / 2, 18)
         menu.Draw();

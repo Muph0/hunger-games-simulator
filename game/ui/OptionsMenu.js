@@ -55,10 +55,10 @@ function OptionsMenu(Console, game)
         switch (menu.Itemlist[0].Value)
         {
             case 0:
-                Console.GetCanvas()['style']['imageRendering'] = 'initial';
+                Console.getCanvas()['style']['imageRendering'] = 'initial';
                 break;
             case 1:
-                Console.GetCanvas()['style']['imageRendering'] = 'pixelated';
+                Console.getCanvas()['style']['imageRendering'] = 'pixelated';
                 break;
         }
 

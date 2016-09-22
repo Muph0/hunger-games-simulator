@@ -70,7 +70,7 @@ function ConnectingMenu(Console, game)
             case ClientState.Connecting:
                 // Draw logo
                 Console.setCursor((Console.getWidth() - this.LogoBuffer.getWidth()) / 2, Console.getHeight() / 2 - 4);
-                Console.WriteImage(this.LogoBuffer.GetCanvas());
+                Console.WriteImage(this.LogoBuffer.getCanvas());
 
                 // write IP
                 var msg = "to " + game.client.getServerIP();

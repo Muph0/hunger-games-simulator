@@ -57,7 +57,7 @@ function MainMenu(Console, game)
 
         //draws game logo
         Console.setCursor((Console.getWidth() - logo_buffer.getWidth()) / 2, 1  );
-        Console.WriteImage(logo_buffer.GetCanvas());
+        Console.WriteImage(logo_buffer.getCanvas());
 
         //draws game menu
         Console.Foreground = [200, 200, 200];
