@@ -11,6 +11,7 @@ function LobbyMenu(Console, game)
         new MenuItem(game, 'Edit character'),
         new StringMenuItem(game, 'Chat:'),
         new MenuItem(game, '').merge({Skip: true}),
+        new MenuItem(game, 'Start game'),
         new MenuItem(game, 'Leave game'),
     ];
 
@@ -145,7 +146,7 @@ function LobbyMenu(Console, game)
 
         // Draw chat window
         Console.setCursor(5, Console.getHeight() - chat_buffer.getHeight() - 1);
-        Console.WriteImage(chat_buffer.GetCanvas());
+        Console.WriteImage(chat_buffer.getCanvas());
 
         Console.setCursor(half_w + 3, 2)
         playerlist_menu.Draw();
