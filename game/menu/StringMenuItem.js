@@ -40,8 +40,9 @@ function StringMenuItem(game, text)
     {
         while (Keyboard.Buffer.length)
         {
+            console.log(Keyboard.Buffer);
             var chr = Keyboard.Buffer.splice(0,1)[0];
-            if (chr.length === 1)
+            if (typeof chr !== 'undefined' && chr.length === 1)
             {
                 this.Value = this.Value.substring(0, this.CursorPos) + chr + this.Value.substring(this.CursorPos);
                 this.CursorPos++;
@@ -58,6 +59,11 @@ function StringMenuItem(game, text)
         {
             this.Value = this.Value.substring(0, this.CursorPos - 1) + this.Value.substring(this.CursorPos);
             this.CursorPos--;
+        }
+
+        if (game.IsKeyPressed(Keyboard.Keys.Delete) && this.CursorPos >= 0)
+        {
+            this.Value = this.Value.substring(0, this.CursorPos) + this.Value.substring(this.CursorPos+1);
         }
 
         if (game.IsKeyPressed(Keyboard.Keys.Enter) || game.IsKeyPressed(Keyboard.Keys.Right))
