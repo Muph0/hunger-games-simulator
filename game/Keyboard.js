@@ -34,7 +34,10 @@ function Keyboard_class()
     }
     this['keypress'] = function(event)
     {
-        this.Buffer.push(event.key);
+        var key = event.keyCode;
+
+        if (key >= 32)
+            this.Buffer.push(String.fromCharCode(key));
     }
 
     this.GetState = function()
