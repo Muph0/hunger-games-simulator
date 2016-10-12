@@ -1,10 +1,12 @@
+// sry, dunno where i got this class from
+// prob somewhere from stackoverflow
 
 function Random(seed)
 {
     // LCG using GCC's constants
     this.m = 0x80000000; // 2**31;
     this.a = 1103515245;
-    this.c = 12345;
+    this.c = 12543;
 
     this.state = seed ? seed : Math.floor(Math.random() * (this.m-1));
 
