@@ -84,6 +84,9 @@ function MainMenu(Console, game)
                 case 3:
                     return game.renderManager.options_menu.Show();
                     break;
+                case 4:
+                    return game.renderManager.credits_menu.Show();
+                    break;
             }
         }
 

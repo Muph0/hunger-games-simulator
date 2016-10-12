@@ -11,6 +11,7 @@ function RenderManager(Console, game)
     self.create_character_menu = new CreateCharacterMenu(Console, game);
     self.guest_login_menu = new GuestLoginMenu(Console, game);
     self.connecting_menu = new ConnectingMenu(Console, game);
+    self.credits_menu = new CreditsMenu(Console, game);
     self.options_menu = new OptionsMenu(Console, game);
     self.browse_menu = new BrowseMenu(Console, game);
     self.login_menu = new LoginMenu(Console, game);
@@ -45,6 +46,9 @@ function RenderManager(Console, game)
             case DrawState.CreateCharacterMenu:
                 state = self.create_character_menu.Update();
                 break;
+            case DrawState.CreditsMenu:
+                state = self.credits_menu.Update();
+                break;
             default:
                 throw new Error("Someone just set the state to NaN.");
         }
@@ -76,6 +80,10 @@ function RenderManager(Console, game)
                 break;
             case DrawState.CreateCharacterMenu:
                 self.create_character_menu.Draw();
+                break;
+            case DrawState.CreditsMenu:
+                self.credits_menu.Draw();
+                break;
         }
     }
 }
@@ -89,5 +97,6 @@ var DrawState = {
     GuestLoginMenu: 5,
     CreateCharacterMenu: 6,
     BrowseMenu: 7,
+    CreditsMenu: 8,
     LobbyMenu: 666,
 }
