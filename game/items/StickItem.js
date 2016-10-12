@@ -9,4 +9,9 @@ function StickItem()
     this.Name = "Stick";
     this.Data;
 }
-StickItem.Generator = null;
+
+if (typeof server !== 'undefined')
+{
+    StickItem.Generator = ItemGenerator.populateTiles(StickItem, [ForestBiome], 10, 100);
+}
+
