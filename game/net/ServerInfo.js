@@ -36,4 +36,13 @@ function ServerInfo()
         msg.time = new Date().getTime();
         this.ChatHistory.push(msg);
     }
+
+    this.AcceptTile = function(tile)
+    {
+
+    }
+
+    // look at my whores
+    // my whores is amazing
+    // was Ben Affleck all along
 }

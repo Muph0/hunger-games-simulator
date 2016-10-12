@@ -19,7 +19,7 @@ function Biome(pivX, pivY)
         var bg = opt.bg;
         var chr = rnd.choice(opt.chars.split(''));
 
-        var result = new Tile(chr, fg, bg);
+        var result = new Tile(this.constructor, chr, fg, bg);
 
         return result;
     }

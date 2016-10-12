@@ -28,6 +28,10 @@ function ConnectionManager(game)
             {
                 game.serverInfo.AcceptMessage(resp.msg);
             }
+            if (resp.map)
+            {
+                resp.map.tiles.forEach(game.serverInfo.AcceptTile);
+            }
         }
 
         return defaultState;
